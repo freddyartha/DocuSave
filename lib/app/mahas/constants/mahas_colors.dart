@@ -11,6 +11,6 @@ class MahasColors {
   static const Color lightBlue = Color(0xff64B5F6);
   static const Color lightGreen = Color(0xff00897B);
   static const Color lightOrange = Color(0xffFF7043);
-  static const Color black = Color(0xffFFFFFF);
-  static const Color white = Color(0xff121212);
+  static const Color white = Color(0xffFFFFFF);
+  static const Color black = Color(0xff121212);
 }
