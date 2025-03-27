@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
-  //mahas Service
   await MahasService.init();
   runApp(
     GetMaterialApp(
