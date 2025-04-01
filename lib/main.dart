@@ -20,6 +20,7 @@ void main() async {
         scaffoldBackgroundColor: MahasColors.white,
         appBarTheme: AppBarTheme(color: MahasColors.white),
         listTileTheme: ListTileThemeData(tileColor: Colors.white),
+        fontFamily: 'Poppins',
       ),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
