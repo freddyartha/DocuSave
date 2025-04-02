@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
@@ -9,6 +7,7 @@ import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:docusave/app/mahas/models/banner_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ReusableWidgets {
   static Widget generalTopHeaderAppBarWidget({
@@ -48,7 +47,7 @@ class ReusableWidgets {
         value: title,
         fontWeight: FontWeight.w600,
         fontColor: textColor,
-        fontSize: MahasFontSize.h6,
+        fontSize: MahasFontSize.h5,
       ),
       elevation: 0,
       centerTitle: false,
@@ -396,8 +395,9 @@ class ReusableWidgets {
     );
   }
 
-  static Future confirmationBottomSheet({
+  static Future<bool?> confirmationBottomSheet({
     required List<Widget> children,
+    String? title,
     String? textConfirm,
     String? textCancel,
   }) {
@@ -421,43 +421,39 @@ class ReusableWidgets {
               shrinkWrap: true,
               physics: ClampingScrollPhysics(),
               children: [
-                Container(
-                  margin: EdgeInsets.only(bottom: 10),
-                  height: 50,
-                  child: Stack(
-                    children: [
-                      Center(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextComponent(
+                      value: title ?? "",
+                      fontWeight: FontWeight.w600,
+                      fontSize: MahasFontSize.h6,
+                      margin: EdgeInsets.only(right: 10),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      height: 40,
+                      child: GestureDetector(
+                        onTap: () => Get.back(result: false),
                         child: Container(
-                          height: 6,
-                          width: 100,
+                          padding: EdgeInsets.all(5),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            color: MahasColors.grayText,
+                            borderRadius: BorderRadius.circular(100),
+                            color: MahasColors.black.withValues(alpha: 0.06),
                           ),
+                          child: Icon(Icons.close, size: 30),
                         ),
                       ),
-                      Positioned(
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: () => Get.back(result: false),
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100),
-                              color: MahasColors.black.withValues(alpha: 0.1),
-                            ),
-                            child: Icon(Icons.close, size: 35),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      SizedBox(height: 15),
                       ...children,
                       const SizedBox(height: 30),
                       Row(
@@ -466,7 +462,7 @@ class ReusableWidgets {
                         children: [
                           Expanded(
                             child: ButtonComponent(
-                              text: textCancel ?? "batal".tr,
+                              text: textCancel ?? "cancel".tr,
                               isMultilineText: true,
                               borderColor: MahasColors.grayText,
                               btnColor: MahasColors.white,
@@ -505,11 +501,17 @@ class ReusableWidgets {
       items:
           imageList.map((item) {
             return Container(
-              margin: EdgeInsets.only(bottom: 10),
-              height: Get.width - 40,
-              width: Get.width - 40,
+              margin: EdgeInsets.only(top: 10, bottom: 20),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(MahasFontSize.normal),
+                boxShadow: [
+                  BoxShadow(
+                    color: MahasColors.black.withValues(alpha: 0.5),
+                    blurRadius: 8,
+                    spreadRadius: 2,
+                    offset: Offset(0, 0),
+                  ),
+                ],
+                borderRadius: BorderRadius.circular(MahasRadius.large),
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
@@ -526,13 +528,7 @@ class ReusableWidgets {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                     ),
-                    borderRadius: BorderRadius.circular(MahasRadius.regular),
-                    boxShadow: [
-                      BoxShadow(
-                        color: MahasColors.black.withValues(alpha: 0.5),
-                        blurRadius: MahasRadius.small,
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(MahasRadius.large),
                   ),
                   child: TextComponent(
                     value: item.text,
@@ -543,11 +539,33 @@ class ReusableWidgets {
             );
           }).toList(),
       options: CarouselOptions(
-        height: Get.width - 80,
+        height: Get.width * 0.8,
         autoPlay: true,
         enlargeCenterPage: true,
         autoPlayInterval: const Duration(seconds: 3),
         autoPlayAnimationDuration: const Duration(milliseconds: 1000),
+      ),
+    );
+  }
+
+  static Widget listLoadingWidget({required int count}) {
+    return Shimmer.fromColors(
+      baseColor: MahasColors.mediumgray,
+      highlightColor: MahasColors.lightgray,
+      child: ListView.separated(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: count,
+        separatorBuilder: (context, index) => SizedBox(height: 10),
+        itemBuilder:
+            (context, index) => Container(
+              decoration: BoxDecoration(
+                color: MahasColors.white,
+                borderRadius: BorderRadius.circular(MahasRadius.regular),
+              ),
+              height: 80,
+            ),
       ),
     );
   }

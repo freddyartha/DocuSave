@@ -1,4 +1,6 @@
 import 'package:docusave/app/mahas/models/banner_model.dart';
+import 'package:docusave/app/mahas/models/menu_item_model.dart';
+import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -28,4 +30,21 @@ class HomeController extends GetxController {
       image: "https://picsum.photos/id/237/200/300",
     ),
   ];
+
+  List<MenuItemModel> layananList = [
+    MenuItemModel(title: "receipt", image: "assets/images/receipt.png"),
+    MenuItemModel(title: "warranty", image: "assets/images/warranty.png"),
+  ];
+
+  RxBool historyLoading = true.obs;
+
+  @override
+  void onInit() {
+    Future.delayed(Duration(seconds: 3), () => historyLoading.value = false);
+    super.onInit();
+  }
+
+  void goToProfileList() {
+    Get.toNamed(Routes.PROFILE_LIST);
+  }
 }

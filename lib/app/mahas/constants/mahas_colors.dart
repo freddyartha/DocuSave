@@ -6,7 +6,9 @@ class MahasColors {
   static const Color yellow = Color(0xffFFC107);
   static const Color green = Color(0xff43A047);
   static const Color red = Color(0xffE53935);
-  static const Color gray = Color(0xffF5F5F5);
+  static const Color lightgray = Color(0xffF5F5F5);
+  static const Color mediumgray = Color(0xffE0E0E0);
+  static const Color darkgray = Color(0xff424242);
   static const Color grayText = Color(0xffB0BEC5);
   static const Color lightBlue = Color(0xff64B5F6);
   static const Color lightGreen = Color(0xff00897B);

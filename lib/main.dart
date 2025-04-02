@@ -17,16 +17,21 @@ void main() async {
     GetMaterialApp(
       title: "DocuSave",
       theme: ThemeData(
-        scaffoldBackgroundColor: MahasColors.white,
+        scaffoldBackgroundColor: MahasColors.lightgray,
         appBarTheme: AppBarTheme(color: MahasColors.white),
-        listTileTheme: ListTileThemeData(tileColor: Colors.white),
+        listTileTheme: ListTileThemeData(tileColor: MahasColors.white),
         fontFamily: 'Poppins',
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: MahasColors.primary,
+          selectionColor: MahasColors.primary,
+          selectionHandleColor: MahasColors.primary,
+        ),
       ),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
-      locale: TranslationService.locale,
+      locale: await TranslationService.locale,
       translations: TranslationService(),
-      fallbackLocale: TranslationService.locale,
+      fallbackLocale: await TranslationService.locale,
       debugShowCheckedModeBanner: false,
     ),
   );

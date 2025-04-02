@@ -3,11 +3,19 @@ import 'dart:ui';
 import 'package:docusave/app/mahas/lang/en_us.dart';
 import 'package:docusave/app/mahas/lang/id_id.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class TranslationService extends Translations {
-  static Locale? get locale => Get.deviceLocale;
-  // static Locale? get locale => const Locale("id", "ID");
-  static const feedBackLocale = Locale("id", "ID");
+  static Future<Locale> get locale async {
+    String? localeCode = GetStorage().read("locale");
+    if (localeCode != null && localeCode == "id") {
+      return Locale(localeCode, localeCode.toUpperCase());
+    } else if (localeCode != null && localeCode == "en") {
+      return Locale(localeCode, localeCode.toUpperCase());
+    } else {
+      return Get.deviceLocale ?? const Locale("id", "ID");
+    }
+  }
 
   Map<String, String> mergedIdLang = {...idID};
   Map<String, String> mergedEnLang = {...enUS};
@@ -17,9 +25,4 @@ class TranslationService extends Translations {
     "id_ID": mergedIdLang,
     "en_US": mergedEnLang,
   };
-
-  static void changeLocale(String langCode) {
-    final locale = Locale(langCode, langCode.toUpperCase());
-    Get.updateLocale(locale);
-  }
 }
