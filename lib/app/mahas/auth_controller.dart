@@ -6,6 +6,7 @@ import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -35,17 +36,17 @@ class AuthController extends GetxController {
   }
 
   void _setInitialScreen(User? user) async {
-    Future.delayed(Duration(seconds: 3), () => Get.offAllNamed(Routes.HOME));
+    Get.offAllNamed(Routes.HOME);
   }
 
   Future<void> signInWithGoogle({bool isLinkingUser = false}) async {
-    // if (EasyLoading.isShow) return;
-    // await EasyLoading.show();
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+    await EasyLoading.show();
     try {
       var r = await _signInWithCredentialGoogle(isLinkingUser);
       box.write('apple_login', null);
       if (r == null) {
-        // await EasyLoading.dismiss();
+        await EasyLoading.dismiss();
       }
     } catch (e) {
       // bool internetError = MahasService.isInternetCausedError(e.toString());
@@ -57,6 +58,7 @@ class AuthController extends GetxController {
       // await EasyLoading.dismiss();
       ReusableWidgets.warningBottomSheet(subtitle: e.toString());
     }
+    await EasyLoading.dismiss();
   }
 
   Future<UserCredential?> _signInWithCredentialGoogle(
@@ -84,7 +86,7 @@ class AuthController extends GetxController {
     User? user = auth.currentUser;
     if (user != null) {
       if (user.email.toString().endsWith("privaterelay.appleid.com")) {
-        // if (EasyLoading.isShow) await EasyLoading.dismiss();
+        if (EasyLoading.isShow) await EasyLoading.dismiss();
         ReusableWidgets.warningBottomSheet(
           subtitle:
               "Tidak dapat menautkan akun karena email Apple bersifat privat",
@@ -118,7 +120,7 @@ class AuthController extends GetxController {
         }
       }
     }
-    // if (EasyLoading.isShow) await EasyLoading.dismiss();
+    if (EasyLoading.isShow) await EasyLoading.dismiss();
   }
 
   String _generateNonce([int length = 32]) {
@@ -162,16 +164,51 @@ class AuthController extends GetxController {
   }
 
   Future<void> signInWithApple({bool isLinkingUser = false}) async {
-    // if (EasyLoading.isShow) return;
-    // await EasyLoading.show();
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+    await EasyLoading.show();
     try {
       await _signInWithCredentialApple(isLinkingUser);
       box.write('apple_login', true);
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code != AuthorizationErrorCode.canceled) {
-        Get.snackbar("Error", e.message, snackPosition: SnackPosition.BOTTOM);
+        ReusableWidgets.warningBottomSheet(subtitle: e.message);
       }
-      // await EasyLoading.dismiss();
+      await EasyLoading.dismiss();
     }
+  }
+
+  Future<void> signOut({bool deleteToken = true}) async {
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+    await EasyLoading.show();
+    //jangan lupa tambahkan delete notif tokennya
+    await auth.signOut();
+    await GoogleSignIn().signOut();
+    await EasyLoading.dismiss();
+  }
+
+  Future<void> deleteAccount() async {
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+    await EasyLoading.show();
+    UserCredential? userCredential;
+    try {
+      //jangan lupa tambahkan delete notif tokennya
+      if (box.read('apple_login') == true) {
+        userCredential = await _signInWithCredentialApple(false);
+      } else {
+        userCredential = await _signInWithCredentialGoogle(false);
+      }
+      if (userCredential?.user != null) {
+        await userCredential!.user!.delete();
+      }
+      auth.signOut();
+      await GoogleSignIn().signOut();
+    } on SignInWithAppleAuthorizationException catch (e) {
+      if (e.code != AuthorizationErrorCode.canceled) {
+        ReusableWidgets.warningBottomSheet(subtitle: e.message);
+      }
+    } catch (e) {
+      ReusableWidgets.warningBottomSheet(subtitle: e.toString());
+    }
+    await EasyLoading.dismiss();
   }
 }

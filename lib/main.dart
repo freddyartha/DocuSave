@@ -2,6 +2,7 @@ import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/lang/translation_service.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -33,6 +34,7 @@ void main() async {
       translations: TranslationService(),
       fallbackLocale: await TranslationService.locale,
       debugShowCheckedModeBanner: false,
+      builder: EasyLoading.init(),
     ),
   );
 }

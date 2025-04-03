@@ -30,4 +30,12 @@ const Map<String, String> idID = {
   "saya_menyetujui": "Saya menyetujui ",
   "terms": "Ketentuan Layanan",
   "privacy": "Kebijakan Privasi ",
+  "sign_out_title": "Keluar",
+  "sign_out_subtitle":
+      "Untuk kembali menggunakan layanan Docusave kamu harus masuk lagi",
+  "sign_out_confirm": "Apakah kamu yakin ingin keluar?",
+  "delete_account_title": "Hapus Akun",
+  "delete_account_subtitle":
+      "Akunmu akan dihapus secara permanen dan riwayat transaksi dari akunmu akan hilang",
+  "delete_account_confirm": "Apakah kamu yakin ingin manghapus akun?",
 };

@@ -31,4 +31,11 @@ const Map<String, String> enUS = {
   "saya_menyetujui": "I agree ",
   "terms": "Terms of Service",
   "privacy": "Privacy Policy ",
+  "sign_out_title": "Sign Out",
+  "sign_out_subtitle": "To use Docusave again, you need to sign in",
+  "sign_out_confirm": "Are you sure you want to sign out?",
+  "delete_account_title": "Delete Account",
+  "delete_account_subtitle":
+      "Your account will be permanently deleted, and all transaction history will be lost.",
+  "delete_account_confirm": "Are you sure you want to delete your account?",
 };

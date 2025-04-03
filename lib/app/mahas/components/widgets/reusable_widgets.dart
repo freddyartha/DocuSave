@@ -480,6 +480,7 @@ class ReusableWidgets {
     String? title,
     String? textConfirm,
     String? textCancel,
+    Color confirmColor = MahasColors.primary,
   }) {
     return Get.bottomSheet<bool>(
       enableDrag: false,
@@ -557,6 +558,7 @@ class ReusableWidgets {
                             child: ButtonComponent(
                               text: textConfirm ?? "ok".tr,
                               borderRadius: MahasRadius.regular,
+                              btnColor: confirmColor,
                               isMultilineText: true,
                               onTap: () {
                                 Get.back(result: true);

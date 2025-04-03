@@ -14,7 +14,11 @@ class ProfileListController extends GetxController {
       title: "privacy_policy",
       icon: Icons.insert_drive_file_outlined,
     ),
-    MenuItemModel(title: "account_setting", icon: Icons.settings),
+    MenuItemModel(
+      title: "account_setting",
+      icon: Icons.settings,
+      onTab: () => Get.toNamed(Routes.PROFILE_ACCOUNT_SETTING),
+    ),
   ];
 
   void goToProfileSetup() => Get.toNamed(Routes.PROFILE_SETUP);

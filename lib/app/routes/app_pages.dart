@@ -1,11 +1,13 @@
-import 'package:docusave/app/mahas/components/others/firebase_analytics_middleware.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get/get.dart';
 
+import '../mahas/components/others/firebase_analytics_middleware.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/profile_account_setting/bindings/profile_account_setting_binding.dart';
+import '../modules/profile_account_setting/views/profile_account_setting_view.dart';
 import '../modules/profile_change_language/bindings/profile_change_language_binding.dart';
 import '../modules/profile_change_language/views/profile_change_language_view.dart';
 import '../modules/profile_list/bindings/profile_list_binding.dart';
@@ -106,6 +108,20 @@ class AppPages {
             analytics: FirebaseAnalytics.instance,
           ),
           name: 'LoginPage',
+        ),
+      ],
+    ),
+    GetPage(
+      name: _Paths.PROFILE_ACCOUNT_SETTING,
+      page: () => const ProfileAccountSettingView(),
+      binding: ProfileAccountSettingBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ProfileAccountSettingPage',
         ),
       ],
     ),

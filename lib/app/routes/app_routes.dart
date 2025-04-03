@@ -11,6 +11,7 @@ abstract class Routes {
   static const PROFILE_CHANGE_LANGUAGE = _Paths.PROFILE_CHANGE_LANGUAGE;
   static const PROFILE_SETUP = _Paths.PROFILE_SETUP;
   static const LOGIN = _Paths.LOGIN;
+  static const PROFILE_ACCOUNT_SETTING = _Paths.PROFILE_ACCOUNT_SETTING;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const PROFILE_CHANGE_LANGUAGE = '/profile-change-language';
   static const PROFILE_SETUP = '/profile-setup';
   static const LOGIN = '/login';
+  static const PROFILE_ACCOUNT_SETTING = '/profile-account-setting';
 }
