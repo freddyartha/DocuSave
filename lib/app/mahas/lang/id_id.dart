@@ -24,4 +24,10 @@ const Map<String, String> idID = {
   "image_cropper": "Potong Gambar",
   "add_image": "Tambah Foto",
   "change_image": "Ganti Foto",
+  "welcome_title": "Selamat datang di Docusave!",
+  "welcome_subtitle":
+      "Aplikasi yang dibuat untuk mengamankan kertas-kertas kecil yang rawan hilang dan mungkin penting bagi kamu, seperti Kwitansi atau Kartu Garansi",
+  "saya_menyetujui": "Saya menyetujui ",
+  "terms": "Ketentuan Layanan",
+  "privacy": "Kebijakan Privasi ",
 };

@@ -1,7 +1,11 @@
+import 'package:docusave/app/mahas/components/others/firebase_analytics_middleware.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get/get.dart';
 
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
+import '../modules/login/bindings/login_binding.dart';
+import '../modules/login/views/login_view.dart';
 import '../modules/profile_change_language/bindings/profile_change_language_binding.dart';
 import '../modules/profile_change_language/views/profile_change_language_view.dart';
 import '../modules/profile_list/bindings/profile_list_binding.dart';
@@ -25,26 +29,85 @@ class AppPages {
       name: _Paths.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'HomePage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.SPASH_SCREEN,
       page: () => const SpashScreenView(),
       binding: SpashScreenBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'SpashScreenPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.PROFILE_LIST,
       page: () => const ProfileListView(),
       binding: ProfileListBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ProfileListPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.PROFILE_CHANGE_LANGUAGE,
       page: () => const ProfileChangeLanguageView(),
       binding: ProfileChangeLanguageBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ProfileChangeLanguagePage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.PROFILE_SETUP,
       page: () => const ProfileSetupView(),
       binding: ProfileSetupBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ProfileSetupPage',
+        ),
+      ],
+    ),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => const LoginView(),
+      binding: LoginBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'LoginPage',
+        ),
+      ],
     ),
   ];
 }

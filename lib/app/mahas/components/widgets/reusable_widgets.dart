@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
+import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
@@ -389,6 +390,85 @@ class ReusableWidgets {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Future<bool?> warningBottomSheet({
+    List<Widget>? children,
+    String? title,
+    required String subtitle,
+  }) {
+    return Get.bottomSheet<bool>(
+      enableDrag: false,
+      PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          Get.back(result: false);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: MahasColors.white,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: SafeArea(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextComponent(
+                      value: title ?? "Terjadi Kesalahan",
+                      fontWeight: FontWeight.w600,
+                      fontSize: MahasFontSize.h6,
+                      margin: EdgeInsets.only(right: 10),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      height: 40,
+                      child: GestureDetector(
+                        onTap: () => Get.back(result: false),
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: MahasColors.black.withValues(alpha: 0.06),
+                          ),
+                          child: Icon(Icons.close, size: 30),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: ImageComponent(
+                          localUrl: "assets/images/error.png",
+                          height: 150,
+                          width: Get.width,
+                          boxFit: BoxFit.fitHeight,
+                          margin: EdgeInsets.only(bottom: 20),
+                        ),
+                      ),
+                      TextComponent(value: subtitle),
+                      if (children != null) ...children,
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

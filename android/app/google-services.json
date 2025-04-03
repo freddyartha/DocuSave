@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "124297413934",
+    "project_id": "docusave-001",
+    "storage_bucket": "docusave-001.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:124297413934:android:46c3da1f26bb66d608e6bf",
+        "android_client_info": {
+          "package_name": "com.freddydev.docusave"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "124297413934-mtisi839rvu38kuc632c8tti4iec8qk3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.freddydev.docusave",
+            "certificate_hash": "1e82e28ca0d0e118cbc1f2ff1376672555c37f44"
+          }
+        },
+        {
+          "client_id": "124297413934-jvsh86uo813uvp0vnier11kq0m4k24jr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7ySd0uP9LT5NwwPZN_mEVJjXtEtGPFc0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "124297413934-jvsh86uo813uvp0vnier11kq0m4k24jr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "124297413934-0cn7dg0ppahpeu6hvgrtf6l01b4iet98.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.freddydev.docusave"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

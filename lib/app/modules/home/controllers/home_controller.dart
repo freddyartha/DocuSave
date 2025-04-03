@@ -1,3 +1,4 @@
+import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/mahas/models/banner_model.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
@@ -45,6 +46,10 @@ class HomeController extends GetxController {
   }
 
   void goToProfileList() {
-    Get.toNamed(Routes.PROFILE_LIST);
+    if (auth.currentUser == null) {
+      Get.toNamed(Routes.LOGIN);
+    } else {
+      Get.toNamed(Routes.PROFILE_LIST);
+    }
   }
 }

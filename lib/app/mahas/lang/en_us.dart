@@ -25,4 +25,10 @@ const Map<String, String> enUS = {
   "image_cropper": "Image Cropper",
   "add_image": "Add Image",
   "change_image": "Change Image",
+  "welcome_title": "Welcome to Docusave!",
+  "welcome_subtitle":
+      "An app made to keep those little papers safe—like receipts or warranty cards—that are easy to lose but might be important to you",
+  "saya_menyetujui": "I agree ",
+  "terms": "Terms of Service",
+  "privacy": "Privacy Policy ",
 };
