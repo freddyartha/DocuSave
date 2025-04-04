@@ -2,6 +2,7 @@ import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
@@ -40,36 +41,62 @@ class HomeView extends GetView<HomeController> {
                       ),
                       GestureDetector(
                         onTap: controller.goToProfileList,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              MahasRadius.extraLarge,
-                            ),
-                            color: MahasColors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: MahasColors.black.withValues(alpha: 0.5),
-                                blurRadius: 5,
-                                spreadRadius: 1,
-                                offset: Offset(0, 0),
+                        child: GetBuilder(
+                          builder:
+                              (HomeController controller) => Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    MahasRadius.extraLarge,
+                                  ),
+                                  color: MahasColors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: MahasColors.black.withValues(
+                                        alpha: 0.5,
+                                      ),
+                                      blurRadius: 5,
+                                      spreadRadius: 1,
+                                      offset: Offset(0, 0),
+                                    ),
+                                  ],
+                                ),
+                                height: 50,
+                                width: 50,
+                                clipBehavior: Clip.hardEdge,
+                                child:
+                                    MahasConfig.userProfile?.profilepic != null
+                                        ? ImageComponent(
+                                          networkUrl:
+                                              MahasConfig
+                                                  .userProfile
+                                                  ?.profilepic,
+                                        )
+                                        : ImageComponent(
+                                          localUrl: "assets/images/user.png",
+                                        ),
                               ),
-                            ],
-                          ),
-                          height: 50,
-                          width: 50,
-                          child: ImageComponent(
-                            localUrl: "assets/images/user.png",
-                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
                 SizedBox(height: 5),
-                ReusableWidgets.carouselWidget(
-                  imageList: controller.listBanner,
+                Obx(
+                  () =>
+                      controller.articlesLoading.value
+                          ? Padding(
+                            padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                            child: ReusableWidgets.listLoadingWidget(
+                              count: 1,
+                              height: Get.height * 0.25,
+                            ),
+                          )
+                          : ReusableWidgets.carouselWidget(
+                            imageList: controller.listBanner,
+                          ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(

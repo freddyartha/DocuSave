@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -107,6 +108,20 @@ class InputFormatter {
     }
   }
 
+  static Timestamp? stringToTimestamp(String? stringDate) {
+    if (stringDate == null) return null;
+    try {
+      var dateValue = stringToDateTime(stringDate);
+      if (dateValue != null) {
+        return Timestamp.fromDate(dateValue);
+      } else {
+        return null;
+      }
+    } catch (ex) {
+      return null;
+    }
+  }
+
   static TimeOfDay? stringToTime(String? time) {
     if (time == null) return null;
     final add = time.indexOf("PM") > 0 ? 12 : 0;
@@ -141,6 +156,13 @@ class InputFormatter {
     if (value is DateTime) return value;
     if (value is String) return stringToDateTime(value);
     return DateTime.tryParse(value);
+  }
+
+  static Timestamp? dynamicToTimestamp(dynamic value) {
+    if (value == null) return null;
+    if (value is Timestamp) return value;
+    if (value is String) return stringToTimestamp(value);
+    return null;
   }
 
   static int? dynamicToInt(dynamic value) {

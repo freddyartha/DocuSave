@@ -21,5 +21,6 @@ class ProfileListController extends GetxController {
     ),
   ];
 
-  void goToProfileSetup() => Get.toNamed(Routes.PROFILE_SETUP);
+  void goToProfileSetup() =>
+      Get.toNamed(Routes.PROFILE_SETUP)?.then((value) => update());
 }

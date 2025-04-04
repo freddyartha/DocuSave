@@ -42,7 +42,7 @@ class TextComponent extends StatelessWidget {
         child: Padding(
           padding: padding,
           child: Text(
-            value!,
+            value ?? "",
             maxLines: maxLines,
             style: TextStyle(
               fontSize: fontSize,

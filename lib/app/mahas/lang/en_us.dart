@@ -12,8 +12,11 @@ const Map<String, String> enUS = {
   "privacy_policy": "Terms & Privacy",
   "account_setting": "Account Setting",
   "ok": "OK",
+  "yes": "Yes",
   "cancel": "Cancel",
   "save": "Save",
+  "success": "Success",
+  "error": "An Error Occurred",
   "name": "Name",
   "name_hint": "Insert your name here",
   "email": "Email",
@@ -38,4 +41,8 @@ const Map<String, String> enUS = {
   "delete_account_subtitle":
       "Your account will be permanently deleted, and all transaction history will be lost.",
   "delete_account_confirm": "Are you sure you want to delete your account?",
+  "failed_upload_image": "Failed to Upload Image",
+  "success_update_profile": "Successfully updated your profile",
+  "go_back_confirmation":
+      "There are unsaved changes, are you sure you want to go back?",
 };

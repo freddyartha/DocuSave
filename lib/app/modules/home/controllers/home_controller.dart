@@ -1,36 +1,12 @@
+import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
-import 'package:docusave/app/mahas/models/banner_model.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
+import 'package:docusave/app/models/article_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
-  final List<BannerModel> listBanner = [
-    BannerModel(
-      id: 1,
-      text:
-          "Selamat Datang,\nIni adalah layanan antrian online sebagai komitmen kami melayani masyarakat Badung sejahtera",
-      image: "https://picsum.photos/id/237/200/300",
-    ),
-    BannerModel(
-      id: 2,
-      text:
-          "Selamat Datang,\nIni adalah layanan antrian online sebagai komitmen kami melayani masyarakat Badung sejahtera",
-      image: "https://picsum.photos/id/237/200/300",
-    ),
-    BannerModel(
-      id: 3,
-      text:
-          "Selamat Datang,\nIni adalah layanan antrian online sebagai komitmen kami melayani masyarakat Badung sejahtera",
-      image: "https://picsum.photos/id/237/200/300",
-    ),
-    BannerModel(
-      id: 4,
-      text:
-          "Selamat Datang,\nIni adalah layanan antrian online sebagai komitmen kami melayani masyarakat Badung sejahtera",
-      image: "https://picsum.photos/id/237/200/300",
-    ),
-  ];
+  final RxList<ArticleModel> listBanner = <ArticleModel>[].obs;
 
   List<MenuItemModel> layananList = [
     MenuItemModel(title: "receipt", image: "assets/images/receipt.png"),
@@ -38,18 +14,29 @@ class HomeController extends GetxController {
   ];
 
   RxBool historyLoading = true.obs;
+  RxBool articlesLoading = true.obs;
 
   @override
-  void onInit() {
+  void onInit() async {
     Future.delayed(Duration(seconds: 3), () => historyLoading.value = false);
+    loadArticles();
     super.onInit();
+  }
+
+  void loadArticles() async {
+    articlesLoading.value = true;
+    var data = await FirebaseRepository.getArticles();
+    if (data != null) {
+      listBanner.addAll(data);
+    }
+    articlesLoading.value = false;
   }
 
   void goToProfileList() {
     if (auth.currentUser == null) {
       Get.toNamed(Routes.LOGIN);
     } else {
-      Get.toNamed(Routes.PROFILE_LIST);
+      Get.toNamed(Routes.PROFILE_LIST)?.then((value) => update());
     }
   }
 }

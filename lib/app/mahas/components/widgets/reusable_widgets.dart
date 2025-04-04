@@ -5,10 +5,12 @@ import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
-import 'package:docusave/app/mahas/models/banner_model.dart';
+import 'package:docusave/app/models/article_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+
+enum NotifType { success, warning }
 
 class ReusableWidgets {
   static Widget generalTopHeaderAppBarWidget({
@@ -396,11 +398,15 @@ class ReusableWidgets {
     );
   }
 
-  static Future<bool?> warningBottomSheet({
+  static Future<bool?> notifBottomSheet({
+    required String subtitle,
     List<Widget>? children,
     String? title,
-    required String subtitle,
+    NotifType notifType = NotifType.warning,
   }) {
+    if (Get.isBottomSheetOpen == true) {
+      Get.back();
+    }
     return Get.bottomSheet<bool>(
       enableDrag: false,
       PopScope(
@@ -425,7 +431,11 @@ class ReusableWidgets {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     TextComponent(
-                      value: title ?? "Terjadi Kesalahan",
+                      value:
+                          title ??
+                          (notifType == NotifType.success
+                              ? "success".tr
+                              : "error".tr),
                       fontWeight: FontWeight.w600,
                       fontSize: MahasFontSize.h6,
                       margin: EdgeInsets.only(right: 10),
@@ -450,18 +460,21 @@ class ReusableWidgets {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Center(
-                        child: ImageComponent(
-                          localUrl: "assets/images/error.png",
-                          height: 150,
-                          width: Get.width,
-                          boxFit: BoxFit.fitHeight,
-                          margin: EdgeInsets.only(bottom: 20),
-                        ),
+                      ImageComponent(
+                        localUrl:
+                            notifType == NotifType.warning
+                                ? "assets/images/error.png"
+                                : "assets/images/success.png",
+                        height: 150,
+                        width: Get.width,
+                        boxFit: BoxFit.fitHeight,
+                        margin: EdgeInsets.only(bottom: 20),
                       ),
-                      TextComponent(value: subtitle),
+                      TextComponent(
+                        value: subtitle,
+                        textAlign: TextAlign.center,
+                      ),
                       if (children != null) ...children,
                       const SizedBox(height: 20),
                     ],
@@ -481,6 +494,7 @@ class ReusableWidgets {
     String? textConfirm,
     String? textCancel,
     Color confirmColor = MahasColors.primary,
+    bool withImage = false,
   }) {
     return Get.bottomSheet<bool>(
       enableDrag: false,
@@ -534,7 +548,18 @@ class ReusableWidgets {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 15),
+                      withImage
+                          ? Center(
+                            child: ImageComponent(
+                              localUrl: "assets/images/question.png",
+                              height: 150,
+                              width: Get.width,
+                              boxFit: BoxFit.fitHeight,
+                              margin: EdgeInsets.only(bottom: 20),
+                            ),
+                          )
+                          : SizedBox(height: 15),
+
                       ...children,
                       const SizedBox(height: 30),
                       Row(
@@ -578,7 +603,7 @@ class ReusableWidgets {
     );
   }
 
-  static Widget carouselWidget({required List<BannerModel> imageList}) {
+  static Widget carouselWidget({required List<ArticleModel> imageList}) {
     return CarouselSlider(
       items:
           imageList.map((item) {
@@ -597,7 +622,7 @@ class ReusableWidgets {
                 image: DecorationImage(
                   fit: BoxFit.cover,
                   alignment: Alignment.bottomCenter,
-                  image: NetworkImage(item.image),
+                  image: NetworkImage(item.imageUrl),
                 ),
               ),
               child: Align(
@@ -612,9 +637,23 @@ class ReusableWidgets {
                     ),
                     borderRadius: BorderRadius.circular(MahasRadius.large),
                   ),
-                  child: TextComponent(
-                    value: item.text,
-                    fontColor: MahasColors.white,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextComponent(
+                        value: item.title,
+                        fontColor: MahasColors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: MahasFontSize.h6,
+                      ),
+                      TextComponent(
+                        value: item.subtitle,
+                        fontColor: MahasColors.white,
+
+                        fontSize: MahasFontSize.small,
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -630,7 +669,7 @@ class ReusableWidgets {
     );
   }
 
-  static Widget listLoadingWidget({required int count}) {
+  static Widget listLoadingWidget({required int count, double? height}) {
     return Shimmer.fromColors(
       baseColor: MahasColors.mediumgray,
       highlightColor: MahasColors.lightgray,
@@ -646,9 +685,35 @@ class ReusableWidgets {
                 color: MahasColors.white,
                 borderRadius: BorderRadius.circular(MahasRadius.regular),
               ),
-              height: 80,
+              height: height ?? 80,
             ),
       ),
+    );
+  }
+
+  static Widget generalPopScopeWidget({
+    required Widget child,
+    required bool Function() showConfirmationCondition,
+    Function()? customBackAction,
+  }) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        if (showConfirmationCondition()) {
+          bool? result = await ReusableWidgets.confirmationBottomSheet(
+            textConfirm: "yes".tr,
+            withImage: true,
+            children: [TextComponent(value: "go_back_confirmation".tr)],
+          );
+          if (result == true) {
+            customBackAction ?? Get.back();
+          }
+        } else {
+          Get.back();
+        }
+      },
+      child: child,
     );
   }
 }

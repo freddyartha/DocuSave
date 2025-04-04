@@ -11,8 +11,11 @@ const Map<String, String> idID = {
   "privacy_policy": "Ketentuan & Privasi",
   "account_setting": "Pengaturan Akun",
   "ok": "Oke",
+  "yes": "Ya",
   "cancel": "Batal",
   "save": "Simpan",
+  "success": "Berhasil",
+  "error": "Terjadi Kesalahan",
   "name": "Nama",
   "name_hint": "Masukkan namamu disini",
   "email": "Email",
@@ -38,4 +41,8 @@ const Map<String, String> idID = {
   "delete_account_subtitle":
       "Akunmu akan dihapus secara permanen dan riwayat transaksi dari akunmu akan hilang",
   "delete_account_confirm": "Apakah kamu yakin ingin manghapus akun?",
+  "failed_upload_image": "Gagal Mengunggah Gambar",
+  "success_update_profile": "Berhasil memperbaharui profil",
+  "go_back_confirmation":
+      "Ada perubahan yang belum disimpan, kamu yakin ingin kembali?",
 };

@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
+import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
+import 'package:docusave/app/models/user_model.dart';
+import 'package:docusave/app/models/user_notification_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -20,11 +24,11 @@ class AuthController extends GetxController {
 
   final box = GetStorage();
   late Rx<User?> firebaseUser;
-  String? token;
+  String? notificationToken;
 
   @override
   void onInit() async {
-    // token = await messaging.getToken();
+    notificationToken = await messaging.getToken();
     firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.authStateChanges().distinct());
     debounce(
@@ -36,6 +40,27 @@ class AuthController extends GetxController {
   }
 
   void _setInitialScreen(User? user) async {
+    if (user != null) {
+      await FirebaseRepository.addUserToFirestore(
+        userModel: UserModel(
+          userid: user.uid,
+          name: user.displayName ?? "",
+          email: user.email ?? "",
+          createdat: Timestamp.now(),
+          subscriptionplan: "free",
+        ),
+      );
+      if (notificationToken != null && notificationToken!.isNotEmpty) {
+        await FirebaseRepository.addUserNotificationToken(
+          userNotificationModel: UserNotificationModel(
+            notificationToken: notificationToken!,
+            createdat: Timestamp.now(),
+          ),
+          userId: user.uid,
+        );
+      }
+      await FirebaseRepository.addUserDeviceInfo(user.uid);
+    }
     Get.offAllNamed(Routes.HOME);
   }
 
@@ -56,7 +81,7 @@ class AuthController extends GetxController {
       //   Helper.errorToast(message: e.toString());
       // }
       // await EasyLoading.dismiss();
-      ReusableWidgets.warningBottomSheet(subtitle: e.toString());
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
     }
     await EasyLoading.dismiss();
   }
@@ -87,7 +112,7 @@ class AuthController extends GetxController {
     if (user != null) {
       if (user.email.toString().endsWith("privaterelay.appleid.com")) {
         if (EasyLoading.isShow) await EasyLoading.dismiss();
-        ReusableWidgets.warningBottomSheet(
+        ReusableWidgets.notifBottomSheet(
           subtitle:
               "Tidak dapat menautkan akun karena email Apple bersifat privat",
         );
@@ -102,18 +127,18 @@ class AuthController extends GetxController {
                 "already in use by another account",
               )) {
             await GoogleSignIn().signOut();
-            ReusableWidgets.warningBottomSheet(
+            ReusableWidgets.notifBottomSheet(
               subtitle:
                   "Akun yang anda pilih sudah terhubung dengan pengguna lain",
             );
           } else if (e.toString().toLowerCase().contains(
             "do not correspond to the previously signed in user",
           )) {
-            ReusableWidgets.warningBottomSheet(
+            ReusableWidgets.notifBottomSheet(
               subtitle: "Tidak dapat menautkan akun dengan email yang berbeda",
             );
           } else {
-            ReusableWidgets.warningBottomSheet(
+            ReusableWidgets.notifBottomSheet(
               subtitle: "Terjadi kesalahan saat menautkan akun anda",
             );
           }
@@ -171,7 +196,7 @@ class AuthController extends GetxController {
       box.write('apple_login', true);
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code != AuthorizationErrorCode.canceled) {
-        ReusableWidgets.warningBottomSheet(subtitle: e.message);
+        ReusableWidgets.notifBottomSheet(subtitle: e.message);
       }
       await EasyLoading.dismiss();
     }
@@ -204,10 +229,10 @@ class AuthController extends GetxController {
       await GoogleSignIn().signOut();
     } on SignInWithAppleAuthorizationException catch (e) {
       if (e.code != AuthorizationErrorCode.canceled) {
-        ReusableWidgets.warningBottomSheet(subtitle: e.message);
+        ReusableWidgets.notifBottomSheet(subtitle: e.message);
       }
     } catch (e) {
-      ReusableWidgets.warningBottomSheet(subtitle: e.toString());
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
     }
     await EasyLoading.dismiss();
   }

@@ -2,6 +2,7 @@ import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
@@ -30,41 +31,53 @@ class ProfileListView extends GetView<ProfileListController> {
               ReusableWidgets.generalTopHeaderAppBarWidget(children: []),
               SafeArea(
                 child: Align(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.symmetric(vertical: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            MahasRadius.extraLarge * 2,
-                          ),
-                          color: MahasColors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: MahasColors.black.withValues(alpha: 0.5),
-                              blurRadius: 5,
-                              spreadRadius: 1,
-                              offset: Offset(0, 0),
+                  child: GetBuilder(
+                    builder:
+                        (ProfileListController controller) => Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  MahasRadius.extraLarge * 2,
+                                ),
+                                color: MahasColors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: MahasColors.black.withValues(
+                                      alpha: 0.5,
+                                    ),
+                                    blurRadius: 5,
+                                    spreadRadius: 1,
+                                    offset: Offset(0, 0),
+                                  ),
+                                ],
+                              ),
+                              height: 100,
+                              width: 100,
+                              clipBehavior: Clip.hardEdge,
+                              child:
+                                  MahasConfig.userProfile?.profilepic != null
+                                      ? ImageComponent(
+                                        networkUrl:
+                                            MahasConfig.userProfile?.profilepic,
+                                      )
+                                      : ImageComponent(
+                                        localUrl: "assets/images/user.png",
+                                      ),
+                            ),
+                            TextComponent(
+                              value: MahasConfig.userProfile?.name,
+                              fontWeight: FontWeight.w600,
+                              fontSize: MahasFontSize.h5,
+                              fontColor: MahasColors.white,
+                            ),
+                            TextComponent(
+                              value: MahasConfig.userProfile?.email,
+                              fontColor: MahasColors.white,
                             ),
                           ],
                         ),
-                        height: 100,
-                        width: 100,
-                        child: ImageComponent(
-                          localUrl: "assets/images/user.png",
-                        ),
-                      ),
-                      TextComponent(
-                        value: "Nama Profile",
-                        fontWeight: FontWeight.w600,
-                        fontSize: MahasFontSize.h5,
-                        fontColor: MahasColors.white,
-                      ),
-                      TextComponent(
-                        value: "Email Profile",
-                        fontColor: MahasColors.white,
-                      ),
-                    ],
                   ),
                 ),
               ),
