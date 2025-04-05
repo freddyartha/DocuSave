@@ -22,6 +22,7 @@ class ProfileSetupController extends GetxController {
     type: InputTextType.email,
   );
   CroppedFile? fileImg;
+  RxString tmpProfilePic = "".obs;
   RxString editPictureLabel = "add_image".obs;
   RxBool isLoading = false.obs;
   RxBool buttonActive = false.obs;
@@ -30,6 +31,7 @@ class ProfileSetupController extends GetxController {
   void onInit() {
     namaCon.value = MahasConfig.userProfile?.name;
     emailCon.value = MahasConfig.userProfile?.email;
+    tmpProfilePic.value = MahasConfig.userProfile?.profilepic ?? "";
     if (MahasConfig.userProfile?.profilepic != null) {
       editPictureLabel.value = "change_image";
     }
@@ -45,6 +47,10 @@ class ProfileSetupController extends GetxController {
 
   void pickImageOptions() async {
     await SelectImageComponent.selectImageBottomSheet(
+      showRemovePicture:
+          fileImg != null || MahasConfig.userProfile?.profilepic != null
+              ? true
+              : false,
       removePicture: removeImage,
       selectCamera: () async => selectImage(ImageSource.camera),
       selectGallery: () async => selectImage(ImageSource.gallery),
@@ -62,6 +68,7 @@ class ProfileSetupController extends GetxController {
   void removeImage() {
     fileImg = null;
     editPictureLabel.value = "add_image";
+    tmpProfilePic.value = "";
     if (!buttonActive.value) buttonActive.value = true;
     update();
   }
@@ -69,7 +76,8 @@ class ProfileSetupController extends GetxController {
   bool showConfirmationCondition() {
     if (namaCon.value != MahasConfig.userProfile?.name ||
         emailCon.value != MahasConfig.userProfile?.email ||
-        fileImg != null) {
+        fileImg != null ||
+        (fileImg == null && tmpProfilePic.value == "")) {
       return true;
     } else {
       return false;
@@ -94,6 +102,13 @@ class ProfileSetupController extends GetxController {
           fileName: auth.currentUser!.uid,
           imageFile: File(fileImg!.path),
         );
+      }
+      if (editPictureLabel.value == "add_image") {
+        FirebaseRepository.removeImageFromFirebaseStorage(
+          imageLocationType: ImageLocationType.profile,
+          fileName: auth.currentUser!.uid,
+        );
+        MahasConfig.userProfile?.profilepic = null;
       }
       UserModel userModel = UserModel(
         userid: auth.currentUser!.uid,

@@ -9,7 +9,11 @@ class HomeController extends GetxController {
   final RxList<ArticleModel> listBanner = <ArticleModel>[].obs;
 
   List<MenuItemModel> layananList = [
-    MenuItemModel(title: "receipt", image: "assets/images/receipt.png"),
+    MenuItemModel(
+      title: "receipt",
+      image: "assets/images/receipt.png",
+      onTab: () => Get.toNamed(Routes.RECEIPT_LIST),
+    ),
     MenuItemModel(title: "warranty", image: "assets/images/warranty.png"),
   ];
 

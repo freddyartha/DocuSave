@@ -12,6 +12,8 @@ abstract class Routes {
   static const PROFILE_SETUP = _Paths.PROFILE_SETUP;
   static const LOGIN = _Paths.LOGIN;
   static const PROFILE_ACCOUNT_SETTING = _Paths.PROFILE_ACCOUNT_SETTING;
+  static const RECEIPT_LIST = _Paths.RECEIPT_LIST;
+  static const RECEIPT_SETUP = _Paths.RECEIPT_SETUP;
 }
 
 abstract class _Paths {
@@ -23,4 +25,6 @@ abstract class _Paths {
   static const PROFILE_SETUP = '/profile-setup';
   static const LOGIN = '/login';
   static const PROFILE_ACCOUNT_SETTING = '/profile-account-setting';
+  static const RECEIPT_LIST = '/receipt-list';
+  static const RECEIPT_SETUP = '/receipt-setup';
 }

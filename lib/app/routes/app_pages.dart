@@ -14,6 +14,10 @@ import '../modules/profile_list/bindings/profile_list_binding.dart';
 import '../modules/profile_list/views/profile_list_view.dart';
 import '../modules/profile_setup/bindings/profile_setup_binding.dart';
 import '../modules/profile_setup/views/profile_setup_view.dart';
+import '../modules/receipt_list/bindings/receipt_list_binding.dart';
+import '../modules/receipt_list/views/receipt_list_view.dart';
+import '../modules/receipt_setup/bindings/receipt_setup_binding.dart';
+import '../modules/receipt_setup/views/receipt_setup_view.dart';
 import '../modules/spash_screen/bindings/spash_screen_binding.dart';
 import '../modules/spash_screen/views/spash_screen_view.dart';
 
@@ -124,6 +128,16 @@ class AppPages {
           name: 'ProfileAccountSettingPage',
         ),
       ],
+    ),
+    GetPage(
+      name: _Paths.RECEIPT_LIST,
+      page: () => const ReceiptListView(),
+      binding: ReceiptListBinding(),
+    ),
+    GetPage(
+      name: _Paths.RECEIPT_SETUP,
+      page: () => const ReceiptSetupView(),
+      binding: ReceiptSetupBinding(),
     ),
   ];
 }

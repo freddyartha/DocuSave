@@ -71,14 +71,10 @@ class FirebaseRepository {
     required File imageFile,
   }) async {
     try {
-      Reference storageRef;
-      if (imageLocationType == ImageLocationType.profile) {
-        storageRef = firebaseStorage.child('profile/$fileName.jpg');
-      } else if (imageLocationType == ImageLocationType.receipt) {
-        storageRef = firebaseStorage.child('receipt/$fileName.jpg');
-      } else {
-        storageRef = firebaseStorage.child('warranty/$fileName.jpg');
-      }
+      Reference storageRef = _getFirebaseStorageRef(
+        imageLocationType: imageLocationType,
+        fileName: fileName,
+      );
 
       //hapus gambar jika sudah ada kemudian upload ulang
       await _checkAndDeleteFileIfExist(fileRef: storageRef);
@@ -96,6 +92,41 @@ class FirebaseRepository {
       );
       return null;
     }
+  }
+
+  static Future<void> removeImageFromFirebaseStorage({
+    required ImageLocationType imageLocationType,
+    required String fileName,
+  }) async {
+    try {
+      //hapus gambar jika sudah ada kemudian upload ulang
+      await _checkAndDeleteFileIfExist(
+        fileRef: _getFirebaseStorageRef(
+          imageLocationType: imageLocationType,
+          fileName: fileName,
+        ),
+      );
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(
+        title: "failed_upload_image".tr,
+        subtitle: e.toString(),
+      );
+    }
+  }
+
+  static Reference _getFirebaseStorageRef({
+    required ImageLocationType imageLocationType,
+    required String fileName,
+  }) {
+    Reference storageRef;
+    if (imageLocationType == ImageLocationType.profile) {
+      storageRef = firebaseStorage.child('profile/$fileName.jpg');
+    } else if (imageLocationType == ImageLocationType.receipt) {
+      storageRef = firebaseStorage.child('receipt/$fileName.jpg');
+    } else {
+      storageRef = firebaseStorage.child('warranty/$fileName.jpg');
+    }
+    return storageRef;
   }
 
   static Future<bool> _checkIfFileExists(Reference fileRef) async {

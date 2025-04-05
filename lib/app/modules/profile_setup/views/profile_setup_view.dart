@@ -4,7 +4,6 @@ import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
-import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
 
@@ -61,10 +60,9 @@ class ProfileSetupView extends GetView<ProfileSetupController> {
                                 imageFromFile: controller.fileImg!.path,
                                 boxFit: BoxFit.cover,
                               );
-                            } else if (MahasConfig.userProfile?.profilepic !=
-                                null) {
+                            } else if (controller.tmpProfilePic.value != "") {
                               return ImageComponent(
-                                networkUrl: MahasConfig.userProfile?.profilepic,
+                                networkUrl: controller.tmpProfilePic.value,
                               );
                             } else {
                               return ImageComponent(

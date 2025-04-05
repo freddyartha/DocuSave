@@ -9,7 +9,8 @@ import 'package:image_picker/image_picker.dart';
 
 class SelectImageComponent {
   static Future selectImageBottomSheet({
-    required Function() removePicture,
+    required bool showRemovePicture,
+    Function()? removePicture,
     Function()? selectGallery,
     Function()? selectCamera,
   }) {
@@ -32,16 +33,18 @@ class SelectImageComponent {
         ),
       );
     }
-    imageOptions.add(
-      MenuItemModel(
-        title: "remove_image",
-        icon: Icons.delete_outline_rounded,
-        onTab: () {
-          if (Get.isBottomSheetOpen == true) Get.back();
-          removePicture();
-        },
-      ),
-    );
+    if (showRemovePicture) {
+      imageOptions.add(
+        MenuItemModel(
+          title: "remove_image",
+          icon: Icons.delete_outline_rounded,
+          onTab: () {
+            if (Get.isBottomSheetOpen == true) Get.back();
+            removePicture != null ? removePicture() : null;
+          },
+        ),
+      );
+    }
 
     return Get.bottomSheet<bool>(
       enableDrag: false,

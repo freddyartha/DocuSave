@@ -119,41 +119,43 @@ class HomeView extends GetView<HomeController> {
                           children:
                               controller.layananList
                                   .map(
-                                    (item) => Container(
-                                      padding: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: MahasColors.white,
-                                        borderRadius: BorderRadius.circular(
-                                          MahasRadius.regular,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: MahasColors.black.withValues(
-                                              alpha: 0.5,
+                                    (item) => GestureDetector(
+                                      onTap: item.onTab,
+                                      child: Container(
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: MahasColors.white,
+                                          borderRadius: BorderRadius.circular(
+                                            MahasRadius.regular,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: MahasColors.black
+                                                  .withValues(alpha: 0.5),
+                                              blurRadius: 8,
+                                              spreadRadius: 1,
+                                              offset: Offset(0, 0),
                                             ),
-                                            blurRadius: 8,
-                                            spreadRadius: 1,
-                                            offset: Offset(0, 0),
-                                          ),
-                                        ],
-                                      ),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        spacing: 5,
-                                        children: [
-                                          ImageComponent(
-                                            localUrl: item.image,
-                                            height: Get.width * 0.25,
-                                            width: Get.width * 0.25,
-                                          ),
-                                          TextComponent(
-                                            value: item.title!.tr,
-                                            fontWeight: FontWeight.w600,
-                                            height: 1,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
+                                          ],
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          spacing: 5,
+                                          children: [
+                                            ImageComponent(
+                                              localUrl: item.image,
+                                              height: Get.width * 0.25,
+                                              width: Get.width * 0.25,
+                                            ),
+                                            TextComponent(
+                                              value: item.title!.tr,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )
