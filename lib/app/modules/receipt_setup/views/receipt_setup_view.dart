@@ -1,4 +1,5 @@
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
+import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
@@ -28,6 +29,16 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
             physics: ClampingScrollPhysics(),
             children: [
               ButtonComponent(onTap: controller.scanDocument, text: "Scan"),
+              GetBuilder(
+                builder:
+                    (ReceiptSetupController controller) =>
+                        controller.scannedDoc.isNotEmpty
+                            ? ImageComponent(
+                              imageFromFile: controller.scannedDoc.first,
+                              boxFit: BoxFit.cover,
+                            )
+                            : SizedBox(),
+              ),
               InputTextComponent(
                 controller: controller.namaCon,
                 label: "name".tr,

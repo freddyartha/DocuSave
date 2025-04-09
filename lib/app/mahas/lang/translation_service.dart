@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class TranslationService extends Translations {
-  static Future<Locale> get locale async {
+  static Locale get locale {
     String? localeCode = GetStorage().read("locale");
     if (localeCode != null && localeCode == "id") {
       return Locale(localeCode, localeCode.toUpperCase());

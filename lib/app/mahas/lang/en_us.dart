@@ -45,4 +45,6 @@ const Map<String, String> enUS = {
   "success_update_profile": "Successfully updated your profile",
   "go_back_confirmation":
       "There are unsaved changes, are you sure you want to go back?",
+  "no_connection_subtitle":
+      "No internet connection. Please enable your internet to use the features in this app",
 };

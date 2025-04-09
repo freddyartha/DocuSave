@@ -10,6 +10,7 @@ import 'package:docusave/app/models/user_model.dart';
 import 'package:docusave/app/models/user_notification_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -28,7 +29,9 @@ class AuthController extends GetxController {
 
   @override
   void onInit() async {
-    notificationToken = await messaging.getToken();
+    // notificationToken = await messaging.getToken();
+    // await messaging.getAPNSToken();
+    requestNotificationPermission();
     firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.authStateChanges().distinct());
     debounce(
@@ -62,6 +65,17 @@ class AuthController extends GetxController {
       await FirebaseRepository.addUserDeviceInfo(user.uid);
     }
     Get.offAllNamed(Routes.HOME);
+  }
+
+  //perlu diperbaiki untuk UI/UX yang lebih bagus
+  void requestNotificationPermission() async {
+    NotificationSettings settings = await messaging.requestPermission();
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      // Dapatkan token FCM (yang juga mengandalkan APNs di iOS)
+      notificationToken = await messaging.getToken();
+      // Dapatkan APNs token (iOS only)
+      await messaging.getAPNSToken();
+    }
   }
 
   Future<void> signInWithGoogle({bool isLinkingUser = false}) async {

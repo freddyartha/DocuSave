@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
+import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 final remoteConfig = FirebaseRemoteConfig.instance;
@@ -73,13 +75,13 @@ class MahasService {
         FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
 
         // remote config
-        await remoteConfig.setConfigSettings(
-          RemoteConfigSettings(
-            fetchTimeout: const Duration(seconds: 1),
-            minimumFetchInterval: Duration.zero,
-          ),
-        );
-        await remoteConfig.fetchAndActivate();
+        // await remoteConfig.setConfigSettings(
+        //   RemoteConfigSettings(
+        //     fetchTimeout: const Duration(seconds: 1),
+        //     minimumFetchInterval: Duration.zero,
+        //   ),
+        // );
+        // await remoteConfig.fetchAndActivate();
         // get api from remote config
         // String noInternetRemoteConfig =
         //     remoteConfig.getString("no_internet_error_message");
@@ -100,6 +102,8 @@ class MahasService {
         // auth controller
         AuthController.instance;
       });
-    } catch (e) {}
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: "no_connection_subtitle".tr);
+    }
   }
 }

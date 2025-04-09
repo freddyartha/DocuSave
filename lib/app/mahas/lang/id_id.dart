@@ -45,4 +45,6 @@ const Map<String, String> idID = {
   "success_update_profile": "Berhasil memperbaharui profil",
   "go_back_confirmation":
       "Ada perubahan yang belum disimpan, kamu yakin ingin kembali?",
+  "no_connection_subtitle":
+      "Kamu tidak terkoneksi ke internet, aktifkan internetmu untuk mengakses fitur-fitur di aplikasi ini",
 };
