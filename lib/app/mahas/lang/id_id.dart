@@ -47,4 +47,9 @@ const Map<String, String> idID = {
       "Ada perubahan yang belum disimpan, kamu yakin ingin kembali?",
   "no_connection_subtitle":
       "Kamu tidak terkoneksi ke internet, aktifkan internetmu untuk mengakses fitur-fitur di aplikasi ini",
+  "scan": "Pindai",
+  "tap_scan_subtitle":
+      "Pencet tombol pindai buat mulai scan dan ambil foto dokumen kamu",
+  "confirm_reset_scan": "Kamu yakin ingin menghapus semua hasil pemindaian?",
+  "scan_result": "Hasil Pemindaian",
 };

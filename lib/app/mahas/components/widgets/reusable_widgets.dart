@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:ui' as ui;
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
@@ -46,6 +50,7 @@ class ReusableWidgets {
     return AppBar(
       backgroundColor: backgroundColor,
       foregroundColor: textColor,
+      surfaceTintColor: backgroundColor,
       title: TextComponent(
         value: title,
         fontWeight: FontWeight.w600,
@@ -422,10 +427,9 @@ class ReusableWidgets {
           ),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: SafeArea(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -457,28 +461,32 @@ class ReusableWidgets {
                     ),
                   ],
                 ),
-                Padding(
+                ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    children: [
-                      ImageComponent(
-                        localUrl:
-                            notifType == NotifType.warning
-                                ? "assets/images/error.png"
-                                : "assets/images/success.png",
-                        height: 150,
-                        width: Get.width,
-                        boxFit: BoxFit.fitHeight,
-                        margin: EdgeInsets.only(bottom: 20),
-                      ),
-                      TextComponent(
-                        value: subtitle,
-                        textAlign: TextAlign.center,
-                      ),
-                      if (children != null) ...children,
-                      const SizedBox(height: 20),
-                    ],
-                  ),
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  children: [
+                    Column(
+                      children: [
+                        ImageComponent(
+                          localUrl:
+                              notifType == NotifType.warning
+                                  ? "assets/images/error.png"
+                                  : "assets/images/success.png",
+                          height: 150,
+                          width: Get.width,
+                          boxFit: BoxFit.fitHeight,
+                          margin: EdgeInsets.only(bottom: 20),
+                        ),
+                        TextComponent(
+                          value: subtitle,
+                          textAlign: TextAlign.center,
+                        ),
+                        if (children != null) ...children,
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -511,10 +519,8 @@ class ReusableWidgets {
           ),
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           child: SafeArea(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              physics: ClampingScrollPhysics(),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -542,59 +548,119 @@ class ReusableWidgets {
                     ),
                   ],
                 ),
-
-                Padding(
+                ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      withImage
-                          ? Center(
-                            child: ImageComponent(
-                              localUrl: "assets/images/question.png",
-                              height: 150,
-                              width: Get.width,
-                              boxFit: BoxFit.fitHeight,
-                              margin: EdgeInsets.only(bottom: 20),
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        withImage
+                            ? Center(
+                              child: ImageComponent(
+                                localUrl: "assets/images/question.png",
+                                height: 150,
+                                width: Get.width,
+                                boxFit: BoxFit.fitHeight,
+                                margin: EdgeInsets.only(bottom: 20),
+                              ),
+                            )
+                            : SizedBox(height: 15),
+                        ...children,
+                        const SizedBox(height: 30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child: ButtonComponent(
+                                text: textCancel ?? "cancel".tr,
+                                isMultilineText: true,
+                                borderColor: MahasColors.grayText,
+                                btnColor: MahasColors.white,
+                                textColor: MahasColors.black,
+                                borderRadius: MahasRadius.regular,
+                                onTap: () {
+                                  Get.back(result: false);
+                                },
+                              ),
                             ),
-                          )
-                          : SizedBox(height: 15),
-
-                      ...children,
-                      const SizedBox(height: 30),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        spacing: 20,
-                        children: [
-                          Expanded(
-                            child: ButtonComponent(
-                              text: textCancel ?? "cancel".tr,
-                              isMultilineText: true,
-                              borderColor: MahasColors.grayText,
-                              btnColor: MahasColors.white,
-                              textColor: MahasColors.black,
-                              borderRadius: MahasRadius.regular,
-                              onTap: () {
-                                Get.back(result: false);
-                              },
+                            Expanded(
+                              child: ButtonComponent(
+                                text: textConfirm ?? "ok".tr,
+                                borderRadius: MahasRadius.regular,
+                                btnColor: confirmColor,
+                                isMultilineText: true,
+                                onTap: () {
+                                  Get.back(result: true);
+                                },
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child: ButtonComponent(
-                              text: textConfirm ?? "ok".tr,
-                              borderRadius: MahasRadius.regular,
-                              btnColor: confirmColor,
-                              isMultilineText: true,
-                              onTap: () {
-                                Get.back(result: true);
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  static Future<bool?> customBottomSheet({
+    required List<Widget> children,
+    String? title,
+  }) {
+    return Get.bottomSheet<bool>(
+      isScrollControlled: true,
+      enableDrag: true,
+      PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) {
+          if (didPop) return;
+          Get.back(result: false);
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: MahasColors.white,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          child: SafeArea(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextComponent(
+                      value: title ?? "",
+                      fontWeight: FontWeight.w600,
+                      fontSize: MahasFontSize.h6,
+                      margin: EdgeInsets.only(right: 10),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      height: 40,
+                      child: GestureDetector(
+                        onTap: () => Get.back(result: false),
+                        child: Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: MahasColors.black.withValues(alpha: 0.06),
+                          ),
+                          child: Icon(Icons.close, size: 30),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                ...children,
               ],
             ),
           ),
@@ -666,6 +732,124 @@ class ReusableWidgets {
         autoPlayInterval: const Duration(seconds: 3),
         autoPlayAnimationDuration: const Duration(milliseconds: 1000),
       ),
+    );
+  }
+
+  static Widget scannedDocCarouselWidget({required List<String> imageList}) {
+    final CarouselSliderController imageController = CarouselSliderController();
+    RxInt current = 0.obs;
+
+    // Ambil ukuran gambar dari File
+    Future<Size> getFileImageSize(File file) async {
+      final bytes = await file.readAsBytes();
+      final codec = await ui.instantiateImageCodec(bytes);
+      final frame = await codec.getNextFrame();
+      final image = frame.image;
+      return Size(image.width.toDouble(), image.height.toDouble());
+    }
+
+    return ListView(
+      padding: EdgeInsets.only(bottom: 20),
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      children: [
+        CarouselSlider(
+          items:
+              imageList.map((item) {
+                return GestureDetector(
+                  onTap:
+                      () => customBottomSheet(
+                        title: "scan_result".tr,
+                        children: [
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final screenWidth = Get.width;
+                              final screenHeight = Get.height * 0.75;
+
+                              return FutureBuilder<Size>(
+                                future: getFileImageSize(File(item)),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(
+                                        color: MahasColors.primary,
+                                      ),
+                                    );
+                                  }
+
+                                  final imageSize = snapshot.data!;
+                                  final aspectRatio =
+                                      imageSize.width / imageSize.height;
+                                  final imageHeight = screenWidth / aspectRatio;
+
+                                  return ImageComponent(
+                                    imageFromFile: item,
+                                    width: screenWidth,
+                                    height:
+                                        imageHeight > screenHeight
+                                            ? screenHeight
+                                            : imageHeight,
+                                    boxFit: BoxFit.fill,
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                  child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: MahasColors.black.withValues(alpha: 0.5),
+                          blurRadius: 8,
+                          offset: Offset(0, 0),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(MahasRadius.large),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        alignment: Alignment.bottomCenter,
+                        image: FileImage(File(item)),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+          carouselController: imageController,
+          options: CarouselOptions(
+            height: Get.height * 0.5,
+            autoPlay: true,
+            enlargeCenterPage: true,
+            autoPlayInterval: const Duration(seconds: 8),
+            autoPlayAnimationDuration: const Duration(seconds: 3),
+            onPageChanged: (index, reason) => current.value = index,
+          ),
+        ),
+        Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children:
+                imageList.asMap().entries.map((entry) {
+                  return GestureDetector(
+                    onTap: () => imageController.animateToPage(entry.key),
+                    child: Container(
+                      width: current.value == entry.key ? 20 : 10,
+                      height: 8,
+                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(3)),
+                        color: (MahasColors.primary).withValues(
+                          alpha: current.value == entry.key ? 1 : 0.4,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+          ),
+        ),
+      ],
     );
   }
 

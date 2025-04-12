@@ -2,7 +2,10 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:docusave/app/mahas/constants/input_formatter.dart';
 
+Map<String, dynamic> userModelToJson(ReceiptModel data) => data.toJson();
+
 class ReceiptModel {
+  String? documentid;
   String? receiptid;
   String? storename;
   Timestamp? purchasedate;
@@ -10,11 +13,10 @@ class ReceiptModel {
   String? currency;
   String? category;
   String? paymentmethod;
-  List<ReceiptItemsModel>? items;
   String? receiptimage;
   String? notes;
-  String? warrantyid;
   Timestamp? createdat;
+  Timestamp? updatedat;
 
   static fromJson(String jsonString) {
     final data = json.decode(jsonString);
@@ -24,6 +26,7 @@ class ReceiptModel {
   static fromDynamic(dynamic dynamicData) {
     final model = ReceiptModel();
 
+    model.documentid = dynamicData['documentId'];
     model.receiptid = dynamicData['receiptId'];
     model.storename = dynamicData['storeName'];
     model.purchasedate = InputFormatter.dynamicToTimestamp(
@@ -35,41 +38,30 @@ class ReceiptModel {
     model.currency = dynamicData['currency'];
     model.category = dynamicData['category'];
     model.paymentmethod = dynamicData['paymentMethod'];
-    if (dynamicData['items'] != null) {
-      final detailT = dynamicData['items'] as List;
-      model.items = [];
-      for (var i = 0; i < detailT.length; i++) {
-        model.items!.add(ReceiptItemsModel.fromDynamic(detailT[i]));
-      }
-    }
     model.receiptimage = dynamicData['receiptImage'];
     model.notes = dynamicData['notes'];
-    model.warrantyid = dynamicData['warrantyId'];
     model.createdat = InputFormatter.dynamicToTimestamp(
       dynamicData['createdAt'],
+    );
+    model.createdat = InputFormatter.dynamicToTimestamp(
+      dynamicData['updatedAt'],
     );
 
     return model;
   }
-}
 
-class ReceiptItemsModel {
-  String? itemname;
-  double? price;
-  int? quantity;
-
-  static fromJson(String jsonString) {
-    final data = json.decode(jsonString);
-    return fromDynamic(data);
-  }
-
-  static fromDynamic(dynamic dynamicData) {
-    final model = ReceiptItemsModel();
-
-    model.itemname = dynamicData['itemName'];
-    model.price = InputFormatter.dynamicToDouble(dynamicData['price']);
-    model.quantity = InputFormatter.dynamicToInt(dynamicData['quantity']);
-
-    return model;
-  }
+  Map<String, dynamic> toJson() => {
+    'documentId': documentid,
+    'receiptId': receiptid,
+    'storeName': storename,
+    'purchaseDate': purchasedate,
+    'totalAmount': totalamount,
+    'currency': currency,
+    'category': category,
+    'paymentMethod': paymentmethod,
+    'receiptImage': receiptimage,
+    'notes': notes,
+    'createdAt': createdat,
+    'updatedAt': updatedat,
+  };
 }

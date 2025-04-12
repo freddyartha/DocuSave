@@ -47,4 +47,9 @@ const Map<String, String> enUS = {
       "There are unsaved changes, are you sure you want to go back?",
   "no_connection_subtitle":
       "No internet connection. Please enable your internet to use the features in this app",
+  "scan": "Scan",
+  "tap_scan_subtitle":
+      "Tap the scan button to start scanning and snap photos of your document",
+  "confirm_reset_scan": "Are you sure you want to delete all scanned results?",
+  "scan_result": "Scan Result",
 };
