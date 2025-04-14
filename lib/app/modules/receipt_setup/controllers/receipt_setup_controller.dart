@@ -83,7 +83,9 @@ class ReceiptSetupController extends GetxController
         page: 4,
       );
       if (results != null) {
-        scannedDoc.addAll(results as List<String>);
+        for (var r in results) {
+          scannedDoc.add(r.toString());
+        }
 
         // OCR
         final textRecognizer = TextRecognizer(
@@ -100,6 +102,10 @@ class ReceiptSetupController extends GetxController
             print(recognizedText.text);
           }
           await textRecognizer.close();
+          await ReusableWidgets.notifBottomSheet(
+            subtitle:
+                "Gagal membaca teks pada gambar, harap masukkan detail data secara manual",
+          );
         }
       }
 

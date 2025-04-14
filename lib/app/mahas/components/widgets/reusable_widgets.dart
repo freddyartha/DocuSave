@@ -739,6 +739,10 @@ class ReusableWidgets {
     final CarouselSliderController imageController = CarouselSliderController();
     RxInt current = 0.obs;
 
+    //sizes
+    final screenWidth = Get.width;
+    final screenHeight = Get.height * 0.75;
+
     // Ambil ukuran gambar dari File
     Future<Size> getFileImageSize(File file) async {
       final bytes = await file.readAsBytes();
@@ -748,109 +752,134 @@ class ReusableWidgets {
       return Size(image.width.toDouble(), image.height.toDouble());
     }
 
-    return ListView(
-      padding: EdgeInsets.only(bottom: 20),
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      children: [
-        CarouselSlider(
-          items:
-              imageList.map((item) {
-                return GestureDetector(
-                  onTap:
-                      () => customBottomSheet(
-                        title: "scan_result".tr,
-                        children: [
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              final screenWidth = Get.width;
-                              final screenHeight = Get.height * 0.75;
-
-                              return FutureBuilder<Size>(
-                                future: getFileImageSize(File(item)),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(
-                                        color: MahasColors.primary,
-                                      ),
-                                    );
-                                  }
-
-                                  final imageSize = snapshot.data!;
-                                  final aspectRatio =
-                                      imageSize.width / imageSize.height;
-                                  final imageHeight = screenWidth / aspectRatio;
-
-                                  return ImageComponent(
-                                    imageFromFile: item,
-                                    width: screenWidth,
-                                    height:
-                                        imageHeight > screenHeight
-                                            ? screenHeight
-                                            : imageHeight,
-                                    boxFit: BoxFit.fill,
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: MahasColors.black.withValues(alpha: 0.5),
-                          blurRadius: 8,
-                          offset: Offset(0, 0),
+    Future<void> showImageBottomSheet(String item) async =>
+        await customBottomSheet(
+          title: "scan_result".tr,
+          children: [
+            LayoutBuilder(
+              builder: (context, constraints) {
+                return FutureBuilder<Size>(
+                  future: getFileImageSize(File(item)),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          color: MahasColors.primary,
                         ),
-                      ],
-                      borderRadius: BorderRadius.circular(MahasRadius.large),
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        alignment: Alignment.bottomCenter,
-                        image: FileImage(File(item)),
-                      ),
-                    ),
-                  ),
+                      );
+                    }
+
+                    final imageSize = snapshot.data!;
+                    final aspectRatio = imageSize.width / imageSize.height;
+                    final imageHeight = screenWidth / aspectRatio;
+
+                    return ImageComponent(
+                      zoomable: true,
+                      imageFromFile: item,
+                      width: screenWidth,
+                      height:
+                          imageHeight > screenHeight
+                              ? screenHeight
+                              : imageHeight,
+                      boxFit: BoxFit.fill,
+                    );
+                  },
                 );
-              }).toList(),
-          carouselController: imageController,
-          options: CarouselOptions(
-            height: Get.height * 0.5,
-            autoPlay: true,
-            enlargeCenterPage: true,
-            autoPlayInterval: const Duration(seconds: 8),
-            autoPlayAnimationDuration: const Duration(seconds: 3),
-            onPageChanged: (index, reason) => current.value = index,
+              },
+            ),
+          ],
+        );
+
+    if (imageList.length <= 1) {
+      final item = imageList.first;
+      return GestureDetector(
+        onTap: () => showImageBottomSheet(item),
+        child: Container(
+          margin: EdgeInsets.all(10),
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: MahasColors.black.withValues(alpha: 0.5),
+                blurRadius: 8,
+                offset: Offset(0, 0),
+              ),
+            ],
+            borderRadius: BorderRadius.circular(MahasRadius.large),
+          ),
+          child: ImageComponent(
+            imageFromFile: item,
+            width: screenWidth,
+            boxFit: BoxFit.fitWidth,
           ),
         ),
-        Obx(
-          () => Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children:
-                imageList.asMap().entries.map((entry) {
+      );
+    } else {
+      return ListView(
+        padding: EdgeInsets.only(bottom: 20),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          CarouselSlider(
+            items:
+                imageList.map((item) {
                   return GestureDetector(
-                    onTap: () => imageController.animateToPage(entry.key),
+                    onTap: () => showImageBottomSheet(item),
                     child: Container(
-                      width: current.value == entry.key ? 20 : 10,
-                      height: 8,
-                      margin: const EdgeInsets.symmetric(horizontal: 2),
+                      margin: EdgeInsets.symmetric(vertical: 10),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(3)),
-                        color: (MahasColors.primary).withValues(
-                          alpha: current.value == entry.key ? 1 : 0.4,
+                        boxShadow: [
+                          BoxShadow(
+                            color: MahasColors.black.withValues(alpha: 0.5),
+                            blurRadius: 8,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.circular(MahasRadius.large),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          alignment: Alignment.bottomCenter,
+                          image: FileImage(File(item)),
                         ),
                       ),
                     ),
                   );
                 }).toList(),
+            carouselController: imageController,
+            options: CarouselOptions(
+              height: Get.height * 0.5,
+              autoPlay: true,
+              enlargeCenterPage: true,
+              autoPlayInterval: const Duration(seconds: 8),
+              autoPlayAnimationDuration: const Duration(seconds: 3),
+              onPageChanged: (index, reason) => current.value = index,
+            ),
           ),
-        ),
-      ],
-    );
+          Obx(
+            () => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:
+                  imageList.asMap().entries.map((entry) {
+                    return GestureDetector(
+                      onTap: () => imageController.animateToPage(entry.key),
+                      child: Container(
+                        width: current.value == entry.key ? 20 : 10,
+                        height: 8,
+                        margin: const EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(3)),
+                          color: (MahasColors.primary).withValues(
+                            alpha: current.value == entry.key ? 1 : 0.4,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   static Widget listLoadingWidget({required int count, double? height}) {
