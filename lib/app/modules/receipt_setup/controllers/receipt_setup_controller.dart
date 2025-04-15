@@ -1,4 +1,5 @@
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
+import 'package:docusave/app/mahas/components/others/ocr_reader_statics.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:flutter/material.dart';
@@ -98,8 +99,13 @@ class ReceiptSetupController extends GetxController
               inputImage,
             );
 
-            print("Hasil OCR:");
-            print(recognizedText.text);
+            storeNameCon.value = OcrReaderStatics.readStoreName(recognizedText);
+            purchaseDateCon.value = OcrReaderStatics.readDateTime(
+              recognizedText.text,
+            );
+            totalAmountCon.value = OcrReaderStatics.readTotalAmount(
+              recognizedText.text,
+            );
           }
           await textRecognizer.close();
           await ReusableWidgets.notifBottomSheet(
