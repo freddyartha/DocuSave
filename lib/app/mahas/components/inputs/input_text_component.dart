@@ -152,9 +152,30 @@ class _InputTextState extends State<InputTextComponent> {
     final decoration = InputDecoration(
       contentPadding: const EdgeInsets.all(10),
       filled: true,
-      fillColor: Colors.black.withValues(alpha: widget.editable ? .01 : .07),
+      fillColor: MahasColors.black.withValues(
+        alpha: widget.editable ? .01 : .07,
+      ),
       hintText: widget.placeHolder,
-      hintStyle: const TextStyle(fontSize: MahasFontSize.normal),
+      hintStyle: TextStyle(
+        fontSize: MahasFontSize.normal,
+        color: MahasColors.mutedGrey,
+      ),
+      errorStyle: TextStyle(
+        color: MahasColors.red,
+        fontSize: MahasFontSize.small,
+      ),
+      errorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          widget.borderRadius ?? Radius.circular(MahasRadius.regular),
+        ),
+        borderSide: BorderSide(color: MahasColors.red),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.all(
+          widget.borderRadius ?? Radius.circular(MahasRadius.regular),
+        ),
+        borderSide: BorderSide(color: MahasColors.red),
+      ),
       isDense: true,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(
@@ -165,19 +186,16 @@ class _InputTextState extends State<InputTextComponent> {
         borderRadius: BorderRadius.all(
           widget.borderRadius ?? Radius.circular(MahasRadius.regular),
         ),
-        borderSide: const BorderSide(color: MahasColors.black, width: .1),
+        borderSide: const BorderSide(color: MahasColors.mutedGrey),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.all(
           widget.borderRadius ?? Radius.circular(MahasRadius.regular),
         ),
-        borderSide: BorderSide(
-          color: MahasColors.black,
-          width: widget.editable ? .1 : .3,
-        ),
+        borderSide: BorderSide(color: MahasColors.mutedGrey),
       ),
       prefixText: widget.prefixText,
-      prefixStyle: TextStyle(color: MahasColors.black.withValues(alpha: 0.6)),
+      prefixStyle: TextStyle(color: MahasColors.mutedGrey),
       suffixIconConstraints: const BoxConstraints(minHeight: 30, minWidth: 30),
       prefixIcon: widget.prefixIcon,
       suffixIcon:
@@ -193,7 +211,7 @@ class _InputTextState extends State<InputTextComponent> {
                   widget.controller._showPassword
                       ? Icons.visibility_off
                       : Icons.visibility,
-                  color: MahasColors.black.withValues(alpha: 0.6),
+                  color: MahasColors.mutedGrey,
                   size: 14,
                 ),
               )

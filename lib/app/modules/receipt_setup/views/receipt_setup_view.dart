@@ -1,5 +1,6 @@
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
+import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
@@ -117,6 +118,8 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                       ),
                     )
                     : ListView(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
                       padding: EdgeInsets.zero,
                       physics: ClampingScrollPhysics(),
                       children: [
@@ -133,34 +136,34 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                             InputTextComponent(
                               controller: controller.receiptIdCon,
                               label: "receipt_id".tr,
-                              placeHolder: "name_hint".tr,
+                              placeHolder: "receipt_id_hint".tr,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.storeNameCon,
                               label: "store_name".tr,
-                              placeHolder: "name_hint".tr,
+                              placeHolder: "store_name_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
-                            InputTextComponent(
+                            InputDatetimeComponent(
                               controller: controller.purchaseDateCon,
                               label: "purchase_date".tr,
-                              placeHolder: "name_hint".tr,
+                              placeHolder: "purchase_date_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.totalAmountCon,
                               label: "total_amount".tr,
-                              placeHolder: "name_hint".tr,
+                              placeHolder: "total_amount_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.currencyCon,
                               label: "currency".tr,
-                              placeHolder: "select_currency".tr,
+                              placeHolder: "currency_hint".tr,
                               required: true,
                               marginBottom: 15,
                               disableInputKeyboard: true,
@@ -175,21 +178,21 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                             InputDropdownComponent(
                               controller: controller.categoryCon,
                               label: "category".tr,
-                              placeHolder: "name_hint".tr,
+                              placeHolder: "category_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputDropdownComponent(
                               controller: controller.paymentMethodCon,
                               label: "payment_method".tr,
-                              placeHolder: "name_hint".tr,
+                              placeHolder: "payment_method_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.notesCon,
                               label: "notes".tr,
-                              placeHolder: "name_hint".tr,
+                              placeHolder: "notes_hint".tr,
                               marginBottom: 15,
                             ),
                             ButtonComponent(

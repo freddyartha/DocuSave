@@ -132,6 +132,21 @@ class InputFormatter {
     return r;
   }
 
+  static Timestamp? timeOfDayToTimestamp(TimeOfDay? time) {
+    if (time == null) return null;
+    final now = DateTime.now();
+
+    final dateTime = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      time.hour,
+      time.minute,
+    );
+
+    return Timestamp.fromDate(dateTime);
+  }
+
   static String toCurrency(double? value) {
     if (value == null) return "";
     var numberFormat = NumberFormat('#,###');

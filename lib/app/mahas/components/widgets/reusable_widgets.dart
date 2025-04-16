@@ -505,6 +505,7 @@ class ReusableWidgets {
     bool withImage = false,
   }) {
     return Get.bottomSheet<bool>(
+      isScrollControlled: true,
       enableDrag: false,
       PopScope(
         canPop: false,

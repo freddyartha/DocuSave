@@ -152,11 +152,7 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
         ),
         borderSide:
             widget.hasBorder
-                ? BorderSide(
-                  color: MahasColors.black.withValues(
-                    alpha: widget.editable ? .1 : .3,
-                  ),
-                )
+                ? BorderSide(color: MahasColors.mutedGrey)
                 : BorderSide.none,
       ),
       focusedBorder: OutlineInputBorder(
@@ -165,11 +161,7 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
         ),
         borderSide:
             widget.hasBorder
-                ? BorderSide(
-                  color: MahasColors.black.withValues(
-                    alpha: widget.editable ? .1 : .3,
-                  ),
-                )
+                ? BorderSide(color: MahasColors.mutedGrey)
                 : BorderSide.none,
       ),
       enabledBorder: OutlineInputBorder(
@@ -178,11 +170,7 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
         ),
         borderSide:
             widget.hasBorder
-                ? BorderSide(
-                  color: MahasColors.black.withValues(
-                    alpha: widget.editable ? .1 : .3,
-                  ),
-                )
+                ? BorderSide(color: MahasColors.mutedGrey)
                 : BorderSide.none,
       ),
       prefixStyle: TextStyle(color: MahasColors.white.withValues(alpha: 0.6)),
@@ -200,9 +188,7 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
       hint: TextComponent(
         value: widget.placeHolder ?? "Select",
         isMuted: true,
-        fontColor: MahasColors.black.withValues(
-          alpha: widget.editable ? .5 : .7,
-        ),
+        fontColor: MahasColors.mutedGrey,
       ),
       items:
           widget.controller.items

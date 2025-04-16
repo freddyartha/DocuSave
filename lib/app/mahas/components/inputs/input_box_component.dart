@@ -78,19 +78,15 @@ class InputBoxComponent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(
                       borderRadius == null ? 15 : borderRadius!.x,
                     ),
-                    color: MahasColors.black.withValues(
-                      alpha: editable == true ? .1 : .7,
+                    color: Colors.black.withValues(
+                      alpha: editable == true ? .01 : .07,
                     ),
                     border:
                         errorMessage != null
                             ? Border.all(
                               color: MahasColors.red.withValues(alpha: .5),
                             )
-                            : Border.all(
-                              color: MahasColors.black.withValues(
-                                alpha: editable == true ? .1 : .3,
-                              ),
-                            ),
+                            : Border.all(color: MahasColors.mutedGrey),
                   ),
                   padding:
                       childrenSizeBox != null
@@ -108,7 +104,7 @@ class InputBoxComponent extends StatelessWidget {
                                 child: TextComponent(
                                   value: childText ?? '',
                                   fontSize: MahasFontSize.normal,
-                                  fontColor: MahasColors.grayText,
+                                  fontColor: MahasColors.mutedGrey,
                                 ),
                               ),
                             ),
@@ -143,7 +139,7 @@ class InputBoxComponent extends StatelessWidget {
                 visible: errorMessage != null,
                 child: TextComponent(
                   value: errorMessage ?? "",
-                  fontSize: MahasFontSize.h6,
+                  fontSize: MahasFontSize.small,
                   fontColor: MahasColors.red,
                   padding: const EdgeInsets.only(left: 12),
                 ),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
+import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/others/ocr_reader_statics.dart';
@@ -28,9 +29,7 @@ class ReceiptSetupController extends GetxController
   final InputTextController storeNameCon = InputTextController(
     type: InputTextType.text,
   );
-  final InputTextController purchaseDateCon = InputTextController(
-    type: InputTextType.text,
-  );
+  final InputDatetimeController purchaseDateCon = InputDatetimeController();
   final InputTextController totalAmountCon = InputTextController(
     type: InputTextType.money,
   );
@@ -73,6 +72,7 @@ class ReceiptSetupController extends GetxController
 
   @override
   void onInit() {
+    scannedDoc.add("element");
     currencyCon.onTap =
         () => showCurrencyPicker(
           context: Get.context!,
@@ -237,8 +237,7 @@ class ReceiptSetupController extends GetxController
         documentid: ReusableStatics.idGenerator(),
         receiptid: receiptIdCon.value,
         storename: storeNameCon.value,
-        purchasedate: Timestamp.now(),
-        // purchaseDateCon.value,
+        purchasedate: purchaseDateCon.value,
         totalamount: totalAmountCon.value,
         currency: currencyCon.value,
         category: categoryCon.value,
