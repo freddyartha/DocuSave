@@ -1,3 +1,4 @@
+import 'package:docusave/app/mahas/constants/input_formatter.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class OcrReaderStatics {
@@ -17,16 +18,16 @@ class OcrReaderStatics {
     }
   }
 
-  static String readTotalAmount(String sourceText) {
+  static double? readTotalAmount(String sourceText) {
     final totalRegex = RegExp(
       r'TOTAL\s+(\d{1,3}(,\d{3})*|\d+)',
       caseSensitive: false,
     );
     final totalMatch = totalRegex.firstMatch(sourceText);
     if (totalMatch != null) {
-      return totalMatch.group(1) ?? "";
+      return InputFormatter.dynamicToDouble(totalMatch.group(1));
     } else {
-      return "";
+      return null;
     }
   }
 

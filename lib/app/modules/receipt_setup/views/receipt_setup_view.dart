@@ -1,5 +1,6 @@
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
+import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
@@ -16,8 +17,7 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
   @override
   Widget build(BuildContext context) {
     return ReusableWidgets.generalPopScopeWidget(
-      showConfirmationCondition: () => true,
-      // controller.showConfirmationCondition,
+      showConfirmationCondition: controller.showConfirmationCondition,
       child: Scaffold(
         backgroundColor: MahasColors.white,
         extendBodyBehindAppBar: true,
@@ -132,63 +132,68 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                           children: [
                             InputTextComponent(
                               controller: controller.receiptIdCon,
-                              label: "Reicipt Id",
+                              label: "receipt_id".tr,
                               placeHolder: "name_hint".tr,
-                              required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.storeNameCon,
-                              label: "Store Name",
+                              label: "store_name".tr,
                               placeHolder: "name_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.purchaseDateCon,
-                              label: "Purchase Date",
+                              label: "purchase_date".tr,
                               placeHolder: "name_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.totalAmountCon,
-                              label: "Total Amount",
+                              label: "total_amount".tr,
                               placeHolder: "name_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.currencyCon,
-                              label: "Currency",
-                              placeHolder: "name_hint".tr,
+                              label: "currency".tr,
+                              placeHolder: "select_currency".tr,
                               required: true,
                               marginBottom: 15,
+                              disableInputKeyboard: true,
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                  size: 25,
+                                ),
+                              ),
                             ),
-                            InputTextComponent(
+                            InputDropdownComponent(
                               controller: controller.categoryCon,
-                              label: "Category",
+                              label: "category".tr,
                               placeHolder: "name_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
-                            InputTextComponent(
+                            InputDropdownComponent(
                               controller: controller.paymentMethodCon,
-                              label: "Payment Method",
+                              label: "payment_method".tr,
                               placeHolder: "name_hint".tr,
                               required: true,
                               marginBottom: 15,
                             ),
                             InputTextComponent(
                               controller: controller.notesCon,
-                              label: "Notes",
+                              label: "notes".tr,
                               placeHolder: "name_hint".tr,
-                              required: true,
                               marginBottom: 15,
                             ),
                             ButtonComponent(
-                              onTap: () {},
-                              // controller.saveOnTap,
+                              onTap: controller.saveOnTap,
                               text: "save".tr,
                               btnColor:
                                   controller.buttonActive.value

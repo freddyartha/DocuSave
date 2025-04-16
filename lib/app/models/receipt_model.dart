@@ -2,49 +2,59 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:docusave/app/mahas/constants/input_formatter.dart';
 
-Map<String, dynamic> userModelToJson(ReceiptModel data) => data.toJson();
+Map<String, dynamic> receiptModelToJson(ReceiptModel data) => data.toJson();
 
 class ReceiptModel {
-  String? documentid;
+  String documentid;
   String? receiptid;
-  String? storename;
+  String storename;
   Timestamp? purchasedate;
-  double? totalamount;
-  String? currency;
-  String? category;
-  String? paymentmethod;
-  String? receiptimage;
+  double totalamount;
+  String currency;
+  String category;
+  String paymentmethod;
+  List<String> receiptimage;
   String? notes;
-  Timestamp? createdat;
+  Timestamp createdat;
   Timestamp? updatedat;
 
-  static fromJson(String jsonString) {
+  ReceiptModel({
+    required this.documentid,
+    this.receiptid,
+    required this.storename,
+    this.purchasedate,
+    required this.totalamount,
+    required this.currency,
+    required this.category,
+    required this.paymentmethod,
+    required this.receiptimage,
+    this.notes,
+    required this.createdat,
+    this.updatedat,
+  });
+
+  static ReceiptModel fromJson(String jsonString) {
     final data = json.decode(jsonString);
     return fromDynamic(data);
   }
 
-  static fromDynamic(dynamic dynamicData) {
-    final model = ReceiptModel();
-
-    model.documentid = dynamicData['documentId'];
-    model.receiptid = dynamicData['receiptId'];
-    model.storename = dynamicData['storeName'];
-    model.purchasedate = InputFormatter.dynamicToTimestamp(
-      dynamicData['purchaseDate'],
-    );
-    model.totalamount = InputFormatter.dynamicToDouble(
-      dynamicData['totalAmount'],
-    );
-    model.currency = dynamicData['currency'];
-    model.category = dynamicData['category'];
-    model.paymentmethod = dynamicData['paymentMethod'];
-    model.receiptimage = dynamicData['receiptImage'];
-    model.notes = dynamicData['notes'];
-    model.createdat = InputFormatter.dynamicToTimestamp(
-      dynamicData['createdAt'],
-    );
-    model.createdat = InputFormatter.dynamicToTimestamp(
-      dynamicData['updatedAt'],
+  static ReceiptModel fromDynamic(dynamic dynamicData) {
+    final model = ReceiptModel(
+      documentid: dynamicData['documentId'],
+      receiptid: dynamicData['receiptId'],
+      storename: dynamicData['storeName'],
+      purchasedate: InputFormatter.dynamicToTimestamp(
+        dynamicData['purchaseDate'],
+      ),
+      totalamount:
+          InputFormatter.dynamicToDouble(dynamicData['totalAmount']) ?? 0,
+      currency: dynamicData['currency'],
+      category: dynamicData['category'],
+      paymentmethod: dynamicData['paymentMethod'],
+      receiptimage: dynamicData['receiptImage'],
+      notes: dynamicData['notes'],
+      createdat: dynamicData['createdAt'],
+      updatedat: dynamicData['updatedAt'],
     );
 
     return model;

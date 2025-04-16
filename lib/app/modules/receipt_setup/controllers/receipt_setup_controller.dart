@@ -1,10 +1,20 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:currency_picker/currency_picker.dart';
+import 'package:docusave/app/data/firebase_repository.dart';
+import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/others/ocr_reader_statics.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
+import 'package:docusave/app/mahas/mahas_service.dart';
+import 'package:docusave/app/models/receipt_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_doc_scanner/flutter_doc_scanner.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
@@ -22,16 +32,35 @@ class ReceiptSetupController extends GetxController
     type: InputTextType.text,
   );
   final InputTextController totalAmountCon = InputTextController(
-    type: InputTextType.text,
+    type: InputTextType.money,
   );
   final InputTextController currencyCon = InputTextController(
     type: InputTextType.text,
   );
-  final InputTextController categoryCon = InputTextController(
-    type: InputTextType.text,
+  final InputDropdownController categoryCon = InputDropdownController(
+    items: [
+      DropdownItem.simple("food_beverage".tr),
+      DropdownItem.simple("transportation".tr),
+      DropdownItem.simple("electronics".tr),
+      DropdownItem.simple("healthcare".tr),
+      DropdownItem.simple("entertainment".tr),
+      DropdownItem.simple("personal_care".tr),
+      DropdownItem.simple("education".tr),
+    ],
   );
-  final InputTextController paymentMethodCon = InputTextController(
-    type: InputTextType.text,
+  final InputDropdownController paymentMethodCon = InputDropdownController(
+    items: [
+      DropdownItem.simple("cash".tr),
+      DropdownItem.simple("bank_transfer".tr),
+      DropdownItem.simple("debit_card".tr),
+      DropdownItem.simple("credit_card".tr),
+      DropdownItem.simple("e_wallet".tr),
+      DropdownItem.simple("qris".tr),
+      DropdownItem.simple("virtual_account".tr),
+      DropdownItem.simple("paylater".tr),
+      DropdownItem.simple("cod".tr),
+      DropdownItem.simple("voucher".tr),
+    ],
   );
   final InputTextController notesCon = InputTextController(
     type: InputTextType.paragraf,
@@ -44,6 +73,17 @@ class ReceiptSetupController extends GetxController
 
   @override
   void onInit() {
+    currencyCon.onTap =
+        () => showCurrencyPicker(
+          context: Get.context!,
+          showFlag: true,
+          showCurrencyName: true,
+          showCurrencyCode: true,
+          favorite: ["IDR", "USD", "SGD"],
+          onSelect: (Currency currency) => currencyCon.value = currency.code,
+          theme: ReusableStatics.currencyPickerTheme(),
+        );
+    activateButton();
     animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
@@ -53,6 +93,12 @@ class ReceiptSetupController extends GetxController
     );
     animationController.repeat(reverse: true);
     super.onInit();
+  }
+
+  void activateButton() {
+    storeNameCon.onChanged = (value) {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
   }
 
   @override
@@ -93,28 +139,39 @@ class ReceiptSetupController extends GetxController
           script: TextRecognitionScript.latin,
         );
         if (scannedDoc.isNotEmpty) {
-          for (var read in scannedDoc) {
-            final inputImage = InputImage.fromFilePath(read);
-            final recognizedText = await textRecognizer.processImage(
-              inputImage,
+          try {
+            final firstPage = InputImage.fromFilePath(scannedDoc.first);
+            final recognizedFirstPage = await textRecognizer.processImage(
+              firstPage,
             );
 
-            storeNameCon.value = OcrReaderStatics.readStoreName(recognizedText);
-            purchaseDateCon.value = OcrReaderStatics.readDateTime(
-              recognizedText.text,
+            storeNameCon.value = OcrReaderStatics.readStoreName(
+              recognizedFirstPage,
             );
-            totalAmountCon.value = OcrReaderStatics.readTotalAmount(
-              recognizedText.text,
+            purchaseDateCon.value = OcrReaderStatics.readDateTime(
+              recognizedFirstPage.text,
+            );
+            if (scannedDoc.length > 1) {
+              totalAmountCon.value = OcrReaderStatics.readTotalAmount(
+                recognizedFirstPage.text,
+              );
+            } else {
+              final lastPage = InputImage.fromFilePath(scannedDoc.last);
+              final recognizedLastPage = await textRecognizer.processImage(
+                lastPage,
+              );
+              totalAmountCon.value = OcrReaderStatics.readTotalAmount(
+                recognizedLastPage.text,
+              );
+            }
+            await textRecognizer.close();
+          } catch (e) {
+            await ReusableWidgets.notifBottomSheet(
+              subtitle: "failed_read_ocr".tr,
             );
           }
-          await textRecognizer.close();
-          await ReusableWidgets.notifBottomSheet(
-            subtitle:
-                "Gagal membaca teks pada gambar, harap masukkan detail data secara manual",
-          );
         }
       }
-
       update();
     } on PlatformException catch (e) {
       ReusableWidgets.notifBottomSheet(
@@ -126,6 +183,77 @@ class ReceiptSetupController extends GetxController
         subtitle: e.toString(),
         notifType: NotifType.warning,
       );
+    }
+  }
+
+  bool showConfirmationCondition() {
+    if (scannedDoc.isNotEmpty ||
+        receiptIdCon.value != null ||
+        storeNameCon.value != null ||
+        purchaseDateCon.value != null ||
+        totalAmountCon.value != null ||
+        currencyCon.value != null ||
+        categoryCon.value != null ||
+        paymentMethodCon.value != null ||
+        notesCon.value != null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  Future<void> saveOnTap() async {
+    FocusScope.of(Get.context!).unfocus();
+    bool validation = showConfirmationCondition();
+    if (!validation) return;
+    if (!receiptIdCon.isValid) return;
+    if (!storeNameCon.isValid) return;
+    if (!purchaseDateCon.isValid) return;
+    if (!totalAmountCon.isValid) return;
+    if (!currencyCon.isValid) return;
+    if (!categoryCon.isValid) return;
+    if (!paymentMethodCon.isValid) return;
+    if (!notesCon.isValid) return;
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+    await EasyLoading.show(status: "Menyimpan Gambar");
+    isLoading.value = true;
+    buttonActive.value = false;
+    if (auth.currentUser != null) {
+      List<String> imageUrl = [];
+      for (var img in scannedDoc) {
+        var result = await FirebaseRepository.saveImageToFirebaseStorage(
+          imageLocationType: ImageLocationType.receipt,
+          fileName: ReusableStatics.idGenerator(simple: true),
+          imageFile: File(img),
+        );
+        if (result != null) {
+          imageUrl.add(result);
+        }
+      }
+
+      if (EasyLoading.isShow) EasyLoading.dismiss();
+      await EasyLoading.show(status: "Menyimpan Dokumen");
+      ReceiptModel receiptModel = ReceiptModel(
+        documentid: ReusableStatics.idGenerator(),
+        receiptid: receiptIdCon.value,
+        storename: storeNameCon.value,
+        purchasedate: Timestamp.now(),
+        // purchaseDateCon.value,
+        totalamount: totalAmountCon.value,
+        currency: currencyCon.value,
+        category: categoryCon.value,
+        paymentmethod: paymentMethodCon.value,
+        receiptimage: imageUrl,
+        notes: notesCon.value,
+        createdat: Timestamp.now(),
+      );
+      await FirebaseRepository.addReceiptToFirestore(
+        receiptModel: receiptModel,
+        userUid: auth.currentUser!.uid,
+      );
+      update();
+      isLoading.value = false;
+      await EasyLoading.dismiss();
     }
   }
 }

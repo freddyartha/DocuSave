@@ -52,4 +52,36 @@ const Map<String, String> idID = {
       "Pencet tombol pindai buat mulai scan dan ambil foto dokumen kamu",
   "confirm_reset_scan": "Kamu yakin ingin menghapus semua hasil pemindaian?",
   "scan_result": "Hasil Pemindaian",
+  "select_currency": "Pilih Mata Uang",
+  "receipt_id": "ID Struk Pembelanjaan",
+  "store_name": "Nama Toko",
+  "purchase_date": "Tanggal Pembelian",
+  "total_amount": "Total Belanja",
+  "currency": "Mata Uang",
+  "category": "Kategori",
+  "payment_method": "Metode Pembayaran",
+  "notes": "Catatan",
+  "failed_read_ocr":
+      "Oops, gagal membaca teks di gambarnya, tolong masukkan detail datanya secara manual ya!",
+
+  //jenis pembayaran
+  "cash": "Tunai",
+  "bank_transfer": "Transfer Bank",
+  "debit_card": "Kartu Debit",
+  "credit_card": "Kartu Kredit",
+  "e_wallet": "Dompet Digital",
+  "qris": "QR Code / QRIS",
+  "virtual_account": "Virtual Account",
+  "paylater": "Cicilan / PayLater",
+  "cod": "Bayar di Tempat (COD)",
+  "voucher": "Voucher / Kupon",
+
+  //kategori pembelanjaan
+  "food_beverage": "Makanan & Minuman",
+  "transportation": "Transportasi",
+  "electronics": "Elektronik",
+  "healthcare": "Kesehatan",
+  "entertainment": "Hiburan",
+  "personal_care": "Perawatan Pribadi",
+  "education": "Pendidikan",
 };

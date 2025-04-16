@@ -6,6 +6,7 @@ import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/article_model.dart';
+import 'package:docusave/app/models/receipt_model.dart';
 import 'package:docusave/app/models/user_devices_model.dart';
 import 'package:docusave/app/models/user_model.dart';
 import 'package:docusave/app/models/user_notification_model.dart';
@@ -19,6 +20,7 @@ class FirebaseRepository {
   static String notificationTokensCollection = 'notificationTokens';
   static String userDevicesCollection = 'userDevices';
   static String articlesCollection = 'articles';
+  static String receiptCollection = 'receipts';
 
   static Future<bool> checkUserExist(String userId) async {
     try {
@@ -313,6 +315,20 @@ class FirebaseRepository {
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
       return null;
+    }
+  }
+
+  static Future<void> addReceiptToFirestore({
+    required String userUid,
+    required ReceiptModel receiptModel,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$receiptCollection")
+          .doc(receiptModel.documentid)
+          .set(receiptModelToJson(receiptModel));
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
     }
   }
 }

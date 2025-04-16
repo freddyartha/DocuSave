@@ -52,4 +52,36 @@ const Map<String, String> enUS = {
       "Tap the scan button to start scanning and snap photos of your document",
   "confirm_reset_scan": "Are you sure you want to delete all scanned results?",
   "scan_result": "Scan Result",
+  "select_currency": "Select Currency",
+  "receipt_id": "Receipt ID",
+  "store_name": "Store Name",
+  "purchase_date": "Purchase Date",
+  "total_amount": "Total Amount",
+  "currency": "Currency",
+  "category": "Category",
+  "payment_method": "Payment Method",
+  "notes": "Notes",
+  "failed_read_ocr":
+      "Failed to read the text on the image, please enter the data manually!",
+
+  //jenis pembayaran
+  "cash": "Cash",
+  "bank_transfer": "Bank Transfer",
+  "debit_card": "Debit Card",
+  "credit_card": "Credit Card",
+  "e_wallet": "E-Wallet",
+  "qris": "QR Code / QRIS",
+  "virtual_account": "Virtual Account",
+  "paylater": "Installment / PayLater",
+  "cod": "Cash on Delivery (COD)",
+  "voucher": "Voucher / Coupon",
+
+  //kategori pembelanjaan
+  "food_beverage": "Food & Beverage",
+  "transportation": "Transportation",
+  "electronics": "Electronics",
+  "healthcare": "Healthcare",
+  "entertainment": "Entertainment",
+  "personal_care": "Personal Care",
+  "education": "Education",
 };
