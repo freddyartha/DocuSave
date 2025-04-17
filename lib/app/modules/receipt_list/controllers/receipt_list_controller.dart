@@ -1,13 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
+import 'package:docusave/app/mahas/components/others/list_component.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/receipt_model.dart';
+import 'package:docusave/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ReceiptListController extends GetxController {
   final searchCon = InputTextController();
+  final listCon = ListComponentController(
+    query: FirebaseFirestore.instance
+        .collection(
+          "${FirebaseRepository.userCollection}/${auth.currentUser?.uid}/${FirebaseRepository.receiptCollection}",
+        )
+        .orderBy('createdAt', descending: true),
+    fromDynamic: ReceiptModel.fromDynamic,
+    searchCon: InputTextController(),
+  );
+
   RxList<ReceiptModel> receipts = <ReceiptModel>[].obs;
   RxBool isLoading = false.obs;
   RxBool hasMore = true.obs;
@@ -23,7 +35,7 @@ class ReceiptListController extends GetxController {
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
           scrollController.position.maxScrollExtent - 200) {
-        fetchReceipts();
+        fetchReceipts(clearAllData: false);
       }
     });
 
@@ -36,7 +48,11 @@ class ReceiptListController extends GetxController {
     super.onClose();
   }
 
-  Future<void> fetchReceipts() async {
+  Future<void> fetchReceipts({bool clearAllData = true}) async {
+    if (clearAllData) {
+      receipts.clear();
+      lastDoc = null;
+    }
     if (isLoading.value || !hasMore.value) return;
 
     isLoading.value = true;
@@ -64,5 +80,14 @@ class ReceiptListController extends GetxController {
     }
 
     isLoading.value = false;
+  }
+
+  void goToReceiptSetup() {
+    Get.toNamed(Routes.RECEIPT_SETUP)?.then((value) {
+      print(value);
+      if (value == true) {
+        listCon.refresh();
+      }
+    });
   }
 }

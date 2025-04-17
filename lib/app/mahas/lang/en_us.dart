@@ -71,7 +71,8 @@ const Map<String, String> enUS = {
       "Failed to read the text on the image, please enter the data manually!",
   "select_date": "Select Date",
   "success_save_receipt": "Successfully save your receipt",
-  "loading": "Memuat",
+  "loading": "Loading",
+  "general_not_found": "Oops... The item that you are looking for is not found",
 
   //jenis pembayaran
   "cash": "Cash",

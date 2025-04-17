@@ -1,276 +1,229 @@
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-// import '../../mahas_colors.dart';
-// import '../../mahas_config.dart';
-// import '../../mahas_service.dart';
-// import '../../models/api_list_resut_model.dart';
-// import '../../services/helper.dart';
-// import '../../services/http_api.dart';
-// import '../inputs/input_text_component.dart';
-// import '../mahas_themes.dart';
-// import 'empty_component.dart';
-// import 'shimmer_component.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
+import 'package:docusave/app/mahas/components/texts/text_component.dart';
+import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
+import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
+import 'package:docusave/app/mahas/constants/mahas_radius.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-// class ListComponentController<T> {
-//   Function(int index, String filter) urlApi;
-//   final T Function(dynamic e) fromDynamic;
-//   final bool allowSearch;
-//   final bool autoRefresh;
-//   final BaseUrlType baseUrlType;
-//   late Function(VoidCallback fn) setState;
+class ListComponentController<T> {
+  final bool allowSearch;
+  final Function()? filterOnTap;
+  final int pageSize;
+  final Query query;
+  final InputTextController searchCon;
+  final T Function(dynamic e) fromDynamic;
+  late Function(VoidCallback fn) setState;
 
-//   final _listViewController = ScrollController();
-//   final filterController = InputTextController();
-//   final List<T> _items = [];
+  final _listViewController = ScrollController();
+  final List<T> _items = [];
+  DocumentSnapshot? _lastDoc;
 
-//   ListComponentController({
-//     required this.urlApi,
-//     required this.fromDynamic,
-//     this.allowSearch = true,
-//     this.autoRefresh = true,
-//     this.baseUrlType = BaseUrlType.apiDinkes,
-//   });
+  ListComponentController({
+    required this.query,
+    required this.fromDynamic,
+    required this.searchCon,
+    this.pageSize = 20,
+    this.allowSearch = true,
+    this.filterOnTap,
+  });
 
-//   bool _loadingBottom = false;
-//   bool _isItemRefresh = true;
-//   int _pageIndex = 0;
-//   int _maxPage = 0;
+  bool _isLoading = false;
+  bool _hasMore = true;
+  bool _isEmpty = false;
 
-//   void clear() {
-//     _items.clear();
-//     _pageIndex = 0;
-//     _maxPage = 0;
-//   }
+  Future refresh() async {
+    await fetchData();
+    Get.focusScope?.unfocus();
+    setState(() {});
+  }
 
-//   Future refresh() async {
-//     clear();
-//     await _refreshBottom();
-//     Get.focusScope?.unfocus();
-//     setState(() {});
-//   }
+  Future<void> fetchData({bool clearAllData = true}) async {
+    if (_isLoading || !_hasMore) return;
+    if (clearAllData) {
+      setState(() {
+        _items.clear();
+        _lastDoc = null;
+      });
+    }
+    setState(() {
+      if (clearAllData) _isLoading = true;
+    });
 
-//   Future _refreshBottom({nextPage = false}) async {
-//     final itemsX = await _getItems(nextPage: nextPage);
-//     if (itemsX != null) {
-//       if (!nextPage) _items.clear();
-//       _items.addAll(itemsX);
-//     }
-//   }
+    query.limit(pageSize);
+    if (_lastDoc != null) {
+      query.startAfterDocument(_lastDoc!);
+    }
+    final snapshot = await query.get();
+    if (snapshot.docs.isNotEmpty) {
+      if (snapshot.docs.length <= pageSize) {
+        _lastDoc = null;
+        _hasMore = false;
+      } else {
+        _lastDoc = snapshot.docs.last;
+        _hasMore = false;
+      }
+      for (var result in snapshot.docs) {
+        _items.add(fromDynamic(result.data()));
+      }
+      setState(() {});
+    } else {
+      setState(() {
+        _hasMore = false;
+        _lastDoc = null;
+        _isEmpty = true;
+      });
+    }
 
-//   Future<List<T>?> _getItems({nextPage = false}) async {
-//     if (!nextPage) {
-//       setState(() {
-//         _isItemRefresh = true;
-//       });
-//     }
-//     try {
-//       final pageIndexX = nextPage ? _pageIndex + 1 : _pageIndex;
-//       final filterX = filterController.value;
-//       final query =
-//           urlApi(pageIndexX + (MahasConfig.isLaravelBackend ? 1 : 0), filterX);
-//       final apiModel = await HttpApi.get(
-//         query,
-//         baseUrlType: baseUrlType,
-//       );
-//       final List<T> result = [];
-//       setState(() {
-//         _isItemRefresh = false;
-//       });
-//       if (apiModel.success) {
-//         ApiResultListModel listModel =
-//             ApiResultListModel.fromJson(apiModel.body);
-//         _maxPage = listModel.maxPage!;
-//         _pageIndex = pageIndexX;
-//         for (var obj in (listModel.datas ?? [])) {
-//           result.add(fromDynamic(obj));
-//         }
-//       } else {
-//         bool internetError =
-//             MahasService.isInternetCausedError(apiModel.message.toString());
-//         if (internetError) {
-//           Helper.errorToast();
-//         } else {
-//           if (apiModel.message.toString().contains(RegExp(
-//               "Item that you try to find can not be found",
-//               caseSensitive: false))) {
-//             Helper.errorToast(message: "Data tidak ditemukan");
-//           } else {
-//             Helper.errorToast(message: apiModel.message.toString());
-//           }
-//         }
-//       }
-//       return result;
-//     } catch (ex) {
-//       Helper.dialogWarning('$ex');
-//       setState(() {
-//         _isItemRefresh = false;
-//       });
-//       return null;
-//     }
-//   }
+    setState(() {
+      if (clearAllData) _isLoading = false;
+    });
+  }
 
-//   void init(Function(VoidCallback fn) setStateX) {
-//     setState = setStateX;
-//     filterController.onEditingComplete = () => refresh();
-//     filterController.onChanged = (value) => refresh();
-//     _listViewController.addListener(() async {
-//       if (_loadingBottom) return;
-//       final maxScroll = _listViewController.position.maxScrollExtent;
-//       final currentScroll = _listViewController.position.pixels;
-//       const delta = 0.0;
-//       if (maxScroll - currentScroll <= delta && _pageIndex != _maxPage) {
-//         _loadingBottom = true;
-//         await _refreshBottom(nextPage: true);
-//         _loadingBottom = false;
-//       }
-//     });
-//     if (autoRefresh) {
-//       refresh();
-//     }
-//   }
-// }
+  void init(Function(VoidCallback fn) setStateX) {
+    setState = setStateX;
+    _listViewController.addListener(() async {
+      if (_listViewController.position.pixels >=
+          _listViewController.position.maxScrollExtent - 200) {
+        fetchData(clearAllData: false);
+      }
+    });
+    fetchData();
+  }
+}
 
-// class ListComponent<T> extends StatefulWidget {
-//   final ListComponentController<T> controller;
-//   final Widget Function(T e) itemBuilder;
-//   final bool allowMenuAction;
-//   final List<Widget>? listMenuAction;
-//   final Widget Function(BuildContext context, int index, int length)?
-//       separatorBuilder;
-//   final bool emptyIsCard;
-//   final Widget? customEmptyWidget;
-//   final bool isCustomLoadingWidget;
-//   final Widget customLoadingWidget;
-//   final double spaceFromHeader;
-//   final String searchPlaceHolder;
-//   final bool isCardSearchWithIcon;
-//   final IconData searchIcon;
+class ListComponent<T> extends StatefulWidget {
+  final ListComponentController<T> controller;
+  final Widget Function(T e, int i) itemBuilder;
+  // final Widget? customSearchBar;
 
-//   const ListComponent({
-//     super.key,
-//     required this.controller,
-//     required this.itemBuilder,
-//     this.allowMenuAction = false,
-//     this.listMenuAction,
-//     this.separatorBuilder,
-//     this.emptyIsCard = false,
-//     this.customEmptyWidget,
-//     this.isCustomLoadingWidget = false,
-//     this.customLoadingWidget = const ShimmerComponent(),
-//     this.spaceFromHeader = 0,
-//     this.searchPlaceHolder = "Search",
-//     this.isCardSearchWithIcon = false,
-//     this.searchIcon = Icons.search_rounded,
-//   });
+  const ListComponent({
+    super.key,
+    required this.controller,
+    required this.itemBuilder,
+    // this.customSearchBar,
+  });
 
-//   @override
-//   State<ListComponent<T>> createState() => _ListComponentState<T>();
-// }
+  @override
+  State<ListComponent<T>> createState() => _ListComponentState<T>();
+}
 
-// class _ListComponentState<T> extends State<ListComponent<T>> {
-//   @override
-//   void initState() {
-//     widget.controller.init((fn) {
-//       if (mounted) {
-//         setState(fn);
-//       }
-//     });
-//     super.initState();
-//   }
+class _ListComponentState<T> extends State<ListComponent<T>> {
+  @override
+  void initState() {
+    widget.controller.init((fn) {
+      if (mounted) {
+        setState(fn);
+      }
+    });
+    super.initState();
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Visibility(
-//           visible: widget.controller.allowSearch,
-//           child: widget.isCardSearchWithIcon
-//               ? Card(
-//                   shape: MahasThemes.cardBorderShape,
-//                   elevation: 5,
-//                   color: MahasColors.light,
-//                   child: Container(
-//                     padding: EdgeInsets.all(8),
-//                     child: Row(
-//                       children: [
-//                         Icon(
-//                           widget.searchIcon,
-//                           size: 25,
-//                           color: MahasColors.greyFontColor,
-//                         ),
-//                         Expanded(
-//                           child: Center(
-//                             child: InputTextComponent(
-//                               edgeInsets: EdgeInsets.only(left: 5),
-//                               borderRadius: Radius.zero,
-//                               placeHolder: widget.searchPlaceHolder,
-//                               fillColor: MahasColors.light,
-//                               marginBottom: 0,
-//                               controller: widget.controller.filterController,
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                 )
-//               : InputTextComponent(
-//                   borderRadius: Radius.zero,
-//                   placeHolder: widget.searchPlaceHolder,
-//                   fillColor: MahasColors.light,
-//                   marginBottom: 0,
-//                   controller: widget.controller.filterController,
-//                 ),
-//         ),
-//         SizedBox(
-//           height: widget.spaceFromHeader,
-//         ),
-//         Expanded(
-//           child: RefreshIndicator(
-//             onRefresh: widget.controller.refresh,
-//             child: widget.controller._isItemRefresh
-//                 ? widget.isCustomLoadingWidget
-//                     ? widget.customLoadingWidget
-//                     : const ShimmerComponent()
-//                 : widget.controller._items.isEmpty &&
-//                         !widget.controller._isItemRefresh
-//                     ? widget.customEmptyWidget != null
-//                         ? widget.customEmptyWidget!
-//                         : EmptyComponent(
-//                             onPressed: widget.controller.refresh,
-//                             isCard: widget.emptyIsCard,
-//                           )
-//                     : ListView.separated(
-//                         separatorBuilder: widget.separatorBuilder != null
-//                             ? (context, index) => widget.separatorBuilder!(
-//                                 context, index, widget.controller._items.length)
-//                             : (context, index) => const Divider(height: 0),
-//                         controller: widget.controller._listViewController,
-//                         physics: const AlwaysScrollableScrollPhysics(),
-//                         itemCount: widget.controller._items.length +
-//                             (MahasConfig.isLaravelBackend ? 1 : 0),
-//                         itemBuilder: (context, index) {
-//                           if (index == widget.controller._items.length) {
-//                             return Visibility(
-//                               visible: widget.controller._pageIndex !=
-//                                       widget.controller._maxPage &&
-//                                   widget.controller._items.isNotEmpty,
-//                               child: Container(
-//                                 margin: const EdgeInsets.all(10),
-//                                 child: const Center(
-//                                   child: CircularProgressIndicator(),
-//                                 ),
-//                               ),
-//                             );
-//                           } else {
-//                             return widget
-//                                 .itemBuilder(widget.controller._items[index]);
-//                           }
-//                         },
-//                       ),
-//           ),
-//         )
-//       ],
-//     );
-//   }
-// }
+  @override
+  void dispose() {
+    widget.controller._listViewController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.controller._isLoading == false &&
+            widget.controller._isEmpty == true
+        ? Container(
+          margin: EdgeInsets.symmetric(horizontal: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 20,
+            children: [
+              Image.asset("assets/images/error.png"),
+              TextComponent(
+                value: "general_not_found".tr,
+                fontSize: MahasFontSize.h6,
+                fontWeight: FontWeight.w600,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        )
+        : widget.controller._isLoading == true
+        ? Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: ReusableWidgets.listLoadingWidget(count: 10),
+        )
+        : Column(
+          children: [
+            !widget.controller.allowSearch
+                ? SizedBox.shrink()
+                : Padding(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    bottom: 10,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InputTextComponent(
+                          controller: widget.controller.searchCon,
+                          placeHolder: "Cari",
+                          prefixIcon: Icon(Icons.search_outlined),
+                          marginBottom: 0,
+                        ),
+                      ),
+                      if (widget.controller.filterOnTap != null) ...[
+                        GestureDetector(
+                          onTap: widget.controller.filterOnTap,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                MahasRadius.regular,
+                              ),
+                              color: MahasColors.lightgray,
+                            ),
+                            padding: EdgeInsets.all(10),
+                            child: Icon(
+                              Icons.filter_alt_outlined,
+                              color: MahasColors.darkgray,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async => widget.controller.fetchData(),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  controller: widget.controller._listViewController,
+                  itemCount:
+                      widget.controller._items.length +
+                      (widget.controller._isLoading ? 1 : 0),
+                  itemBuilder: (context, index) {
+                    if (index < widget.controller._items.length) {
+                      return widget.itemBuilder(
+                        widget.controller._items[index],
+                        index,
+                      );
+                    } else {
+                      return Align(
+                        alignment: Alignment.bottomCenter,
+                        child: TextComponent(
+                          value: "loading".tr,
+                          fontColor: MahasColors.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+  }
+}

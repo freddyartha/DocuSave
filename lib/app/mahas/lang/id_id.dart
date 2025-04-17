@@ -72,7 +72,8 @@ const Map<String, String> idID = {
       "Oops, gagal membaca teks di gambarnya, tolong masukkan detail datanya secara manual ya!",
   "select_date": "Pilih Tanggal",
   "success_save_receipt": "Berhasil menyimpan nota/kwitansi",
-  "loading": "Loading",
+  "loading": "Memuat",
+  "general_not_found": "Oops... Data yang kamu cari tidak ditemukan",
 
   //jenis pembayaran
   "cash": "Tunai",

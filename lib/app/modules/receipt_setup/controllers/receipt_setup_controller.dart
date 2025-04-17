@@ -240,21 +240,21 @@ class ReceiptSetupController extends GetxController
       buttonActive.value = false;
       if (auth.currentUser != null) {
         List<String> imageUrl = [];
-        for (var img in scannedDoc) {
-          String? compressedImagePath = await ReusableStatics.compressImage(
-            img,
-          );
-          if (compressedImagePath != null) {
-            var result = await FirebaseRepository.saveImageToFirebaseStorage(
-              imageLocationType: ImageLocationType.receipt,
-              fileName: ReusableStatics.idGenerator(simple: true),
-              imageFile: File(compressedImagePath),
-            );
-            if (result != null) {
-              imageUrl.add(result);
-            }
-          }
-        }
+        // for (var img in scannedDoc) {
+        //   String? compressedImagePath = await ReusableStatics.compressImage(
+        //     img,
+        //   );
+        //   if (compressedImagePath != null) {
+        //     var result = await FirebaseRepository.saveImageToFirebaseStorage(
+        //       imageLocationType: ImageLocationType.receipt,
+        //       fileName: ReusableStatics.idGenerator(simple: true),
+        //       imageFile: File(compressedImagePath),
+        //     );
+        //     if (result != null) {
+        //       imageUrl.add(result);
+        //     }
+        //   }
+        // }
 
         if (EasyLoading.isShow) EasyLoading.dismiss();
         await EasyLoading.show(status: "Menyimpan Dokumen");
@@ -275,17 +275,17 @@ class ReceiptSetupController extends GetxController
           receiptModel: receiptModel,
           userUid: auth.currentUser!.uid,
         );
+        update();
+        await EasyLoading.dismiss();
         if (result) {
           bool? result = await ReusableWidgets.notifBottomSheet(
             notifType: NotifType.success,
-            subtitle: "success_update_profile".tr,
+            subtitle: "success_save_receipt".tr,
           );
-          if (result != null) Get.back();
+          if (result != null) Get.back(result: true);
         } else {
           buttonActive.value = true;
         }
-        update();
-        await EasyLoading.dismiss();
       }
     }
   }
