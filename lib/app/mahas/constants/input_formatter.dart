@@ -169,13 +169,15 @@ class InputFormatter {
   static DateTime? dynamicToDateTime(dynamic value) {
     if (value == null) return null;
     if (value is DateTime) return value;
-    if (value is String) return stringToDateTime(value);
+    if (value is String) return stringToDateTime(value.toString());
     return DateTime.tryParse(value);
   }
 
   static Timestamp? dynamicToTimestamp(dynamic value) {
+    // print(value);
     if (value == null) return null;
     if (value is Timestamp) return value;
+    if (value is DateTime) return Timestamp.fromDate(value);
     if (value is String) return stringToTimestamp(value);
     return null;
   }

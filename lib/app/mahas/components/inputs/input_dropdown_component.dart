@@ -140,10 +140,7 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
       isDense: true,
       filled: true,
       hoverColor: MahasColors.white,
-      fillColor:
-          widget.hasBorder
-              ? MahasColors.black.withValues(alpha: widget.editable ? .01 : .07)
-              : MahasColors.grayText,
+      fillColor: MahasColors.lightgray,
       contentPadding:
           widget.padding ?? const EdgeInsets.fromLTRB(10, 12, 10, 12),
       border: OutlineInputBorder(

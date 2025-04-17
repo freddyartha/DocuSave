@@ -152,9 +152,8 @@ class _InputTextState extends State<InputTextComponent> {
     final decoration = InputDecoration(
       contentPadding: const EdgeInsets.all(10),
       filled: true,
-      fillColor: MahasColors.black.withValues(
-        alpha: widget.editable ? .01 : .07,
-      ),
+      fillColor:
+          widget.editable ? MahasColors.lightgray : MahasColors.mediumgray,
       hintText: widget.placeHolder,
       hintStyle: TextStyle(
         fontSize: MahasFontSize.normal,

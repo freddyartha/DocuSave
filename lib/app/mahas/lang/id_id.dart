@@ -71,6 +71,8 @@ const Map<String, String> idID = {
   "failed_read_ocr":
       "Oops, gagal membaca teks di gambarnya, tolong masukkan detail datanya secara manual ya!",
   "select_date": "Pilih Tanggal",
+  "success_save_receipt": "Berhasil menyimpan nota/kwitansi",
+  "loading": "Loading",
 
   //jenis pembayaran
   "cash": "Tunai",

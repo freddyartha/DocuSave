@@ -51,11 +51,17 @@ class ReceiptModel {
       currency: dynamicData['currency'],
       category: dynamicData['category'],
       paymentmethod: dynamicData['paymentMethod'],
-      receiptimage: dynamicData['receiptImage'],
+      receiptimage: [],
       notes: dynamicData['notes'],
       createdat: dynamicData['createdAt'],
       updatedat: dynamicData['updatedAt'],
     );
+    if (dynamicData['receiptImage'] != null) {
+      final detailT = dynamicData['receiptImage'];
+      for (var e in detailT) {
+        model.receiptimage.add(e);
+      }
+    }
 
     return model;
   }

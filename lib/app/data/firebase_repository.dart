@@ -71,6 +71,7 @@ class FirebaseRepository {
     required ImageLocationType imageLocationType,
     required String fileName,
     required File imageFile,
+    Function()? onErrorFunction,
   }) async {
     try {
       Reference storageRef = _getFirebaseStorageRef(
@@ -92,6 +93,7 @@ class FirebaseRepository {
         title: "failed_upload_image".tr,
         subtitle: e.toString(),
       );
+      onErrorFunction;
       return null;
     }
   }
@@ -318,17 +320,20 @@ class FirebaseRepository {
     }
   }
 
-  static Future<void> addReceiptToFirestore({
+  static Future<bool> addReceiptToFirestore({
     required String userUid,
     required ReceiptModel receiptModel,
+    // Function()? onErrorFunction,
   }) async {
     try {
       await firestore
           .collection("$userCollection/$userUid/$receiptCollection")
           .doc(receiptModel.documentid)
           .set(receiptModelToJson(receiptModel));
+      return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
     }
   }
 }

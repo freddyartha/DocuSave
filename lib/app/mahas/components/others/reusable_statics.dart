@@ -3,7 +3,10 @@ import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ReusableStatics {
@@ -12,8 +15,22 @@ class ReusableStatics {
 
   static String idGenerator({bool simple = false}) {
     const uuid = Uuid();
-    var r = simple ? uuid.v8().substring(0, 8) : uuid.v8();
+    var r = simple ? uuid.v4().split('-').last : uuid.v8();
     return r;
+  }
+
+  static Future<String?> compressImage(String filePath) async {
+    final dir = await getTemporaryDirectory();
+    final targetPath =
+        "${dir.absolute.path}/${basename(filePath)}_compressed.jpg";
+
+    var result = await FlutterImageCompress.compressAndGetFile(
+      filePath,
+      targetPath,
+      quality: 50,
+    );
+
+    return result?.path;
   }
 
   static CurrencyPickerThemeData currencyPickerTheme() =>

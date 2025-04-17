@@ -85,60 +85,62 @@ class ProfileSetupController extends GetxController {
   }
 
   Future<void> saveOnTap() async {
-    FocusScope.of(Get.context!).unfocus();
-    bool validation = showConfirmationCondition();
-    if (!validation) return;
-    if (!namaCon.isValid) return;
-    if (!emailCon.isValid) return;
-    if (EasyLoading.isShow) EasyLoading.dismiss();
-    await EasyLoading.show();
-    isLoading.value = true;
-    buttonActive.value = false;
-    if (auth.currentUser != null) {
-      String? imageUrl;
-      if (fileImg != null) {
-        imageUrl = await FirebaseRepository.saveImageToFirebaseStorage(
-          imageLocationType: ImageLocationType.profile,
-          fileName: auth.currentUser!.uid,
-          imageFile: File(fileImg!.path),
+    if (buttonActive.value) {
+      FocusScope.of(Get.context!).unfocus();
+      bool validation = showConfirmationCondition();
+      if (!validation) return;
+      if (!namaCon.isValid) return;
+      if (!emailCon.isValid) return;
+      if (EasyLoading.isShow) EasyLoading.dismiss();
+      await EasyLoading.show();
+      isLoading.value = true;
+      buttonActive.value = false;
+      if (auth.currentUser != null) {
+        String? imageUrl;
+        if (fileImg != null) {
+          imageUrl = await FirebaseRepository.saveImageToFirebaseStorage(
+            imageLocationType: ImageLocationType.profile,
+            fileName: auth.currentUser!.uid,
+            imageFile: File(fileImg!.path),
+          );
+        }
+        if (editPictureLabel.value == "add_image") {
+          FirebaseRepository.removeImageFromFirebaseStorage(
+            imageLocationType: ImageLocationType.profile,
+            fileName: auth.currentUser!.uid,
+          );
+          MahasConfig.userProfile?.profilepic = null;
+        }
+        UserModel userModel = UserModel(
+          userid: auth.currentUser!.uid,
+          name: namaCon.value,
+          email: emailCon.value,
+          updatedat: Timestamp.now(),
+          profilepic: imageUrl ?? MahasConfig.userProfile?.profilepic,
+          subscriptionplan: MahasConfig.userProfile?.subscriptionplan,
+          createdat: MahasConfig.userProfile?.createdat,
         );
-      }
-      if (editPictureLabel.value == "add_image") {
-        FirebaseRepository.removeImageFromFirebaseStorage(
-          imageLocationType: ImageLocationType.profile,
-          fileName: auth.currentUser!.uid,
+        bool result = await FirebaseRepository.updateUserProfile(
+          userModel: userModel,
         );
-        MahasConfig.userProfile?.profilepic = null;
+        update();
+        isLoading.value = false;
+        await EasyLoading.dismiss();
+        if (result == true) {
+          MahasConfig.userProfile = userModel;
+          fileImg = null;
+          bool? result = await ReusableWidgets.notifBottomSheet(
+            notifType: NotifType.success,
+            subtitle: "success_save_receipt".tr,
+          );
+          if (result != null) Get.back();
+        } else {
+          buttonActive.value = true;
+        }
       }
-      UserModel userModel = UserModel(
-        userid: auth.currentUser!.uid,
-        name: namaCon.value,
-        email: emailCon.value,
-        updatedat: Timestamp.now(),
-        profilepic: imageUrl ?? MahasConfig.userProfile?.profilepic,
-        subscriptionplan: MahasConfig.userProfile?.subscriptionplan,
-        createdat: MahasConfig.userProfile?.createdat,
-      );
-      bool result = await FirebaseRepository.updateUserProfile(
-        userModel: userModel,
-      );
       update();
       isLoading.value = false;
       await EasyLoading.dismiss();
-      if (result == true) {
-        MahasConfig.userProfile = userModel;
-        fileImg = null;
-        bool? result = await ReusableWidgets.notifBottomSheet(
-          notifType: NotifType.success,
-          subtitle: "success_update_profile".tr,
-        );
-        if (result != null) Get.back();
-      } else {
-        buttonActive.value = true;
-      }
     }
-    update();
-    isLoading.value = false;
-    await EasyLoading.dismiss();
   }
 }

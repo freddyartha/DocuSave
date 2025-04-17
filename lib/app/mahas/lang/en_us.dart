@@ -70,6 +70,8 @@ const Map<String, String> enUS = {
   "failed_read_ocr":
       "Failed to read the text on the image, please enter the data manually!",
   "select_date": "Select Date",
+  "success_save_receipt": "Successfully save your receipt",
+  "loading": "Memuat",
 
   //jenis pembayaran
   "cash": "Cash",

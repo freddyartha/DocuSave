@@ -67,7 +67,6 @@ class ReceiptSetupController extends GetxController
 
   RxList<String> scannedDoc = <String>[].obs;
 
-  RxBool isLoading = false.obs;
   RxBool buttonActive = false.obs;
 
   @override
@@ -96,7 +95,28 @@ class ReceiptSetupController extends GetxController
   }
 
   void activateButton() {
+    receiptIdCon.onChanged = (value) {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
     storeNameCon.onChanged = (value) {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
+    purchaseDateCon.onChanged = () {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
+    totalAmountCon.onChanged = (value) {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
+    currencyCon.onChanged = (value) {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
+    categoryCon.onChanged = (value) {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
+    paymentMethodCon.onChanged = (value) {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
+    notesCon.onChanged = (value) {
       if (!buttonActive.value) buttonActive.value = true;
     };
   }
@@ -203,56 +223,70 @@ class ReceiptSetupController extends GetxController
   }
 
   Future<void> saveOnTap() async {
-    FocusScope.of(Get.context!).unfocus();
-    bool validation = showConfirmationCondition();
-    if (!validation) return;
-    if (!receiptIdCon.isValid) return;
-    if (!storeNameCon.isValid) return;
-    if (!purchaseDateCon.isValid) return;
-    if (!totalAmountCon.isValid) return;
-    if (!currencyCon.isValid) return;
-    if (!categoryCon.isValid) return;
-    if (!paymentMethodCon.isValid) return;
-    if (!notesCon.isValid) return;
-    if (EasyLoading.isShow) EasyLoading.dismiss();
-    await EasyLoading.show(status: "Menyimpan Gambar");
-    isLoading.value = true;
-    buttonActive.value = false;
-    if (auth.currentUser != null) {
-      List<String> imageUrl = [];
-      for (var img in scannedDoc) {
-        var result = await FirebaseRepository.saveImageToFirebaseStorage(
-          imageLocationType: ImageLocationType.receipt,
-          fileName: ReusableStatics.idGenerator(simple: true),
-          imageFile: File(img),
-        );
-        if (result != null) {
-          imageUrl.add(result);
-        }
-      }
-
+    if (buttonActive.value) {
+      FocusScope.of(Get.context!).unfocus();
+      bool validation = showConfirmationCondition();
+      if (!validation) return;
+      if (!receiptIdCon.isValid) return;
+      if (!storeNameCon.isValid) return;
+      if (!purchaseDateCon.isValid) return;
+      if (!totalAmountCon.isValid) return;
+      if (!currencyCon.isValid) return;
+      if (!categoryCon.isValid) return;
+      if (!paymentMethodCon.isValid) return;
+      if (!notesCon.isValid) return;
       if (EasyLoading.isShow) EasyLoading.dismiss();
-      await EasyLoading.show(status: "Menyimpan Dokumen");
-      ReceiptModel receiptModel = ReceiptModel(
-        documentid: ReusableStatics.idGenerator(),
-        receiptid: receiptIdCon.value,
-        storename: storeNameCon.value,
-        purchasedate: purchaseDateCon.value,
-        totalamount: totalAmountCon.value,
-        currency: currencyCon.value,
-        category: categoryCon.value,
-        paymentmethod: paymentMethodCon.value,
-        receiptimage: imageUrl,
-        notes: notesCon.value,
-        createdat: Timestamp.now(),
-      );
-      await FirebaseRepository.addReceiptToFirestore(
-        receiptModel: receiptModel,
-        userUid: auth.currentUser!.uid,
-      );
-      update();
-      isLoading.value = false;
-      await EasyLoading.dismiss();
+      await EasyLoading.show(status: "Menyimpan Gambar");
+      buttonActive.value = false;
+      if (auth.currentUser != null) {
+        List<String> imageUrl = [];
+        for (var img in scannedDoc) {
+          String? compressedImagePath = await ReusableStatics.compressImage(
+            img,
+          );
+          if (compressedImagePath != null) {
+            var result = await FirebaseRepository.saveImageToFirebaseStorage(
+              imageLocationType: ImageLocationType.receipt,
+              fileName: ReusableStatics.idGenerator(simple: true),
+              imageFile: File(compressedImagePath),
+            );
+            if (result != null) {
+              imageUrl.add(result);
+            }
+          }
+        }
+
+        if (EasyLoading.isShow) EasyLoading.dismiss();
+        await EasyLoading.show(status: "Menyimpan Dokumen");
+        ReceiptModel receiptModel = ReceiptModel(
+          documentid: ReusableStatics.idGenerator(),
+          receiptid: receiptIdCon.value,
+          storename: storeNameCon.value,
+          purchasedate: purchaseDateCon.value,
+          totalamount: totalAmountCon.value,
+          currency: currencyCon.value,
+          category: categoryCon.value,
+          paymentmethod: paymentMethodCon.value,
+          receiptimage: imageUrl,
+          notes: notesCon.value,
+          createdat: Timestamp.now(),
+        );
+        bool result = await FirebaseRepository.addReceiptToFirestore(
+          receiptModel: receiptModel,
+          userUid: auth.currentUser!.uid,
+        );
+        if (result) {
+          bool? result = await ReusableWidgets.notifBottomSheet(
+            notifType: NotifType.success,
+            subtitle: "success_update_profile".tr,
+          );
+          if (result != null) Get.back();
+        } else {
+          buttonActive.value = true;
+        }
+        update();
+        await EasyLoading.dismiss();
+      }
     }
   }
 }

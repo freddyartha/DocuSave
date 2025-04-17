@@ -78,9 +78,10 @@ class InputBoxComponent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(
                       borderRadius == null ? 15 : borderRadius!.x,
                     ),
-                    color: Colors.black.withValues(
-                      alpha: editable == true ? .01 : .07,
-                    ),
+                    color:
+                        editable == true
+                            ? MahasColors.lightgray
+                            : MahasColors.mediumgray,
                     border:
                         errorMessage != null
                             ? Border.all(
