@@ -16,14 +16,24 @@ class ReceiptListController extends GetxController {
         )
         .orderBy('createdAt', descending: true),
     fromDynamic: ReceiptModel.fromDynamic,
-    searchOnType: (value, item) {
-      return [
-        item.storename.toLowerCase(),
-        item.category.toLowerCase(),
-        item.currency.toLowerCase(),
-        item.paymentmethod.toLowerCase(),
-        item.notes.toString().toLowerCase(),
-      ];
+    searchOnType: (value, list) {
+      print(value);
+      print(list.length);
+      return list.where((e) {
+        final store = e.storename.toLowerCase();
+        final category = e.category.toLowerCase();
+        final currency = e.currency.toLowerCase();
+        final paymentmethod = e.paymentmethod.toLowerCase();
+
+        final notes = e.notes.toString().toLowerCase();
+        final query = value.toLowerCase();
+
+        return store.contains(query) ||
+            category.contains(query) ||
+            currency.contains(query) ||
+            paymentmethod.contains(query) ||
+            notes.contains(query);
+      }).toList();
     },
   );
 

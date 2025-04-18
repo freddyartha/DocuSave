@@ -14,7 +14,7 @@ class ListComponentController<T> {
   final int pageSize;
   final Query query;
   final T Function(dynamic e) fromDynamic;
-  final List<dynamic> Function(String, T)? searchOnType;
+  final List<T> Function(String, List<T>)? searchOnType;
   late Function(VoidCallback fn) setState;
 
   final _listViewController = ScrollController();
@@ -70,6 +70,7 @@ class ListComponentController<T> {
       }
       for (var result in snapshot.docs) {
         _items.add(fromDynamic(result.data()));
+        searchOnType!("", _items);
         _tmpItems.addAll(_items);
       }
       setState(() {});
@@ -91,24 +92,12 @@ class ListComponentController<T> {
     searchCon.onChanged = (value) {
       print(_items.length);
       if (value.isNotEmpty) {
-        // if (searchOnType != null) {
-        //   _items.where((e){
-        //      final query = value.toLowerCase();
-
-        //     for (var t in searchOnType!(value, _items.first)) {
-        //      return t.toString().contains(query);
-        //     }
-        //   }).toList();
-        //     String condition = searchOnType!(value, _items.first).map((f) => "${f.contains(value.toLowerCase())}").join(' || ');
-        //     _items.where((element) => condition;
-
-        //     ).toList();
-        //   setState(() {
-        //     _items.clear();
-
-        //     _items.addAll(searchOnType!(value, _items.first));
-        //   });
-        // }
+        if (searchOnType != null) {
+          setState(() {
+            _items.clear();
+            _items.addAll(searchOnType!(value, _items));
+          });
+        }
       } else {
         setState(() {
           _items.clear();
