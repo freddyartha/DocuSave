@@ -930,4 +930,30 @@ class ReusableWidgets {
       child: child,
     );
   }
+
+  static Widget generalShadowedContainer({
+    required Widget child,
+    double? radius,
+    EdgeInsetsGeometry? margin,
+    EdgeInsetsGeometry? padding,
+  }) {
+    return Container(
+      margin: margin,
+      padding: padding,
+      decoration: BoxDecoration(
+        color: MahasColors.white,
+        borderRadius: BorderRadius.circular(radius ?? MahasRadius.regular),
+        boxShadow: [
+          BoxShadow(
+            color: MahasColors.black.withValues(alpha: 0.3),
+            blurRadius: 5,
+            spreadRadius: 1,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+
+      child: child,
+    );
+  }
 }

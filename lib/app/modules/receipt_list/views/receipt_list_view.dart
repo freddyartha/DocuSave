@@ -1,7 +1,11 @@
 import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/others/list_component.dart';
+import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
+import 'package:docusave/app/mahas/constants/input_formatter.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
+import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -40,84 +44,50 @@ class ReceiptListView extends GetView<ReceiptListController> {
             child: ListComponent(
               controller: controller.listCon,
               itemBuilder:
-                  (item, index) => Container(
-                    margin: EdgeInsets.all(10),
-                    color: MahasColors.white,
+                  (item, index) => ReusableWidgets.generalShadowedContainer(
+                    margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
                     child: ListTile(
-                      title: Text(item.storename),
-                      subtitle: Text(item.totalamount.toString()),
+                      titleAlignment: ListTileTitleAlignment.top,
+                      horizontalTitleGap: 10,
+                      visualDensity: VisualDensity.compact,
+                      contentPadding: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 10,
+                      ),
+                      title: TextComponent(
+                        value: item.storename,
+                        fontWeight: FontWeight.w600,
+                        fontSize: MahasFontSize.h6,
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextComponent(
+                            value:
+                                "${item.currency} ${InputFormatter.toCurrency(item.totalamount)}",
+                          ),
+                        ],
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            MahasRadius.regular,
+                          ),
+                          color: MahasColors.mutedGrey,
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          vertical: 3,
+                          horizontal: 8,
+                        ),
+                        child: TextComponent(
+                          value: item.category,
+                          fontSize: MahasFontSize.small,
+                          fontColor: MahasColors.white,
+                        ),
+                      ),
                     ),
                   ),
             ),
-
-            // Obx(
-            //   () => Column(
-            //     children: [
-            //       Padding(
-            //         padding: const EdgeInsets.only(
-            //           left: 20,
-            //           right: 20,
-            //           bottom: 10,
-            //         ),
-            //         child: Row(
-            //           children: [
-            //             Expanded(
-            //               child: InputTextComponent(
-            //                 controller: controller.searchCon,
-            //                 placeHolder: "Cari",
-            //                 prefixIcon: Icon(Icons.search_outlined),
-            //                 marginBottom: 0,
-            //               ),
-            //             ),
-            //             Container(
-            //               margin: EdgeInsets.only(left: 10),
-            //               decoration: BoxDecoration(
-            //                 borderRadius: BorderRadius.circular(
-            //                   MahasRadius.regular,
-            //                 ),
-            //                 color: MahasColors.lightgray,
-            //               ),
-            //               padding: EdgeInsets.all(10),
-            //               child: Icon(Icons.filter_alt_outlined),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //       Expanded(
-            //         child: RefreshIndicator(
-            //           onRefresh: () async {
-            //             controller.lastDoc = null;
-            //             controller.fetchReceipts();
-            //           },
-            //           child: ListView.builder(
-            //             controller: controller.scrollController,
-            //             itemCount:
-            //                 controller.receipts.length +
-            //                 (controller.isLoading.value ? 1 : 0),
-            //             itemBuilder: (context, index) {
-            //               if (index < controller.receipts.length) {
-            //                 final item = controller.receipts[index];
-            //                 return ListTile(
-            //                   title: Text(item.storename),
-            //                   subtitle: Text(item.totalamount.toString()),
-            //                 );
-            //               } else {
-            //                 return Align(
-            //                   alignment: Alignment.bottomCenter,
-            //                   child: TextComponent(
-            //                     value: "loading".tr,
-            //                     fontColor: MahasColors.primary,
-            //                     fontWeight: FontWeight.w600,
-            //                   ),
-            //                 );
-            //               }
-            //             },
-            //           ),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ),
         ],
       ),

@@ -27,6 +27,12 @@ void main() async {
           selectionColor: MahasColors.primary,
           selectionHandleColor: MahasColors.primary,
         ),
+        primaryColor: MahasColors.primary,
+        colorScheme: ColorScheme.light(
+          primary: MahasColors.primary,
+          onPrimary: MahasColors.white,
+          onSurface: MahasColors.black,
+        ),
       ),
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,

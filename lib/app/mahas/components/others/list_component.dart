@@ -13,20 +13,22 @@ class ListComponentController<T> {
   final Function()? filterOnTap;
   final int pageSize;
   final Query query;
-  final InputTextController searchCon;
   final T Function(dynamic e) fromDynamic;
+  final List<dynamic> Function(String, T)? searchOnType;
   late Function(VoidCallback fn) setState;
 
   final _listViewController = ScrollController();
+  final searchCon = InputTextController();
   final List<T> _items = [];
+  final List<T> _tmpItems = [];
   DocumentSnapshot? _lastDoc;
 
   ListComponentController({
     required this.query,
     required this.fromDynamic,
-    required this.searchCon,
     this.pageSize = 20,
     this.allowSearch = true,
+    this.searchOnType,
     this.filterOnTap,
   });
 
@@ -45,6 +47,7 @@ class ListComponentController<T> {
     if (clearAllData) {
       setState(() {
         _items.clear();
+        _tmpItems.clear();
         _lastDoc = null;
       });
     }
@@ -67,6 +70,7 @@ class ListComponentController<T> {
       }
       for (var result in snapshot.docs) {
         _items.add(fromDynamic(result.data()));
+        _tmpItems.addAll(_items);
       }
       setState(() {});
     } else {
@@ -84,6 +88,35 @@ class ListComponentController<T> {
 
   void init(Function(VoidCallback fn) setStateX) {
     setState = setStateX;
+    searchCon.onChanged = (value) {
+      print(_items.length);
+      if (value.isNotEmpty) {
+        // if (searchOnType != null) {
+        //   _items.where((e){
+        //      final query = value.toLowerCase();
+
+        //     for (var t in searchOnType!(value, _items.first)) {
+        //      return t.toString().contains(query);
+        //     }
+        //   }).toList();
+        //     String condition = searchOnType!(value, _items.first).map((f) => "${f.contains(value.toLowerCase())}").join(' || ');
+        //     _items.where((element) => condition;
+
+        //     ).toList();
+        //   setState(() {
+        //     _items.clear();
+
+        //     _items.addAll(searchOnType!(value, _items.first));
+        //   });
+        // }
+      } else {
+        setState(() {
+          _items.clear();
+          _items.addAll(_tmpItems);
+        });
+      }
+    };
+
     _listViewController.addListener(() async {
       if (_listViewController.position.pixels >=
           _listViewController.position.maxScrollExtent - 200) {
@@ -198,6 +231,8 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
               child: RefreshIndicator(
                 onRefresh: () async => widget.controller.fetchData(),
                 child: ListView.builder(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   padding: EdgeInsets.zero,
                   controller: widget.controller._listViewController,
                   itemCount:

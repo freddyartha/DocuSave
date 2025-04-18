@@ -149,7 +149,7 @@ class InputFormatter {
 
   static String toCurrency(double? value) {
     if (value == null) return "";
-    var numberFormat = NumberFormat('#,###');
+    var numberFormat = NumberFormat('#,###.##');
     return numberFormat.format(value);
   }
 
