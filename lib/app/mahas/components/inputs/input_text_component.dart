@@ -67,6 +67,7 @@ class InputTextController extends ChangeNotifier {
   }
 
   dynamic get value {
+    if (_con.text.toString().isEmpty) return null;
     if (type == InputTextType.number) {
       return num.tryParse(_con.text);
     } else if (type == InputTextType.money) {

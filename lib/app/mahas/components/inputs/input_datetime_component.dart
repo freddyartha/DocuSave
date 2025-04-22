@@ -12,7 +12,7 @@ import 'input_box_component.dart';
 
 class InputDatetimeController {
   late bool _required;
-  late InputDatetimeType _type;
+  final InputDatetimeType type;
   late bool _isDialogFormat;
   late BuildContext _context;
   late Function(VoidCallback fn) setState;
@@ -23,7 +23,7 @@ class InputDatetimeController {
   TimeOfDay? _time;
   String? _errorMessage;
 
-  InputDatetimeController({this.onChanged});
+  InputDatetimeController({this.type = InputDatetimeType.date, this.onChanged});
 
   Function()? onChanged;
 
@@ -41,9 +41,9 @@ class InputDatetimeController {
   }
 
   dynamic get value {
-    if (_type == InputDatetimeType.date) {
+    if (type == InputDatetimeType.date) {
       return InputFormatter.dynamicToTimestamp(_date);
-    } else if (_type == InputDatetimeType.time) {
+    } else if (type == InputDatetimeType.time) {
       return InputFormatter.timeOfDayToTimestamp(_time);
     } else {
       return _dateRange;
@@ -56,9 +56,9 @@ class InputDatetimeController {
     });
 
     if (_required &&
-        ((_type == InputDatetimeType.date && _date == null) ||
-            (_type == InputDatetimeType.time && _time == null) ||
-            (_type == InputDatetimeType.dateRange && _dateRange == null))) {
+        ((type == InputDatetimeType.date && _date == null) ||
+            (type == InputDatetimeType.time && _time == null) ||
+            (type == InputDatetimeType.dateRange && _dateRange == null))) {
       setState(() {
         _errorMessage = 'Kolom harus diisi';
       });
@@ -70,7 +70,7 @@ class InputDatetimeController {
   void _onTab(bool editable) async {
     Get.focusScope!.unfocus();
     if (!editable) return;
-    if (_type == InputDatetimeType.date) {
+    if (type == InputDatetimeType.date) {
       if (_isDialogFormat) {
         final DateTime? picked = await showDatePicker(
           context: _context,
@@ -169,7 +169,7 @@ class InputDatetimeController {
           isValid;
         });
       }
-    } else if (_type == InputDatetimeType.time) {
+    } else if (type == InputDatetimeType.time) {
       final TimeOfDay? picked = await showTimePicker(
         context: _context,
         initialTime: _time ?? TimeOfDay.now(),
@@ -227,13 +227,11 @@ class InputDatetimeController {
     Function(VoidCallback fn) setStateX,
     BuildContext contextX,
     bool requiredX,
-    InputDatetimeType typeX,
     bool isDialogFormat,
   ) {
     setState = setStateX;
     _context = contextX;
     _required = requiredX;
-    _type = typeX;
     _isDialogFormat = isDialogFormat;
     _isInit = true;
   }
@@ -256,7 +254,6 @@ class InputDatetimeComponent extends StatefulWidget {
   final double? marginBottom;
   final bool required;
   final InputDatetimeController controller;
-  final InputDatetimeType type;
   final Radius? borderRadius;
   final String? description;
   final bool? boxChecked;
@@ -271,7 +268,7 @@ class InputDatetimeComponent extends StatefulWidget {
     required this.controller,
     this.editable = true,
     this.required = false,
-    this.type = InputDatetimeType.date,
+
     this.borderRadius,
     this.description,
     this.checkBoxOnTab,
@@ -294,7 +291,6 @@ class _InputDatetimeComponentState extends State<InputDatetimeComponent> {
       },
       context,
       widget.required,
-      widget.type,
       widget.isDialogFormat,
     );
     super.initState();
@@ -311,28 +307,28 @@ class _InputDatetimeComponentState extends State<InputDatetimeComponent> {
           editable: widget.editable,
           isRequired: widget.required,
           icon:
-              widget.controller._type == InputDatetimeType.date ||
-                      widget.controller._type == InputDatetimeType.dateRange
+              widget.controller.type == InputDatetimeType.date ||
+                      widget.controller.type == InputDatetimeType.dateRange
                   ? Icons.calendar_month_outlined
                   : Icons.access_time_outlined,
           alowClear:
               widget.editable &&
-              ((widget.controller._type == InputDatetimeType.date &&
+              ((widget.controller.type == InputDatetimeType.date &&
                       widget.controller._date != null) ||
-                  (widget.controller._type == InputDatetimeType.time &&
+                  (widget.controller.type == InputDatetimeType.time &&
                       widget.controller._time != null) ||
-                  (widget.controller._type == InputDatetimeType.dateRange &&
+                  (widget.controller.type == InputDatetimeType.dateRange &&
                       widget.controller._dateRange != null)),
           errorMessage: widget.controller._errorMessage,
           clearOnTab: widget.controller.clearOnTab,
           marginBottom: widget.marginBottom,
           onTap: () => widget.controller._onTab(widget.editable),
           childText:
-              widget.controller._type == InputDatetimeType.date
+              widget.controller.type == InputDatetimeType.date
                   ? widget.controller._date == null
                       ? widget.placeHolder
                       : InputFormatter.displayDate(widget.controller._date)
-                  : widget.controller._type == InputDatetimeType.dateRange
+                  : widget.controller.type == InputDatetimeType.dateRange
                   ? widget.controller._dateRange == null
                       ? widget.placeHolder
                       : InputFormatter.displayDateRange(

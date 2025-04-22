@@ -22,6 +22,11 @@ class FirebaseRepository {
   static String articlesCollection = 'articles';
   static String receiptCollection = 'receipts';
 
+  //queries
+  static final getToReceiptCollection = FirebaseFirestore.instance.collection(
+    "$userCollection/${auth.currentUser?.uid}/$receiptCollection",
+  );
+
   static Future<bool> checkUserExist(String userId) async {
     try {
       DocumentSnapshot snapshot =

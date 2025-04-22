@@ -418,7 +418,7 @@ class ReusableWidgets {
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
-          Get.back(result: false);
+          Get.back(result: null);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -511,7 +511,7 @@ class ReusableWidgets {
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
-          Get.back(result: false);
+          Get.back(result: null);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -623,7 +623,7 @@ class ReusableWidgets {
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
-          Get.back(result: false);
+          Get.back(result: null);
         },
         child: Container(
           decoration: BoxDecoration(

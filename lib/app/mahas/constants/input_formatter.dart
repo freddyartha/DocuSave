@@ -238,4 +238,10 @@ class InputFormatter {
 
     return value.toString();
   }
+
+  static String titleToCamelCase(String input) {
+    final parts = input.toLowerCase().split(' ');
+    return parts.first +
+        parts.skip(1).map((e) => e[0].toUpperCase() + e.substring(1)).join();
+  }
 }
