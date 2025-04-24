@@ -155,7 +155,7 @@ class _InputTextState extends State<InputTextComponent> {
       filled: true,
       fillColor:
           widget.editable ? MahasColors.lightgray : MahasColors.mediumgray,
-      hintText: widget.placeHolder,
+      hintText: widget.editable ? widget.placeHolder : null,
       hintStyle: TextStyle(
         fontSize: MahasFontSize.normal,
         color: MahasColors.mutedGrey,

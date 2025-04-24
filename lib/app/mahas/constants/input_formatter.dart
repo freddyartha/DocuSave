@@ -169,6 +169,7 @@ class InputFormatter {
   static DateTime? dynamicToDateTime(dynamic value) {
     if (value == null) return null;
     if (value is DateTime) return value;
+    if (value is Timestamp) return value.toDate();
     if (value is String) return stringToDateTime(value.toString());
     return DateTime.tryParse(value);
   }
@@ -240,7 +241,18 @@ class InputFormatter {
   }
 
   static String titleToCamelCase(String input) {
-    final parts = input.toLowerCase().split(' ');
+    input = input.trim().toLowerCase();
+    if (!input.contains("_") && !input.contains(" ")) {
+      return input;
+    }
+
+    List<String> parts;
+    if (input.contains("_")) {
+      parts = input.split('_');
+    } else {
+      parts = input.split(' ');
+    }
+
     return parts.first +
         parts.skip(1).map((e) => e[0].toUpperCase() + e.substring(1)).join();
   }

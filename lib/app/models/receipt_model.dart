@@ -11,8 +11,8 @@ class ReceiptModel {
   Timestamp? purchasedate;
   double totalamount;
   String currency;
-  String category;
-  String paymentmethod;
+  int category;
+  int paymentmethod;
   List<String> receiptimage;
   String? notes;
   Timestamp createdat;
@@ -49,8 +49,9 @@ class ReceiptModel {
       totalamount:
           InputFormatter.dynamicToDouble(dynamicData['totalAmount']) ?? 0,
       currency: dynamicData['currency'],
-      category: dynamicData['category'],
-      paymentmethod: dynamicData['paymentMethod'],
+      category: InputFormatter.dynamicToInt(dynamicData['category']) ?? 0,
+      paymentmethod:
+          InputFormatter.dynamicToInt(dynamicData['paymentMethod']) ?? 0,
       receiptimage: [],
       notes: dynamicData['notes'],
       createdat: dynamicData['createdAt'],

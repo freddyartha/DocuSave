@@ -1,6 +1,7 @@
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
+import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
 
 class InputBoxComponent extends StatelessWidget {
@@ -76,7 +77,9 @@ class InputBoxComponent extends StatelessWidget {
                   width: double.infinity,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
-                      borderRadius == null ? 15 : borderRadius!.x,
+                      borderRadius == null
+                          ? MahasRadius.regular
+                          : borderRadius!.x,
                     ),
                     color:
                         editable == true
@@ -105,7 +108,7 @@ class InputBoxComponent extends StatelessWidget {
                                 child: TextComponent(
                                   value: childText ?? '',
                                   fontSize: MahasFontSize.normal,
-                                  fontColor: MahasColors.mutedGrey,
+                                  fontColor: MahasColors.black,
                                 ),
                               ),
                             ),

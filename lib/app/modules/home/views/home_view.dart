@@ -5,6 +5,7 @@ import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
+import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -33,11 +34,24 @@ class HomeView extends GetView<HomeController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      TextComponent(
-                        value: "Welcome Guest!",
-                        fontColor: MahasColors.white,
-                        fontSize: MahasFontSize.h3,
-                        fontWeight: FontWeight.w600,
+                      Row(
+                        children: [
+                          TextComponent(
+                            value: "welcome".tr,
+                            fontColor: MahasColors.white,
+                            fontSize: MahasFontSize.h3,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          TextComponent(
+                            value:
+                                auth.currentUser != null
+                                    ? " ${MahasConfig.userProfile?.name}!"
+                                    : " Guest!",
+                            fontColor: MahasColors.white,
+                            fontSize: MahasFontSize.h3,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ],
                       ),
                       GestureDetector(
                         onTap: controller.goToProfileList,

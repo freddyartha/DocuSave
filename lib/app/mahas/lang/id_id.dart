@@ -16,6 +16,8 @@ const Map<String, String> idID = {
   "save": "Simpan",
   "success": "Berhasil",
   "error": "Terjadi Kesalahan",
+  "edit": "Edit",
+  "delete": "Hapus",
   "name": "Nama",
   "name_hint": "Masukkan namamu disini",
   "email": "Email",
@@ -27,6 +29,7 @@ const Map<String, String> idID = {
   "image_cropper": "Potong Gambar",
   "add_image": "Tambah Foto",
   "change_image": "Ganti Foto",
+  "welcome": "Selamat Datang",
   "welcome_title": "Selamat datang di Docusave!",
   "welcome_subtitle":
       "Aplikasi yang dibuat untuk mengamankan kertas-kertas kecil yang rawan hilang dan mungkin penting bagi kamu, seperti Kwitansi atau Kartu Garansi",
@@ -74,6 +77,12 @@ const Map<String, String> idID = {
   "success_save_receipt": "Berhasil menyimpan nota/kwitansi",
   "loading": "Memuat",
   "general_not_found": "Oops... Data yang kamu cari tidak ditemukan",
+  "general_delete_header": "Konfirmasi Hapus Data",
+  "general_delete_subtitle":
+      "Kamu beneran mau hapus data ini? Sekali dihapus, datanya hilang selamanya",
+  "save_data": "Menyimpan Dokumen",
+  "save_image": "Menyimpan Gambar",
+  "delete_data": " Menghapus Dokumen",
 
   //jenis pembayaran
   "cash": "Tunai",

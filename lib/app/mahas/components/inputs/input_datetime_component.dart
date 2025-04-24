@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/input_formatter.dart';
@@ -34,6 +35,8 @@ class InputDatetimeController {
       _time = val;
     } else if (val is DateTimeRange) {
       _dateRange = val;
+    } else if (val is Timestamp) {
+      _date = InputFormatter.dynamicToDateTime(val);
     }
     if (_isInit) {
       setState(() {});

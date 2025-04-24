@@ -168,7 +168,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 20,
             children: [
-              Image.asset("assets/images/error.png"),
+              Image.asset("assets/images/not_found.png"),
               TextComponent(
                 value: "general_not_found".tr,
                 fontSize: MahasFontSize.h6,
@@ -234,7 +234,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         spacing: 20,
                         children: [
-                          Image.asset("assets/images/error.png"),
+                          Image.asset("assets/images/not_found.png"),
                           TextComponent(
                             value: "general_not_found".tr,
                             fontSize: MahasFontSize.h6,
@@ -248,7 +248,10 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
                 )
                 : Expanded(
                   child: RefreshIndicator(
-                    onRefresh: () async => widget.controller.fetchData(),
+                    onRefresh: () async {
+                      widget.controller._hasMore = true;
+                      await widget.controller.fetchData();
+                    },
                     child: ListView.builder(
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,

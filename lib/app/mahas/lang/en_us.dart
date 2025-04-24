@@ -17,6 +17,8 @@ const Map<String, String> enUS = {
   "save": "Save",
   "success": "Success",
   "error": "An Error Occurred",
+  "edit": "Edit",
+  "delete": "Delete",
   "name": "Name",
   "name_hint": "Insert your name here",
   "email": "Email",
@@ -28,6 +30,7 @@ const Map<String, String> enUS = {
   "image_cropper": "Image Cropper",
   "add_image": "Add Image",
   "change_image": "Change Image",
+  "welcome": "Welcome",
   "welcome_title": "Welcome to Docusave!",
   "welcome_subtitle":
       "An app made to keep those little papers safe—like receipts or warranty cards—that are easy to lose but might be important to you",
@@ -73,6 +76,12 @@ const Map<String, String> enUS = {
   "success_save_receipt": "Successfully save your receipt",
   "loading": "Loading",
   "general_not_found": "Oops... The item that you are looking for is not found",
+  "general_delete_header": "Delete Confirmation",
+  "general_delete_subtitle":
+      "Are you sure you want to delete this data? Once deleted, it's gone for good",
+  "save_data": "Saving Document",
+  "save_image": "Saving Image",
+  "delete_data": "Deleting Document",
 
   //jenis pembayaran
   "cash": "Cash",

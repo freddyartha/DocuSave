@@ -16,7 +16,7 @@ import 'package:get/get.dart';
 
 class ReceiptListController extends GetxController {
   final searchCon = InputTextController();
-  late ListComponentController listCon;
+  late ListComponentController<ReceiptModel> listCon;
   final defaultQuery = FirebaseRepository.getToReceiptCollection.orderBy(
     'createdAt',
     descending: true,
@@ -36,17 +36,17 @@ class ReceiptListController extends GetxController {
       searchOnType: (value) {
         return listCon.items.where((e) {
           final store = e.storename.toLowerCase();
-          final category = e.category.toLowerCase();
+          final category = e.category;
           final currency = e.currency.toLowerCase();
-          final paymentmethod = e.paymentmethod.toLowerCase();
+          final paymentmethod = e.paymentmethod;
 
           final notes = e.notes.toString().toLowerCase();
           final query = value.toLowerCase();
 
           return store.contains(query) ||
-              category.contains(query) ||
+              category.toString() == query ||
               currency.contains(query) ||
-              paymentmethod.contains(query) ||
+              paymentmethod.toString() == query ||
               notes.contains(query);
         }).toList();
       },
@@ -140,8 +140,11 @@ class ReceiptListController extends GetxController {
     super.onInit();
   }
 
-  void goToReceiptSetup() {
-    Get.toNamed(Routes.RECEIPT_SETUP)?.then((value) {
+  void goToReceiptSetup({String? id}) {
+    Get.toNamed(
+      Routes.RECEIPT_SETUP,
+      parameters: id != null ? {"id": id} : null,
+    )?.then((value) {
       if (value == true) {
         listCon.refresh();
       }

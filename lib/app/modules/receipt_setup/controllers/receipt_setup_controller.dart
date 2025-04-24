@@ -23,6 +23,9 @@ class ReceiptSetupController extends GetxController
     with GetSingleTickerProviderStateMixin {
   late AnimationController animationController;
   late Animation animation;
+  RxString id = "".obs;
+  RxBool loadingData = false.obs;
+  RxBool editable = true.obs;
   final InputTextController receiptIdCon = InputTextController(
     type: InputTextType.text,
   );
@@ -38,27 +41,27 @@ class ReceiptSetupController extends GetxController
   );
   final InputDropdownController categoryCon = InputDropdownController(
     items: [
-      DropdownItem.simple("food_beverage".tr),
-      DropdownItem.simple("transportation".tr),
-      DropdownItem.simple("electronics".tr),
-      DropdownItem.simple("healthcare".tr),
-      DropdownItem.simple("entertainment".tr),
-      DropdownItem.simple("personal_care".tr),
-      DropdownItem.simple("education".tr),
+      DropdownItem(text: "food_beverage".tr, value: 1),
+      DropdownItem(text: "transportation".tr, value: 2),
+      DropdownItem(text: "electronics".tr, value: 3),
+      DropdownItem(text: "healthcare".tr, value: 4),
+      DropdownItem(text: "entertainment".tr, value: 5),
+      DropdownItem(text: "personal_care".tr, value: 6),
+      DropdownItem(text: "education".tr, value: 7),
     ],
   );
   final InputDropdownController paymentMethodCon = InputDropdownController(
     items: [
-      DropdownItem.simple("cash".tr),
-      DropdownItem.simple("bank_transfer".tr),
-      DropdownItem.simple("debit_card".tr),
-      DropdownItem.simple("credit_card".tr),
-      DropdownItem.simple("e_wallet".tr),
-      DropdownItem.simple("qris".tr),
-      DropdownItem.simple("virtual_account".tr),
-      DropdownItem.simple("paylater".tr),
-      DropdownItem.simple("cod".tr),
-      DropdownItem.simple("voucher".tr),
+      DropdownItem(text: "cash".tr, value: 1),
+      DropdownItem(text: "bank_transfer".tr, value: 2),
+      DropdownItem(text: "debit_card".tr, value: 3),
+      DropdownItem(text: "credit_card".tr, value: 4),
+      DropdownItem(text: "e_wallet".tr, value: 5),
+      DropdownItem(text: "qris".tr, value: 6),
+      DropdownItem(text: "virtual_account".tr, value: 7),
+      DropdownItem(text: "paylater".tr, value: 8),
+      DropdownItem(text: "cod".tr, value: 9),
+      DropdownItem(text: "voucher".tr, value: 10),
     ],
   );
   final InputTextController notesCon = InputTextController(
@@ -70,18 +73,7 @@ class ReceiptSetupController extends GetxController
   RxBool buttonActive = false.obs;
 
   @override
-  void onInit() {
-    currencyCon.onTap =
-        () => showCurrencyPicker(
-          context: Get.context!,
-          showFlag: true,
-          showCurrencyName: true,
-          showCurrencyCode: true,
-          favorite: ["IDR", "USD", "SGD"],
-          onSelect: (Currency currency) => currencyCon.value = currency.code,
-          theme: ReusableStatics.currencyPickerTheme(),
-        );
-    activateButton();
+  void onInit() async {
     animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
@@ -90,6 +82,41 @@ class ReceiptSetupController extends GetxController
       CurvedAnimation(parent: animationController, curve: Curves.easeOut),
     );
     animationController.repeat(reverse: true);
+
+    id.value = Get.parameters["id"] ?? "";
+    if (id.value.isNotEmpty) {
+      editable.value = false;
+      loadingData.value = true;
+      var r = await FirebaseRepository.getReceiptById(
+        documentId: id.value,
+        userUid: auth.currentUser!.uid,
+      );
+      loadingData.value = false;
+      if (r != null) {
+        scannedDoc.addAll(r.receiptimage);
+        receiptIdCon.value = r.receiptid;
+        storeNameCon.value = r.storename;
+        purchaseDateCon.value = r.purchasedate;
+        totalAmountCon.value = r.totalamount;
+        currencyCon.value = r.currency;
+        categoryCon.value = r.category;
+        paymentMethodCon.value = r.paymentmethod;
+        notesCon.value = r.notes;
+      }
+    }
+    if (editable.value) {
+      currencyCon.onTap =
+          () => showCurrencyPicker(
+            context: Get.context!,
+            showFlag: true,
+            showCurrencyName: true,
+            showCurrencyCode: true,
+            favorite: ["IDR", "USD", "SGD"],
+            onSelect: (Currency currency) => currencyCon.value = currency.code,
+            theme: ReusableStatics.currencyPickerTheme(),
+          );
+    }
+    activateButton();
     super.onInit();
   }
 
@@ -206,15 +233,16 @@ class ReceiptSetupController extends GetxController
   }
 
   bool showConfirmationCondition() {
-    if (scannedDoc.isNotEmpty ||
-        receiptIdCon.value != null ||
-        storeNameCon.value != null ||
-        purchaseDateCon.value != null ||
-        totalAmountCon.value != null ||
-        currencyCon.value != null ||
-        categoryCon.value != null ||
-        paymentMethodCon.value != null ||
-        notesCon.value != null) {
+    if (editable.value &&
+        (scannedDoc.isNotEmpty ||
+            receiptIdCon.value != null ||
+            storeNameCon.value != null ||
+            purchaseDateCon.value != null ||
+            totalAmountCon.value != null ||
+            currencyCon.value != null ||
+            categoryCon.value != null ||
+            paymentMethodCon.value != null ||
+            notesCon.value != null)) {
       return true;
     } else {
       return false;
@@ -235,7 +263,7 @@ class ReceiptSetupController extends GetxController
       if (!paymentMethodCon.isValid) return;
       if (!notesCon.isValid) return;
       if (EasyLoading.isShow) EasyLoading.dismiss();
-      await EasyLoading.show(status: "Menyimpan Gambar");
+      await EasyLoading.show(status: "save_image".tr);
       buttonActive.value = false;
       if (auth.currentUser != null) {
         List<String> imageUrl = [];
@@ -256,7 +284,7 @@ class ReceiptSetupController extends GetxController
         }
 
         if (EasyLoading.isShow) EasyLoading.dismiss();
-        await EasyLoading.show(status: "Menyimpan Dokumen");
+        await EasyLoading.show(status: "Save_data".tr);
         ReceiptModel receiptModel = ReceiptModel(
           documentid: ReusableStatics.idGenerator(),
           receiptid: receiptIdCon.value,
@@ -287,5 +315,18 @@ class ReceiptSetupController extends GetxController
         }
       }
     }
+  }
+
+  void deleteData() async {
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+    await EasyLoading.show(status: "delete_data".tr);
+    bool? result = await FirebaseRepository.deleteReceiptById(
+      documentId: id.value,
+      userUid: auth.currentUser!.uid,
+    );
+    if (result == true) {
+      Get.back(result: true);
+    }
+    await EasyLoading.dismiss();
   }
 }

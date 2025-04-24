@@ -736,7 +736,10 @@ class ReusableWidgets {
     );
   }
 
-  static Widget scannedDocCarouselWidget({required List<String> imageList}) {
+  static Widget scannedDocCarouselWidget({
+    required List<String> imageList,
+    bool isNetworkImage = false,
+  }) {
     final CarouselSliderController imageController = CarouselSliderController();
     RxInt current = 0.obs;
 
@@ -753,43 +756,71 @@ class ReusableWidgets {
       return Size(image.width.toDouble(), image.height.toDouble());
     }
 
-    Future<void> showImageBottomSheet(String item) async =>
-        await customBottomSheet(
-          title: "scan_result".tr,
-          children: [
-            LayoutBuilder(
-              builder: (context, constraints) {
-                return FutureBuilder<Size>(
-                  future: getFileImageSize(File(item)),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: MahasColors.primary,
-                        ),
+    Future<void> showImageBottomSheet(
+      String item,
+    ) async => await customBottomSheet(
+      title: "scan_result".tr,
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            if (isNetworkImage) {
+              Size? imageSize;
+              double? aspectRatio;
+              double? imageHeight;
+              final image = Image.network(item);
+
+              image.image
+                  .resolve(const ImageConfiguration())
+                  .addListener(
+                    ImageStreamListener((ImageInfo info, bool _) {
+                      imageSize = Size(
+                        info.image.width.toDouble(),
+                        info.image.height.toDouble(),
                       );
-                    }
+                      aspectRatio = imageSize!.width / imageSize!.height;
+                      imageHeight = screenWidth / aspectRatio!;
+                    }),
+                  );
 
-                    final imageSize = snapshot.data!;
-                    final aspectRatio = imageSize.width / imageSize.height;
-                    final imageHeight = screenWidth / aspectRatio;
-
-                    return ImageComponent(
-                      zoomable: true,
-                      imageFromFile: item,
-                      width: screenWidth,
-                      height:
-                          imageHeight > screenHeight
-                              ? screenHeight
-                              : imageHeight,
-                      boxFit: BoxFit.fill,
+              return ImageComponent(
+                zoomable: true,
+                networkUrl: item,
+                width: screenWidth,
+                height:
+                    imageHeight! > screenHeight ? screenHeight : imageHeight,
+                boxFit: BoxFit.fill,
+              );
+            } else {
+              return FutureBuilder<Size>(
+                future: getFileImageSize(File(item)),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: MahasColors.primary,
+                      ),
                     );
-                  },
-                );
-              },
-            ),
-          ],
-        );
+                  }
+
+                  final imageSize = snapshot.data!;
+                  final aspectRatio = imageSize.width / imageSize.height;
+                  final imageHeight = screenWidth / aspectRatio;
+
+                  return ImageComponent(
+                    zoomable: true,
+                    imageFromFile: item,
+                    width: screenWidth,
+                    height:
+                        imageHeight > screenHeight ? screenHeight : imageHeight,
+                    boxFit: BoxFit.fill,
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ],
+    );
 
     if (imageList.length <= 1) {
       final item = imageList.first;
@@ -809,7 +840,8 @@ class ReusableWidgets {
             borderRadius: BorderRadius.circular(MahasRadius.large),
           ),
           child: ImageComponent(
-            imageFromFile: item,
+            imageFromFile: isNetworkImage ? null : item,
+            networkUrl: isNetworkImage ? item : null,
             width: screenWidth,
             boxFit: BoxFit.fitWidth,
           ),
@@ -840,7 +872,10 @@ class ReusableWidgets {
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           alignment: Alignment.bottomCenter,
-                          image: FileImage(File(item)),
+                          image:
+                              isNetworkImage
+                                  ? NetworkImage(item)
+                                  : FileImage(File(item)),
                         ),
                       ),
                     ),
@@ -905,6 +940,63 @@ class ReusableWidgets {
     );
   }
 
+  static Widget formLoadingWidget() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Shimmer.fromColors(
+        baseColor: MahasColors.mediumgray,
+        highlightColor: MahasColors.lightgray,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 20,
+          children: [
+            Container(
+              height: Get.height * 0.25,
+              decoration: BoxDecoration(
+                color: MahasColors.white,
+                borderRadius: BorderRadius.circular(MahasRadius.large),
+              ),
+            ),
+            ListView.separated(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: 6,
+              separatorBuilder: (context, index) => SizedBox(height: 10),
+              itemBuilder:
+                  (context, index) => Row(
+                    spacing: 10,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: MahasColors.white,
+                          borderRadius: BorderRadius.circular(
+                            MahasRadius.regular,
+                          ),
+                        ),
+                        height: 45,
+                        width: 100,
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: MahasColors.white,
+                            borderRadius: BorderRadius.circular(
+                              MahasRadius.regular,
+                            ),
+                          ),
+                          height: 45,
+                        ),
+                      ),
+                    ],
+                  ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   static Widget generalPopScopeWidget({
     required Widget child,
     required bool Function() showConfirmationCondition,
@@ -956,4 +1048,45 @@ class ReusableWidgets {
       child: child,
     );
   }
+
+  static Widget generalEditDeleteButtonWidget({
+    required Function() editOnTap,
+    required Function() deleteOnTap,
+  }) => Row(
+    spacing: 20,
+    children: [
+      Expanded(
+        child: ButtonComponent(
+          onTap: editOnTap,
+          text: "edit".tr,
+          btnColor: MahasColors.primary,
+          icon: "assets/images/edit.png",
+          isSvg: false,
+          iconSize: 25,
+        ),
+      ),
+      Expanded(
+        child: ButtonComponent(
+          onTap: () async {
+            bool? result = await confirmationBottomSheet(
+              title: "general_delete_header".tr,
+              withImage: true,
+              children: [
+                TextComponent(
+                  textAlign: TextAlign.center,
+                  value: "general_delete_subtitle".tr,
+                ),
+              ],
+            );
+            if (result == true) deleteOnTap();
+          },
+          text: "delete".tr,
+          btnColor: MahasColors.red,
+          icon: "assets/images/delete.png",
+          isSvg: false,
+          iconSize: 25,
+        ),
+      ),
+    ],
+  );
 }

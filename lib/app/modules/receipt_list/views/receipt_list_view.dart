@@ -17,6 +17,7 @@ class ReceiptListView extends GetView<ReceiptListController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: ReusableWidgets.generalAppBarWidget(
         title: "receipt".tr,
@@ -47,6 +48,9 @@ class ReceiptListView extends GetView<ReceiptListController> {
                   (item, index) => ReusableWidgets.generalShadowedContainer(
                     margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
                     child: ListTile(
+                      onTap:
+                          () =>
+                              controller.goToReceiptSetup(id: item.documentid),
                       titleAlignment: ListTileTitleAlignment.top,
                       horizontalTitleGap: 10,
                       visualDensity: VisualDensity.compact,
@@ -80,7 +84,9 @@ class ReceiptListView extends GetView<ReceiptListController> {
                           horizontal: 8,
                         ),
                         child: TextComponent(
-                          value: item.category,
+                          value: InputFormatter.displayDate(
+                            item.createdat.toDate(),
+                          ),
                           fontSize: MahasFontSize.small,
                           fontColor: MahasColors.white,
                         ),

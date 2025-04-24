@@ -325,6 +325,7 @@ class FirebaseRepository {
     }
   }
 
+  //Receipt
   static Future<bool> addReceiptToFirestore({
     required String userUid,
     required ReceiptModel receiptModel,
@@ -335,6 +336,40 @@ class FirebaseRepository {
           .collection("$userCollection/$userUid/$receiptCollection")
           .doc(receiptModel.documentid)
           .set(receiptModelToJson(receiptModel));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<ReceiptModel?> getReceiptById({
+    required String documentId,
+    required String userUid,
+  }) async {
+    try {
+      var result =
+          await firestore
+              .collection("$userCollection/$userUid/$receiptCollection")
+              .doc(documentId)
+              .get();
+
+      return ReceiptModel.fromDynamic(result.data());
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return null;
+    }
+  }
+
+  static Future<bool> deleteReceiptById({
+    required String documentId,
+    required String userUid,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$receiptCollection")
+          .doc(documentId)
+          .delete();
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());

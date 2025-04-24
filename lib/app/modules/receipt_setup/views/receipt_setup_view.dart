@@ -28,9 +28,8 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
           actions: [
             Obx(
               () =>
-                  controller.scannedDoc.isEmpty
-                      ? SizedBox()
-                      : GestureDetector(
+                  controller.scannedDoc.isNotEmpty && controller.editable.value
+                      ? GestureDetector(
                         onTap: controller.resetScan,
                         child: ImageComponent(
                           margin: EdgeInsets.symmetric(horizontal: 10),
@@ -38,13 +37,14 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                           height: 30,
                           width: 30,
                         ),
-                      ),
+                      )
+                      : SizedBox(),
             ),
           ],
         ),
         floatingActionButton: Obx(
           () =>
-              controller.scannedDoc.isEmpty
+              controller.scannedDoc.isEmpty && controller.id.isEmpty
                   ? AnimatedBuilder(
                     animation: controller.animation,
                     builder: (context, _) {
@@ -97,7 +97,10 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
         body: SafeArea(
           child: Obx(
             () =>
-                controller.scannedDoc.isEmpty
+                controller.id.value.isNotEmpty && controller.loadingData.value
+                    ? ReusableWidgets.formLoadingWidget()
+                    : controller.id.value.isEmpty &&
+                        controller.scannedDoc.isEmpty
                     ? Center(
                       child: Padding(
                         padding: EdgeInsets.only(bottom: Get.height * 0.2),
@@ -126,6 +129,8 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                         controller.scannedDoc.isNotEmpty
                             ? ReusableWidgets.scannedDocCarouselWidget(
                               imageList: controller.scannedDoc,
+                              isNetworkImage:
+                                  controller.id.value.isNotEmpty ? true : false,
                             )
                             : SizedBox(),
                         ListView(
@@ -138,6 +143,7 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                               label: "receipt_id".tr,
                               placeHolder: "receipt_id_hint".tr,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                             ),
                             InputTextComponent(
                               controller: controller.storeNameCon,
@@ -145,6 +151,7 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                               placeHolder: "store_name_hint".tr,
                               required: true,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                             ),
                             InputDatetimeComponent(
                               controller: controller.purchaseDateCon,
@@ -152,6 +159,7 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                               placeHolder: "purchase_date_hint".tr,
                               required: true,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                             ),
                             InputTextComponent(
                               controller: controller.totalAmountCon,
@@ -159,6 +167,7 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                               placeHolder: "total_amount_hint".tr,
                               required: true,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                             ),
                             InputTextComponent(
                               controller: controller.currencyCon,
@@ -166,14 +175,20 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                               placeHolder: "currency_hint".tr,
                               required: true,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                               disableInputKeyboard: true,
-                              suffixIcon: Padding(
-                                padding: const EdgeInsets.only(right: 5),
-                                child: Icon(
-                                  Icons.arrow_drop_down_outlined,
-                                  size: 25,
-                                ),
-                              ),
+                              suffixIcon:
+                                  controller.editable.value
+                                      ? Padding(
+                                        padding: const EdgeInsets.only(
+                                          right: 5,
+                                        ),
+                                        child: Icon(
+                                          Icons.arrow_drop_down_outlined,
+                                          size: 25,
+                                        ),
+                                      )
+                                      : null,
                             ),
                             InputDropdownComponent(
                               controller: controller.categoryCon,
@@ -181,6 +196,7 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                               placeHolder: "category_hint".tr,
                               required: true,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                             ),
                             InputDropdownComponent(
                               controller: controller.paymentMethodCon,
@@ -188,21 +204,44 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                               placeHolder: "payment_method_hint".tr,
                               required: true,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                             ),
                             InputTextComponent(
                               controller: controller.notesCon,
                               label: "notes".tr,
                               placeHolder: "notes_hint".tr,
                               marginBottom: 15,
+                              editable: controller.editable.value,
                             ),
-                            ButtonComponent(
-                              onTap: controller.saveOnTap,
-                              text: "save".tr,
-                              btnColor:
-                                  controller.buttonActive.value
-                                      ? MahasColors.primary
-                                      : MahasColors.mediumgray,
-                            ),
+                            controller.editable.value
+                                ? Column(
+                                  spacing: 15,
+                                  children: [
+                                    ButtonComponent(
+                                      onTap: controller.saveOnTap,
+                                      text: "save".tr,
+                                      btnColor:
+                                          controller.buttonActive.value
+                                              ? MahasColors.primary
+                                              : MahasColors.mediumgray,
+                                    ),
+                                    controller.id.value.isNotEmpty
+                                        ? ButtonComponent(
+                                          onTap:
+                                              () =>
+                                                  controller.editable.value =
+                                                      false,
+                                          text: "cancel".tr,
+                                          btnColor: MahasColors.darkBlue,
+                                        )
+                                        : SizedBox.shrink(),
+                                  ],
+                                )
+                                : ReusableWidgets.generalEditDeleteButtonWidget(
+                                  deleteOnTap: controller.deleteData,
+                                  editOnTap:
+                                      () => controller.editable.value = true,
+                                ),
                           ],
                         ),
                       ],
