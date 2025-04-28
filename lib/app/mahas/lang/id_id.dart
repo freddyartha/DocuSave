@@ -83,6 +83,10 @@ const Map<String, String> idID = {
   "save_data": "Menyimpan Dokumen",
   "save_image": "Menyimpan Gambar",
   "delete_data": " Menghapus Dokumen",
+  "year": "tahun",
+  "month": "bulan",
+  "day": "hari",
+  "expires_in": "Berakhir dalam",
 
   //jenis pembayaran
   "cash": "Tunai",

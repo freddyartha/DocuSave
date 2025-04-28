@@ -14,7 +14,11 @@ class HomeController extends GetxController {
       image: "assets/images/receipt.png",
       onTab: () => Get.toNamed(Routes.RECEIPT_LIST),
     ),
-    MenuItemModel(title: "warranty", image: "assets/images/warranty.png"),
+    MenuItemModel(
+      title: "warranty",
+      image: "assets/images/warranty.png",
+      onTab: () => Get.toNamed(Routes.WARRANTY_LIST),
+    ),
   ];
 
   RxBool historyLoading = true.obs;

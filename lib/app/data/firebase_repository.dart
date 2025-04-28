@@ -10,6 +10,7 @@ import 'package:docusave/app/models/receipt_model.dart';
 import 'package:docusave/app/models/user_devices_model.dart';
 import 'package:docusave/app/models/user_model.dart';
 import 'package:docusave/app/models/user_notification_model.dart';
+import 'package:docusave/app/models/warranty_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
@@ -21,10 +22,14 @@ class FirebaseRepository {
   static String userDevicesCollection = 'userDevices';
   static String articlesCollection = 'articles';
   static String receiptCollection = 'receipts';
+  static String warrantyCollection = 'warranties';
 
   //queries
   static final getToReceiptCollection = FirebaseFirestore.instance.collection(
     "$userCollection/${auth.currentUser?.uid}/$receiptCollection",
+  );
+  static final getToWarrantyCollection = FirebaseFirestore.instance.collection(
+    "$userCollection/${auth.currentUser?.uid}/$warrantyCollection",
   );
 
   static Future<bool> checkUserExist(String userId) async {
@@ -329,13 +334,28 @@ class FirebaseRepository {
   static Future<bool> addReceiptToFirestore({
     required String userUid,
     required ReceiptModel receiptModel,
-    // Function()? onErrorFunction,
   }) async {
     try {
       await firestore
           .collection("$userCollection/$userUid/$receiptCollection")
           .doc(receiptModel.documentid)
           .set(receiptModelToJson(receiptModel));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> updateReceiptById({
+    required String userUid,
+    required ReceiptModel receiptModel,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$receiptCollection")
+          .doc(receiptModel.documentid)
+          .update(receiptModelToJson(receiptModel));
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -368,6 +388,73 @@ class FirebaseRepository {
     try {
       await firestore
           .collection("$userCollection/$userUid/$receiptCollection")
+          .doc(documentId)
+          .delete();
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  //Warranty
+  static Future<bool> addWarrantyToFirestore({
+    required String userUid,
+    required WarrantyModel model,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$warrantyCollection")
+          .doc(model.documentid)
+          .set(warrantyModelToJson(model));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> updateWarrantyById({
+    required String userUid,
+    required WarrantyModel model,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$warrantyCollection")
+          .doc(model.documentid)
+          .update(warrantyModelToJson(model));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<ReceiptModel?> getWarrantytById({
+    required String documentId,
+    required String userUid,
+  }) async {
+    try {
+      var result =
+          await firestore
+              .collection("$userCollection/$userUid/$warrantyCollection")
+              .doc(documentId)
+              .get();
+
+      return ReceiptModel.fromDynamic(result.data());
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return null;
+    }
+  }
+
+  static Future<bool> deleteWarrantyById({
+    required String documentId,
+    required String userUid,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$warrantyCollection")
           .doc(documentId)
           .delete();
       return true;

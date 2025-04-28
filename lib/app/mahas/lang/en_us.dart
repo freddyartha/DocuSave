@@ -82,6 +82,10 @@ const Map<String, String> enUS = {
   "save_data": "Saving Document",
   "save_image": "Saving Image",
   "delete_data": "Deleting Document",
+  "year": "year(s)",
+  "month": "month(s)",
+  "day": "day(s)",
+  "expires_in": "Expires in",
 
   //jenis pembayaran
   "cash": "Cash",

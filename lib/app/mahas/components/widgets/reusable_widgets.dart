@@ -418,7 +418,7 @@ class ReusableWidgets {
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
-          Get.back(result: null);
+          Get.back(result: false);
         },
         child: Container(
           decoration: BoxDecoration(

@@ -1,31 +1,30 @@
 import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/others/list_component.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
-import 'package:docusave/app/mahas/constants/input_formatter.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
-import '../controllers/receipt_list_controller.dart';
+import '../controllers/warranty_list_controller.dart';
 
-class ReceiptListView extends GetView<ReceiptListController> {
-  const ReceiptListView({super.key});
+class WarrantyListView extends GetView<WarrantyListController> {
+  const WarrantyListView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: ReusableWidgets.generalAppBarWidget(
-        title: "receipt".tr,
+        title: "warranty".tr,
         backgroundColor: Colors.transparent,
         textColor: MahasColors.white,
         actions: [
           GestureDetector(
-            onTap: controller.goToReceiptSetup,
+            onTap: controller.goToWarrantySetup,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: ImageComponent(
@@ -50,7 +49,7 @@ class ReceiptListView extends GetView<ReceiptListController> {
                     child: ListTile(
                       onTap:
                           () =>
-                              controller.goToReceiptSetup(id: item.documentid),
+                              controller.goToWarrantySetup(id: item.documentid),
                       titleAlignment: ListTileTitleAlignment.top,
                       horizontalTitleGap: 10,
                       visualDensity: VisualDensity.compact,
@@ -59,32 +58,35 @@ class ReceiptListView extends GetView<ReceiptListController> {
                         horizontal: 10,
                       ),
                       title: TextComponent(
-                        value: item.storename,
+                        value: item.itemname,
                         fontWeight: FontWeight.w600,
                         fontSize: MahasFontSize.h6,
                       ),
-                      subtitle: TextComponent(
-                        value:
-                            "${item.currency} ${InputFormatter.toCurrency(item.totalamount)}",
-                      ),
-                      trailing: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            MahasRadius.regular,
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 10,
+                        children: [
+                          TextComponent(value: item.storename),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                MahasRadius.regular,
+                              ),
+                              color: MahasColors.mutedGrey,
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 3,
+                              horizontal: 8,
+                            ),
+                            child: TextComponent(
+                              value: ReusableStatics.getWarrantyRemaining(
+                                item.warrantyexpirydate.toDate(),
+                              ),
+                              fontSize: MahasFontSize.small,
+                              fontColor: MahasColors.white,
+                            ),
                           ),
-                          color: MahasColors.mutedGrey,
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 3,
-                          horizontal: 8,
-                        ),
-                        child: TextComponent(
-                          value: InputFormatter.displayDate(
-                            item.createdat.toDate(),
-                          ),
-                          fontSize: MahasFontSize.small,
-                          fontColor: MahasColors.white,
-                        ),
+                        ],
                       ),
                     ),
                   ),

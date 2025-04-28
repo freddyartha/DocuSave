@@ -104,18 +104,25 @@ class ReceiptSetupController extends GetxController
         notesCon.value = r.notes;
       }
     }
-    if (editable.value) {
-      currencyCon.onTap =
-          () => showCurrencyPicker(
-            context: Get.context!,
-            showFlag: true,
-            showCurrencyName: true,
-            showCurrencyCode: true,
-            favorite: ["IDR", "USD", "SGD"],
-            onSelect: (Currency currency) => currencyCon.value = currency.code,
-            theme: ReusableStatics.currencyPickerTheme(),
-          );
-    }
+
+    ever(editable, (value) {
+      if (value) {
+        currencyCon.onTap =
+            () => showCurrencyPicker(
+              context: Get.context!,
+              showFlag: true,
+              showCurrencyName: true,
+              showCurrencyCode: true,
+              favorite: ["IDR", "USD", "SGD"],
+              onSelect:
+                  (Currency currency) => currencyCon.value = currency.code,
+              theme: ReusableStatics.currencyPickerTheme(),
+            );
+      } else {
+        currencyCon.onTap = () {};
+      }
+    });
+
     activateButton();
     super.onInit();
   }
@@ -262,31 +269,35 @@ class ReceiptSetupController extends GetxController
       if (!categoryCon.isValid) return;
       if (!paymentMethodCon.isValid) return;
       if (!notesCon.isValid) return;
-      if (EasyLoading.isShow) EasyLoading.dismiss();
-      await EasyLoading.show(status: "save_image".tr);
       buttonActive.value = false;
       if (auth.currentUser != null) {
         List<String> imageUrl = [];
-        for (var img in scannedDoc) {
-          String? compressedImagePath = await ReusableStatics.compressImage(
-            img,
-          );
-          if (compressedImagePath != null) {
-            var result = await FirebaseRepository.saveImageToFirebaseStorage(
-              imageLocationType: ImageLocationType.receipt,
-              fileName: ReusableStatics.idGenerator(simple: true),
-              imageFile: File(compressedImagePath),
+        if (scannedDoc.first.contains(RegExp('http', caseSensitive: false))) {
+          imageUrl.addAll(scannedDoc);
+        } else {
+          if (EasyLoading.isShow) EasyLoading.dismiss();
+          await EasyLoading.show(status: "save_image".tr);
+          for (var img in scannedDoc) {
+            String? compressedImagePath = await ReusableStatics.compressImage(
+              img,
             );
-            if (result != null) {
-              imageUrl.add(result);
+            if (compressedImagePath != null) {
+              var result = await FirebaseRepository.saveImageToFirebaseStorage(
+                imageLocationType: ImageLocationType.receipt,
+                fileName: ReusableStatics.idGenerator(simple: true),
+                imageFile: File(compressedImagePath),
+              );
+              if (result != null) {
+                imageUrl.add(result);
+              }
             }
           }
         }
 
         if (EasyLoading.isShow) EasyLoading.dismiss();
-        await EasyLoading.show(status: "Save_data".tr);
+        await EasyLoading.show(status: "save_data".tr);
         ReceiptModel receiptModel = ReceiptModel(
-          documentid: ReusableStatics.idGenerator(),
+          documentid: id.isNotEmpty ? id.value : ReusableStatics.idGenerator(),
           receiptid: receiptIdCon.value,
           storename: storeNameCon.value,
           purchasedate: purchaseDateCon.value,
@@ -297,11 +308,20 @@ class ReceiptSetupController extends GetxController
           receiptimage: imageUrl,
           notes: notesCon.value,
           createdat: Timestamp.now(),
+          updatedat: id.isNotEmpty ? Timestamp.now() : null,
         );
-        bool result = await FirebaseRepository.addReceiptToFirestore(
-          receiptModel: receiptModel,
-          userUid: auth.currentUser!.uid,
-        );
+
+        bool result =
+            id.isNotEmpty
+                ? await FirebaseRepository.updateReceiptById(
+                  receiptModel: receiptModel,
+                  userUid: auth.currentUser!.uid,
+                )
+                : await FirebaseRepository.addReceiptToFirestore(
+                  receiptModel: receiptModel,
+                  userUid: auth.currentUser!.uid,
+                );
+
         update();
         await EasyLoading.dismiss();
         if (result) {

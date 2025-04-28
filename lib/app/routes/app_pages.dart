@@ -20,6 +20,10 @@ import '../modules/receipt_setup/bindings/receipt_setup_binding.dart';
 import '../modules/receipt_setup/views/receipt_setup_view.dart';
 import '../modules/spash_screen/bindings/spash_screen_binding.dart';
 import '../modules/spash_screen/views/spash_screen_view.dart';
+import '../modules/warranty_list/bindings/warranty_list_binding.dart';
+import '../modules/warranty_list/views/warranty_list_view.dart';
+import '../modules/warranty_setup/bindings/warranty_setup_binding.dart';
+import '../modules/warranty_setup/views/warranty_setup_view.dart';
 
 // ignore_for_file: constant_identifier_names
 
@@ -138,6 +142,16 @@ class AppPages {
       name: _Paths.RECEIPT_SETUP,
       page: () => const ReceiptSetupView(),
       binding: ReceiptSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.WARRANTY_LIST,
+      page: () => const WarrantyListView(),
+      binding: WarrantyListBinding(),
+    ),
+    GetPage(
+      name: _Paths.WARRANTY_SETUP,
+      page: () => const WarrantySetupView(),
+      binding: WarrantySetupBinding(),
     ),
   ];
 }

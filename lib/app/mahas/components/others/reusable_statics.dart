@@ -62,4 +62,35 @@ class ReusableStatics {
           ),
         ),
       );
+
+  static String? getWarrantyRemaining(DateTime expiryDate) {
+    final now = DateTime.now();
+
+    int years = expiryDate.year - now.year;
+    int months = expiryDate.month - now.month;
+    int days = expiryDate.day - now.day;
+
+    if (days < 0) {
+      months -= 1;
+      days += DateTime(expiryDate.year, expiryDate.month, 0).day;
+    }
+
+    if (months < 0) {
+      years -= 1;
+      months += 12;
+    }
+
+    List<String> parts = [];
+    if (years > 0) {
+      parts.add('$years ${'year'.tr}');
+    }
+    if (months > 0) {
+      parts.add('$months ${'month'.tr}');
+    }
+    if (days > 0) {
+      parts.add('$days ${'day'.tr}');
+    }
+
+    return parts.isEmpty ? null : "${'expires_in'.tr} ${parts.join(' ')}";
+  }
 }

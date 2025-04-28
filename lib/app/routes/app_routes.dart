@@ -14,6 +14,8 @@ abstract class Routes {
   static const PROFILE_ACCOUNT_SETTING = _Paths.PROFILE_ACCOUNT_SETTING;
   static const RECEIPT_LIST = _Paths.RECEIPT_LIST;
   static const RECEIPT_SETUP = _Paths.RECEIPT_SETUP;
+  static const WARRANTY_LIST = _Paths.WARRANTY_LIST;
+  static const WARRANTY_SETUP = _Paths.WARRANTY_SETUP;
 }
 
 abstract class _Paths {
@@ -27,4 +29,6 @@ abstract class _Paths {
   static const PROFILE_ACCOUNT_SETTING = '/profile-account-setting';
   static const RECEIPT_LIST = '/receipt-list';
   static const RECEIPT_SETUP = '/receipt-setup';
+  static const WARRANTY_LIST = '/warranty-list';
+  static const WARRANTY_SETUP = '/warranty-setup';
 }
