@@ -93,4 +93,17 @@ class ReusableStatics {
 
     return parts.isEmpty ? null : "${'expires_in'.tr} ${parts.join(' ')}";
   }
+
+  static DateTime addMonths(DateTime date, int months) {
+    int year = date.year + ((date.month + months - 1) ~/ 12);
+    int month = (date.month + months - 1) % 12 + 1;
+    int day = date.day;
+
+    int lastDayOfMonth = DateTime(year, month + 1, 0).day;
+    if (day > lastDayOfMonth) {
+      day = lastDayOfMonth;
+    }
+
+    return DateTime(year, month, day).subtract(const Duration(days: 1));
+  }
 }

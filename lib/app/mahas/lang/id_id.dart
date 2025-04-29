@@ -98,6 +98,7 @@ const Map<String, String> idID = {
   "warranty_provider": "Penyedia Garansi",
   "warranty_provider_hint": "Isi nama penyedia layanan garansi",
   "success_save_warranty": "Berhasil menyimpan kartu garansi",
+  "continue_with": "Melanjutkan dengan",
 
   //jenis pembayaran
   "cash": "Tunai",

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
@@ -106,6 +104,21 @@ class WarrantySetupController extends GetxController
     };
     warrantyPeriodCon.onChanged = (value) {
       if (!buttonActive.value) buttonActive.value = true;
+      if (purchaseDateCon.value != null && value.isNotEmpty) {
+        DateTime purchaseDate = (purchaseDateCon.value as Timestamp).toDate();
+        DateTime expiryDate = ReusableStatics.addMonths(
+          purchaseDate,
+          int.parse(value),
+        );
+        //  DateTime(
+        //   purchaseDate.year,
+        //   purchaseDate.month + int.parse(value),
+        //   1,
+        // ).subtract(const Duration(days: 1));
+        warrantyExpiryCon.value = expiryDate;
+      } else {
+        warrantyExpiryCon.value = null;
+      }
     };
     warrantyExpiryCon.onChanged = () {
       if (!buttonActive.value) buttonActive.value = true;
@@ -233,23 +246,23 @@ class WarrantySetupController extends GetxController
         if (scannedDoc.first.contains(RegExp('http', caseSensitive: false))) {
           imageUrl.addAll(scannedDoc);
         } else {
-          if (EasyLoading.isShow) EasyLoading.dismiss();
-          await EasyLoading.show(status: "save_image".tr);
-          for (var img in scannedDoc) {
-            String? compressedImagePath = await ReusableStatics.compressImage(
-              img,
-            );
-            if (compressedImagePath != null) {
-              var result = await FirebaseRepository.saveImageToFirebaseStorage(
-                imageLocationType: ImageLocationType.warranty,
-                fileName: ReusableStatics.idGenerator(simple: true),
-                imageFile: File(compressedImagePath),
-              );
-              if (result != null) {
-                imageUrl.add(result);
-              }
-            }
-          }
+          // if (EasyLoading.isShow) EasyLoading.dismiss();
+          // await EasyLoading.show(status: "save_image".tr);
+          // for (var img in scannedDoc) {
+          //   String? compressedImagePath = await ReusableStatics.compressImage(
+          //     img,
+          //   );
+          //   if (compressedImagePath != null) {
+          //     var result = await FirebaseRepository.saveImageToFirebaseStorage(
+          //       imageLocationType: ImageLocationType.warranty,
+          //       fileName: ReusableStatics.idGenerator(simple: true),
+          //       imageFile: File(compressedImagePath),
+          //     );
+          //     if (result != null) {
+          //       imageUrl.add(result);
+          //     }
+          //   }
+          // }
         }
 
         if (EasyLoading.isShow) EasyLoading.dismiss();

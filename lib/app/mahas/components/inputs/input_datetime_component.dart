@@ -29,7 +29,9 @@ class InputDatetimeController {
   Function()? onChanged;
 
   set value(dynamic val) {
-    if (val is DateTime) {
+    if (val == null) {
+      _date = null;
+    } else if (val is DateTime) {
       _date = val;
     } else if (val is TimeOfDay) {
       _time = val;

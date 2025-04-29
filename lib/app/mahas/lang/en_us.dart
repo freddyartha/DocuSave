@@ -97,6 +97,7 @@ const Map<String, String> enUS = {
   "warranty_provider": "Warranty Provider",
   "warranty_provider_hint": "Enter the name of the warranty provider",
   "success_save_warranty": "Successfully save your warranty card",
+  "continue_with": "Continue with",
 
   //jenis pembayaran
   "cash": "Cash",

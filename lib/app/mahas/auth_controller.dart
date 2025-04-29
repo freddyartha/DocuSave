@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:crypto/crypto.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/user_model.dart';
 import 'package:docusave/app/models/user_notification_model.dart';
@@ -222,6 +223,7 @@ class AuthController extends GetxController {
     //jangan lupa tambahkan delete notif tokennya
     await auth.signOut();
     await GoogleSignIn().signOut();
+    MahasConfig.userProfile = null;
     await EasyLoading.dismiss();
   }
 

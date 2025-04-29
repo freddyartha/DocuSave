@@ -1,4 +1,5 @@
 import 'package:docusave/app/data/firebase_repository.dart';
+import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
 import 'package:docusave/app/models/article_model.dart';
@@ -7,6 +8,14 @@ import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   final RxList<ArticleModel> listBanner = <ArticleModel>[].obs;
+  var authCon = AuthController.instance;
+  void googleLoginOnPress() async {
+    await authCon.signInWithGoogle();
+  }
+
+  void appleLoginOnPress() async {
+    await authCon.signInWithApple();
+  }
 
   List<MenuItemModel> layananList = [
     MenuItemModel(
