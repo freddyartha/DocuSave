@@ -86,6 +86,17 @@ const Map<String, String> enUS = {
   "month": "month(s)",
   "day": "day(s)",
   "expires_in": "Expires in",
+  "item_name": "Item Name",
+  "item_name_hint": "Enter your item name",
+  "serial_number": "Serial Number",
+  "serial_number_hint": "The serial number of your item",
+  "warranty_period": "Warranty Period (in Months)",
+  "warranty_period_hint": "E.g.: 12 months",
+  "warranty_expiry": "Expiry Date",
+  "warranty_expiry_hint": "The date your warranty expires",
+  "warranty_provider": "Warranty Provider",
+  "warranty_provider_hint": "Enter the name of the warranty provider",
+  "success_save_warranty": "Successfully save your warranty card",
 
   //jenis pembayaran
   "cash": "Cash",

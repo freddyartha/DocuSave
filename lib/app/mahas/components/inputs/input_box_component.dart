@@ -8,6 +8,7 @@ class InputBoxComponent extends StatelessWidget {
   final String? label;
   final double? marginBottom;
   final String? childText;
+  final String? placeHolder;
   final Widget? children;
   final Widget? childrenSizeBox;
   final GestureTapCallback? onTap;
@@ -25,6 +26,7 @@ class InputBoxComponent extends StatelessWidget {
     this.label,
     this.marginBottom,
     this.childText,
+    this.placeHolder,
     this.onTap,
     this.children,
     this.childrenSizeBox,
@@ -106,9 +108,15 @@ class InputBoxComponent extends StatelessWidget {
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: TextComponent(
-                                  value: childText ?? '',
+                                  value:
+                                      placeHolder != null && childText != null
+                                          ? childText
+                                          : placeHolder,
                                   fontSize: MahasFontSize.normal,
-                                  fontColor: MahasColors.black,
+                                  fontColor:
+                                      placeHolder != null && childText != null
+                                          ? MahasColors.black
+                                          : MahasColors.mutedGrey,
                                 ),
                               ),
                             ),

@@ -430,7 +430,7 @@ class FirebaseRepository {
     }
   }
 
-  static Future<ReceiptModel?> getWarrantytById({
+  static Future<WarrantyModel?> getWarrantytById({
     required String documentId,
     required String userUid,
   }) async {
@@ -441,7 +441,7 @@ class FirebaseRepository {
               .doc(documentId)
               .get();
 
-      return ReceiptModel.fromDynamic(result.data());
+      return WarrantyModel.fromDynamic(result.data());
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
       return null;

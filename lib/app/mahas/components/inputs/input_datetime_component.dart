@@ -329,15 +329,17 @@ class _InputDatetimeComponentState extends State<InputDatetimeComponent> {
           childText:
               widget.controller.type == InputDatetimeType.date
                   ? widget.controller._date == null
-                      ? widget.placeHolder
+                      ? null
                       : InputFormatter.displayDate(widget.controller._date)
                   : widget.controller.type == InputDatetimeType.dateRange
                   ? widget.controller._dateRange == null
-                      ? widget.placeHolder
+                      ? null
                       : InputFormatter.displayDateRange(
                         widget.controller._dateRange,
                       )
                   : widget.controller._time?.format(context) ?? '',
+
+          placeHolder: widget.placeHolder,
         ),
         if (widget.description != null) ...[
           Row(

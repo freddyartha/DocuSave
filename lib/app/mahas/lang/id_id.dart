@@ -87,6 +87,17 @@ const Map<String, String> idID = {
   "month": "bulan",
   "day": "hari",
   "expires_in": "Berakhir dalam",
+  "item_name": "Nama Item",
+  "item_name_hint": "Isi nama barang kamu",
+  "serial_number": "Nomor Seri",
+  "serial_number_hint": "Nomor seri dari barang kamu",
+  "warranty_period": "Periode Garansi (dalam Bulan)",
+  "warranty_period_hint": "Cth: 12 bulan",
+  "warranty_expiry": "Tanggal Berakhir",
+  "warranty_expiry_hint": "Tanggal garansimu berakhir",
+  "warranty_provider": "Penyedia Garansi",
+  "warranty_provider_hint": "Isi nama penyedia layanan garansi",
+  "success_save_warranty": "Berhasil menyimpan kartu garansi",
 
   //jenis pembayaran
   "cash": "Tunai",
