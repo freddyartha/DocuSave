@@ -103,21 +103,13 @@ class ReceiptSetupController extends GetxController
         paymentMethodCon.value = r.paymentmethod;
         notesCon.value = r.notes;
       }
+    } else {
+      currencyOnTap();
     }
 
     ever(editable, (value) {
       if (value) {
-        currencyCon.onTap =
-            () => showCurrencyPicker(
-              context: Get.context!,
-              showFlag: true,
-              showCurrencyName: true,
-              showCurrencyCode: true,
-              favorite: ["IDR", "USD", "SGD"],
-              onSelect:
-                  (Currency currency) => currencyCon.value = currency.code,
-              theme: ReusableStatics.currencyPickerTheme(),
-            );
+        currencyOnTap();
       } else {
         currencyCon.onTap = () {};
       }
@@ -126,6 +118,18 @@ class ReceiptSetupController extends GetxController
     activateButton();
     super.onInit();
   }
+
+  void currencyOnTap() =>
+      currencyCon.onTap =
+          () => showCurrencyPicker(
+            context: Get.context!,
+            showFlag: true,
+            showCurrencyName: true,
+            showCurrencyCode: true,
+            favorite: ["IDR", "USD", "SGD"],
+            onSelect: (Currency currency) => currencyCon.value = currency.code,
+            theme: ReusableStatics.currencyPickerTheme(),
+          );
 
   void activateButton() {
     receiptIdCon.onChanged = (value) {

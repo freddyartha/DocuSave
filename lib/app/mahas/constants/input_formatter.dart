@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:docusave/app/mahas/lang/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -149,13 +150,20 @@ class InputFormatter {
 
   static String toCurrency(double? value) {
     if (value == null) return "";
-    var numberFormat = NumberFormat('#,###.##');
+    final numberFormat = NumberFormat.currency(
+      locale: TranslationService.locale.languageCode,
+      symbol: '',
+      decimalDigits: 0,
+    );
     return numberFormat.format(value);
   }
 
   static double currencyToDouble(String? value) {
     if (value == null) return 0;
-    value = value.replaceAll(',', '');
+    value =
+        TranslationService.locale == Locale("id", "ID")
+            ? value.replaceAll(".", "")
+            : value.replaceAll(",", "");
     return double.parse(value);
   }
 

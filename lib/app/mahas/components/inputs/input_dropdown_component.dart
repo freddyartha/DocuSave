@@ -203,6 +203,7 @@ class _InputDropdownComponentState extends State<InputDropdownComponent> {
       isRequired: widget.required,
       marginBottom: widget.marginBottom,
       childText: widget.controller._value?.text ?? "",
+      placeHolder: "",
       children:
           widget.editable
               ? widget.required

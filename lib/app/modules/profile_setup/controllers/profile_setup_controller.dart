@@ -131,7 +131,7 @@ class ProfileSetupController extends GetxController {
           fileImg = null;
           bool? result = await ReusableWidgets.notifBottomSheet(
             notifType: NotifType.success,
-            subtitle: "success_save_receipt".tr,
+            subtitle: "success_save_profile".tr,
           );
           if (result != null) Get.back();
         } else {

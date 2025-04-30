@@ -3,11 +3,13 @@ import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
 import 'package:docusave/app/models/article_model.dart';
+import 'package:docusave/app/models/warranty_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   final RxList<ArticleModel> listBanner = <ArticleModel>[].obs;
+  final RxList<WarrantyModel> listExpiringWarranties = <WarrantyModel>[].obs;
   var authCon = AuthController.instance;
   void googleLoginOnPress() async {
     await authCon.signInWithGoogle();
@@ -34,10 +36,24 @@ class HomeController extends GetxController {
   RxBool articlesLoading = true.obs;
 
   @override
-  void onInit() async {
-    Future.delayed(Duration(seconds: 3), () => historyLoading.value = false);
+  void onInit() {
+    // Future.delayed(Duration(seconds: 3), () => historyLoading.value = false);
     loadArticles();
+    loadExpiringWarranties();
     super.onInit();
+  }
+
+  void loadExpiringWarranties() async {
+    historyLoading.value = true;
+    if (auth.currentUser != null) {
+      var result = await FirebaseRepository.getExpiringWarranties(
+        auth.currentUser!.uid,
+      );
+      if (result != null && result.isNotEmpty) {
+        listExpiringWarranties.addAll(result);
+      }
+    }
+    historyLoading.value = false;
   }
 
   void loadArticles() async {

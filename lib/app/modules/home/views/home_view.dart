@@ -1,5 +1,6 @@
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
@@ -35,24 +36,23 @@ class HomeView extends GetView<HomeController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          TextComponent(
-                            value: "welcome".tr,
-                            fontColor: MahasColors.white,
-                            fontSize: MahasFontSize.h3,
-                            fontWeight: FontWeight.w600,
-                          ),
-                          TextComponent(
-                            value:
-                                auth.currentUser != null
-                                    ? " ${MahasConfig.userProfile?.name}!"
-                                    : " Guest!",
-                            fontColor: MahasColors.white,
-                            fontSize: MahasFontSize.h3,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ],
+                      GetBuilder(
+                        builder:
+                            (HomeController controller) => Expanded(
+                              child: TextComponent(
+                                value: "welcome".trParams({
+                                  "value":
+                                      auth.currentUser != null
+                                          ? "${MahasConfig.userProfile?.name}!"
+                                          : "Guest!",
+                                }),
+                                fontColor: MahasColors.white,
+                                fontSize: MahasFontSize.h4,
+                                fontWeight: FontWeight.w600,
+                                height: 1.15,
+                                maxLines: 2,
+                              ),
+                            ),
                       ),
                       GestureDetector(
                         onTap: controller.goToProfileList,
@@ -275,95 +275,106 @@ class HomeView extends GetView<HomeController> {
                                     ? ReusableWidgets.listLoadingWidget(
                                       count: 5,
                                     )
+                                    : !controller.historyLoading.value &&
+                                        controller
+                                            .listExpiringWarranties
+                                            .isEmpty
+                                    ? SizedBox.shrink()
                                     : ListView.builder(
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
                                       physics: NeverScrollableScrollPhysics(),
-                                      itemCount: 5,
-                                      itemBuilder:
-                                          (context, index) => Container(
-                                            margin: EdgeInsets.only(bottom: 10),
-                                            decoration: BoxDecoration(
-                                              color: MahasColors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                    MahasRadius.regular,
-                                                  ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: MahasColors.black
-                                                      .withValues(alpha: 0.3),
-                                                  blurRadius: 5,
-                                                  spreadRadius: 1,
-                                                  offset: Offset(0, 3),
-                                                ),
-                                              ],
+                                      itemCount:
+                                          controller
+                                              .listExpiringWarranties
+                                              .length,
+                                      itemBuilder: (context, index) {
+                                        var item =
+                                            controller
+                                                .listExpiringWarranties[index];
+                                        return Container(
+                                          margin: EdgeInsets.only(bottom: 10),
+                                          decoration: BoxDecoration(
+                                            color: MahasColors.white,
+                                            borderRadius: BorderRadius.circular(
+                                              MahasRadius.regular,
                                             ),
-                                            child: ListTile(
-                                              onTap: () {
-                                                if (EasyLoading.isShow) {
-                                                  EasyLoading.dismiss();
-                                                } else {
-                                                  EasyLoading.show();
-                                                }
-                                              },
-                                              horizontalTitleGap: 10,
-                                              contentPadding:
-                                                  EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 3,
-                                                  ),
-                                              visualDensity:
-                                                  VisualDensity.comfortable,
-                                              leading: ImageComponent(
-                                                localUrl:
-                                                    "assets/images/receipt.png",
-                                                height: 50,
-                                                width: 50,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: MahasColors.black
+                                                    .withValues(alpha: 0.3),
+                                                blurRadius: 5,
+                                                spreadRadius: 1,
+                                                offset: Offset(0, 3),
                                               ),
-                                              title: TextComponent(
-                                                value:
-                                                    "Judul Kwitansi / Kartu Garansi",
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                              subtitle: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        MahasRadius.regular,
-                                                      ),
-                                                  color: MahasColors.yellow,
-                                                ),
-                                                padding: EdgeInsets.symmetric(
+                                            ],
+                                          ),
+                                          child: ListTile(
+                                            onTap: () {
+                                              if (EasyLoading.isShow) {
+                                                EasyLoading.dismiss();
+                                              } else {
+                                                EasyLoading.show();
+                                              }
+                                            },
+                                            horizontalTitleGap: 10,
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
                                                   horizontal: 10,
                                                   vertical: 3,
                                                 ),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Icon(
-                                                      Icons
-                                                          .info_outline_rounded,
-                                                      color: MahasColors.white,
-                                                      size: 15,
+                                            visualDensity:
+                                                VisualDensity.comfortable,
+                                            leading: ImageComponent(
+                                              localUrl:
+                                                  "assets/images/warranty.png",
+                                              height: 50,
+                                              width: 50,
+                                            ),
+                                            title: TextComponent(
+                                              value: item.itemname,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                            subtitle: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      MahasRadius.regular,
                                                     ),
-                                                    TextComponent(
-                                                      margin: EdgeInsets.only(
-                                                        left: 5,
-                                                      ),
-                                                      value:
-                                                          "Akan berakhir pada tanggal",
-                                                      fontSize:
-                                                          MahasFontSize.small,
-                                                      fontColor:
-                                                          MahasColors.white,
+                                                color: MahasColors.yellow,
+                                              ),
+                                              padding: EdgeInsets.symmetric(
+                                                horizontal: 10,
+                                                vertical: 3,
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Icon(
+                                                    Icons.info_outline_rounded,
+                                                    color: MahasColors.white,
+                                                    size: 15,
+                                                  ),
+                                                  TextComponent(
+                                                    margin: EdgeInsets.only(
+                                                      left: 5,
                                                     ),
-                                                  ],
-                                                ),
+                                                    value:
+                                                        ReusableStatics.getWarrantyRemaining(
+                                                          item.warrantyexpirydate
+                                                              .toDate(),
+                                                        ),
+                                                    fontSize:
+                                                        MahasFontSize.small,
+                                                    fontColor:
+                                                        MahasColors.white,
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
+                                        );
+                                      },
                                     ),
                           ),
                         ],

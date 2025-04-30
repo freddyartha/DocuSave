@@ -44,6 +44,10 @@ class AuthController extends GetxController {
   }
 
   void _setInitialScreen(User? user) async {
+    if (Get.currentRoute == Routes.HOME || Get.currentRoute == Routes.LOGIN) {
+      if (EasyLoading.isShow) EasyLoading.dismiss();
+      await EasyLoading.show();
+    }
     if (user != null) {
       await FirebaseRepository.addUserToFirestore(
         userModel: UserModel(
@@ -65,6 +69,7 @@ class AuthController extends GetxController {
       }
       await FirebaseRepository.addUserDeviceInfo(user.uid);
     }
+    await EasyLoading.dismiss();
     Get.offAllNamed(Routes.HOME);
   }
 

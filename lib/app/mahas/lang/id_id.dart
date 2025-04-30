@@ -3,7 +3,7 @@ const Map<String, String> idID = {
   "choose_service": "Pilih Layanan",
   "receipt": "Nota/Kwitansi",
   "warranty": "Kartu Garansi",
-  "need_your_attention": "Nota/Kartu Garansi ini Butuh Perhatian Kamu!",
+  "need_your_attention": "Kartu Garansi ini Butuh Perhatian Kamu!",
   "profile": "Profil Saya",
   "title_change_language": "Pilihan Bahasa",
   "confirm_change_language": "Anda yakin ingin mengganti ke bahasa Inggris?",
@@ -29,7 +29,7 @@ const Map<String, String> idID = {
   "image_cropper": "Potong Gambar",
   "add_image": "Tambah Foto",
   "change_image": "Ganti Foto",
-  "welcome": "Selamat Datang",
+  "welcome": "Selamat Datang @value",
   "welcome_title": "Selamat datang di Docusave!",
   "welcome_subtitle":
       "Aplikasi yang dibuat untuk mengamankan kertas-kertas kecil yang rawan hilang dan mungkin penting bagi kamu, seperti Kwitansi atau Kartu Garansi",
@@ -99,6 +99,7 @@ const Map<String, String> idID = {
   "warranty_provider_hint": "Isi nama penyedia layanan garansi",
   "success_save_warranty": "Berhasil menyimpan kartu garansi",
   "continue_with": "Melanjutkan dengan",
+  "success_save_profile": "Berhasil memperbaharui profil",
 
   //jenis pembayaran
   "cash": "Tunai",

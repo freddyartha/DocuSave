@@ -463,4 +463,30 @@ class FirebaseRepository {
       return false;
     }
   }
+
+  static Future<List<WarrantyModel>?> getExpiringWarranties(
+    String userUid,
+  ) async {
+    try {
+      final now = Timestamp.now();
+      final oneMonthLater = Timestamp.fromDate(
+        DateTime.now().add(Duration(days: 30)),
+      );
+
+      final snapshot =
+          await firestore
+              .collection("$userCollection/$userUid/$warrantyCollection")
+              .where('warrantyExpiryDate', isGreaterThanOrEqualTo: now)
+              .where('warrantyExpiryDate', isLessThanOrEqualTo: oneMonthLater)
+              .orderBy('warrantyExpiryDate')
+              .get();
+
+      return snapshot.docs
+          .map((doc) => WarrantyModel.fromDynamic(doc.data()))
+          .toList();
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return null;
+    }
+  }
 }
