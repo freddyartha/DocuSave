@@ -12,7 +12,7 @@ class SpashScreenView extends GetView<SpashScreenController> {
       color: Colors.white,
       child: Center(
         child: Image.asset(
-          'assets/images/loading.gif',
+          'assets/images/logo.png',
           width: Get.width * 0.4,
           fit: BoxFit.contain,
         ),

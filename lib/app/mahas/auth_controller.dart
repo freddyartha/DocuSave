@@ -16,6 +16,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthController extends GetxController {
@@ -32,7 +33,7 @@ class AuthController extends GetxController {
   void onInit() async {
     // notificationToken = await messaging.getToken();
     // await messaging.getAPNSToken();
-    requestNotificationPermission();
+    // requestNotificationPermission();
     firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.authStateChanges().distinct());
     debounce(
@@ -48,32 +49,37 @@ class AuthController extends GetxController {
       if (EasyLoading.isShow) EasyLoading.dismiss();
       await EasyLoading.show();
     }
-    if (user != null) {
-      await FirebaseRepository.addUserToFirestore(
-        userModel: UserModel(
-          userid: user.uid,
-          name: user.displayName ?? "",
-          email: user.email ?? "",
-          createdat: Timestamp.now(),
-          subscriptionplan: "free",
-        ),
-      );
-      if (notificationToken != null && notificationToken!.isNotEmpty) {
-        await FirebaseRepository.addUserNotificationToken(
-          userNotificationModel: UserNotificationModel(
-            notificationToken: notificationToken!,
+
+    final firstOpen = await box.read('first_open_app');
+    if (firstOpen != false) {
+      Get.toNamed(Routes.ONBOARDING);
+    } else {
+      if (user != null) {
+        await FirebaseRepository.addUserToFirestore(
+          userModel: UserModel(
+            userid: user.uid,
+            name: user.displayName ?? "",
+            email: user.email ?? "",
             createdat: Timestamp.now(),
+            subscriptionplan: "free",
           ),
-          userId: user.uid,
         );
+        if (notificationToken != null && notificationToken!.isNotEmpty) {
+          await FirebaseRepository.addUserNotificationToken(
+            userNotificationModel: UserNotificationModel(
+              notificationToken: notificationToken!,
+              createdat: Timestamp.now(),
+            ),
+            userId: user.uid,
+          );
+        }
+        await FirebaseRepository.addUserDeviceInfo(user.uid);
       }
-      await FirebaseRepository.addUserDeviceInfo(user.uid);
+      await EasyLoading.dismiss();
+      Get.offAllNamed(Routes.HOME);
     }
-    await EasyLoading.dismiss();
-    Get.offAllNamed(Routes.HOME);
   }
 
-  //perlu diperbaiki untuk UI/UX yang lebih bagus
   void requestNotificationPermission() async {
     NotificationSettings settings = await messaging.requestPermission();
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
@@ -81,6 +87,14 @@ class AuthController extends GetxController {
       notificationToken = await messaging.getToken();
       // Dapatkan APNs token (iOS only)
       await messaging.getAPNSToken();
+    }
+  }
+
+  //perlu diperbaiki untuk UI/UX yang lebih bagus
+  Future<void> requestCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (status.isDenied || status.isRestricted) {
+      status = await Permission.camera.request();
     }
   }
 

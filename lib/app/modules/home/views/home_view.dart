@@ -122,8 +122,10 @@ class HomeView extends GetView<HomeController> {
                         children: [
                           Container(
                             margin: EdgeInsets.only(bottom: 20),
+                            padding: EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
+                              color: MahasColors.white,
                               boxShadow: [
                                 BoxShadow(
                                   color: MahasColors.black.withValues(
@@ -137,10 +139,10 @@ class HomeView extends GetView<HomeController> {
                             ),
                             clipBehavior: Clip.hardEdge,
                             child: ImageComponent(
-                              localUrl: "assets/images/welcome.png",
+                              localUrl: "assets/images/logo.png",
                               height: Get.width * 0.3,
                               width: Get.width,
-                              boxFit: BoxFit.fitHeight,
+                              boxFit: BoxFit.contain,
                             ),
                           ),
                           TextComponent(

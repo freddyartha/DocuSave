@@ -16,6 +16,7 @@ abstract class Routes {
   static const RECEIPT_SETUP = _Paths.RECEIPT_SETUP;
   static const WARRANTY_LIST = _Paths.WARRANTY_LIST;
   static const WARRANTY_SETUP = _Paths.WARRANTY_SETUP;
+  static const ONBOARDING = _Paths.ONBOARDING;
 }
 
 abstract class _Paths {
@@ -31,4 +32,5 @@ abstract class _Paths {
   static const RECEIPT_SETUP = '/receipt-setup';
   static const WARRANTY_LIST = '/warranty-list';
   static const WARRANTY_SETUP = '/warranty-setup';
+  static const ONBOARDING = '/onboarding';
 }

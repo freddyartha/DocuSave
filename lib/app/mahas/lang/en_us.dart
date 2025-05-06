@@ -31,14 +31,14 @@ const Map<String, String> enUS = {
   "add_image": "Add Image",
   "change_image": "Change Image",
   "welcome": "Welcome @value",
-  "welcome_title": "Welcome to Docusave!",
+  "welcome_title": "Welcome to DocuSave!",
   "welcome_subtitle":
       "An app made to keep those little papers safe—like receipts or warranty cards—that are easy to lose but might be important to you",
   "saya_menyetujui": "I agree ",
   "terms": "Terms of Service",
   "privacy": "Privacy Policy ",
   "sign_out_title": "Sign Out",
-  "sign_out_subtitle": "To use Docusave again, you need to sign in",
+  "sign_out_subtitle": "To use DocuSave again, you need to sign in",
   "sign_out_confirm": "Are you sure you want to sign out?",
   "delete_account_title": "Delete Account",
   "delete_account_subtitle":
@@ -120,4 +120,21 @@ const Map<String, String> enUS = {
   "entertainment": "Entertainment",
   "personal_care": "Personal Care",
   "education": "Education",
+
+  //onboarding
+  "onboarding_title_1": "Let's Get to Know DocuSave!",
+  "onboarding_subtitle_1":
+      "Store all your receipts & warranties in one place. It's practical, secure, and super easy to use!",
+  "onboarding_title_2": "Save, Manage, and Find Your Documents!",
+  "onboarding_subtitle_2":
+      "Upload documents anytime. Search and manage them with smart search and automatic categorization. No hassle!",
+  "onboarding_title_3": "Ready to Start with DocuSave?",
+  "onboarding_subtitle_3":
+      "DocuSave is here to be your digital assistant for receipts and warranties. Let's get started!",
+  "request_notification_title": "Enable Notifications",
+  "request_notification_subtitle":
+      "We'll send important reminders, like warranty expiration dates or other updates. Don't miss out!",
+  "request_camera_title": "Allow Camera Access",
+  "request_camera_subtitle":
+      "We need camera access to help you capture receipts or documents directly from the app",
 };

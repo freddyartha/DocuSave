@@ -30,7 +30,7 @@ const Map<String, String> idID = {
   "add_image": "Tambah Foto",
   "change_image": "Ganti Foto",
   "welcome": "Selamat Datang @value",
-  "welcome_title": "Selamat datang di Docusave!",
+  "welcome_title": "Selamat datang di DocuSave!",
   "welcome_subtitle":
       "Aplikasi yang dibuat untuk mengamankan kertas-kertas kecil yang rawan hilang dan mungkin penting bagi kamu, seperti Kwitansi atau Kartu Garansi",
   "saya_menyetujui": "Saya menyetujui ",
@@ -38,7 +38,7 @@ const Map<String, String> idID = {
   "privacy": "Kebijakan Privasi ",
   "sign_out_title": "Keluar",
   "sign_out_subtitle":
-      "Untuk kembali menggunakan layanan Docusave kamu harus masuk lagi",
+      "Untuk kembali menggunakan layanan DocuSave kamu harus masuk lagi",
   "sign_out_confirm": "Apakah kamu yakin ingin keluar?",
   "delete_account_title": "Hapus Akun",
   "delete_account_subtitle":
@@ -121,4 +121,21 @@ const Map<String, String> idID = {
   "entertainment": "Hiburan",
   "personal_care": "Perawatan Pribadi",
   "education": "Pendidikan",
+
+  //onboarding
+  "onboarding_title_1": "Yuk, Kenalan Sama DocuSave!",
+  "onboarding_subtitle_1":
+      "Simpan semua struk & garansi kamu di satu tempat. Praktis, aman, dan gampang banget dipakainya!",
+  "onboarding_title_2": "Simpan, Kelola, dan Temukan Dokumen!",
+  "onboarding_subtitle_2":
+      "Upload dokumen kapan aja. Cari dan kelola dengan fitur pencarian pintar dan kategori otomatis. Nggak ribet!",
+  "onboarding_title_3": "Siap Mulai Bareng DocuSave?",
+  "onboarding_subtitle_3":
+      "DocuSave siap jadi asisten digital kamu buat urusan struk dan garansi. Yuk mulai sekarang!",
+  "request_notification_title": "Aktifkan Notifikasi",
+  "request_notification_subtitle":
+      "Kami akan mengirimkan pengingat penting, seperti masa berlaku garansi atau update lainnya. Jangan sampai ketinggalan!",
+  "request_camera_title": "Izinkan Akses Kamera",
+  "request_camera_subtitle":
+      "Kami memerlukan izin kamera untuk membantu kamu memotret struk atau dokumen langsung dari aplikasi",
 };

@@ -6,6 +6,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/onboarding/bindings/onboarding_binding.dart';
+import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/profile_account_setting/bindings/profile_account_setting_binding.dart';
 import '../modules/profile_account_setting/views/profile_account_setting_view.dart';
 import '../modules/profile_change_language/bindings/profile_change_language_binding.dart';
@@ -152,6 +154,11 @@ class AppPages {
       name: _Paths.WARRANTY_SETUP,
       page: () => const WarrantySetupView(),
       binding: WarrantySetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.ONBOARDING,
+      page: () => const OnboardingView(),
+      binding: OnboardingBinding(),
     ),
   ];
 }
