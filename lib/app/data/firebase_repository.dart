@@ -468,7 +468,8 @@ class FirebaseRepository {
     String userUid,
   ) async {
     try {
-      final now = Timestamp.now();
+      final now = DateTime.now();
+      final todayStart = DateTime(now.year, now.month, now.day);
       final oneMonthLater = Timestamp.fromDate(
         DateTime.now().add(Duration(days: 30)),
       );
@@ -476,7 +477,10 @@ class FirebaseRepository {
       final snapshot =
           await firestore
               .collection("$userCollection/$userUid/$warrantyCollection")
-              .where('warrantyExpiryDate', isGreaterThanOrEqualTo: now)
+              .where(
+                'warrantyExpiryDate',
+                isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart),
+              )
               .where('warrantyExpiryDate', isLessThanOrEqualTo: oneMonthLater)
               .orderBy('warrantyExpiryDate')
               .get();

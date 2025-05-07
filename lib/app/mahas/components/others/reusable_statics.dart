@@ -91,7 +91,14 @@ class ReusableStatics {
       parts.add('$days ${'day'.tr}');
     }
 
-    return parts.isEmpty ? null : "${'expires_in'.tr} ${parts.join(' ')}";
+    return DateTime(expiryDate.year, expiryDate.month, expiryDate.day) ==
+            DateTime(now.year, now.month, now.day)
+        ? "expires_today".tr
+        : expiryDate.isBefore(DateTime(now.year, now.month, now.day))
+        ? "expired".tr
+        : parts.isEmpty
+        ? null
+        : "${'expires_in'.tr} ${parts.join(' ')}";
   }
 
   static DateTime addMonths(DateTime date, int months) {

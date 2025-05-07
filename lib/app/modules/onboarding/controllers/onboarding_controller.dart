@@ -52,13 +52,15 @@ class OnboardingController extends GetxController {
 
   void requestPermission() async {
     if (onBoardingIndex.value == 3) {
-      AuthController.instance.requestNotificationPermission();
-      onBoardingIndex++;
+      bool result =
+          await AuthController.instance.requestNotificationPermission();
+      if (result) onBoardingIndex++;
     } else if (onBoardingIndex.value == 4) {
-      AuthController.instance.requestCameraPermission();
-
-      box.write('first_open_app', false);
-      AuthController.instance.onInit();
+      bool result = await AuthController.instance.requestCameraPermission();
+      if (result) {
+        box.write('first_open_app', false);
+        AuthController.instance.onInit();
+      }
     }
   }
 }

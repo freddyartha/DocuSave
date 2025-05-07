@@ -86,6 +86,8 @@ const Map<String, String> enUS = {
   "month": "month(s)",
   "day": "day(s)",
   "expires_in": "Expires in",
+  "expires_today": "Expires today",
+  "expired": "Expired",
   "item_name": "Item Name",
   "item_name_hint": "Enter your item name",
   "serial_number": "Serial Number",
@@ -137,4 +139,5 @@ const Map<String, String> enUS = {
   "request_camera_title": "Allow Camera Access",
   "request_camera_subtitle":
       "We need camera access to help you capture receipts or documents directly from the app",
+  "click_here": "Click here",
 };

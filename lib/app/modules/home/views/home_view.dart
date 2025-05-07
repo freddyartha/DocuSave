@@ -9,7 +9,6 @@ import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:get/get.dart';
 
@@ -312,13 +311,11 @@ class HomeView extends GetView<HomeController> {
                                             ],
                                           ),
                                           child: ListTile(
-                                            onTap: () {
-                                              if (EasyLoading.isShow) {
-                                                EasyLoading.dismiss();
-                                              } else {
-                                                EasyLoading.show();
-                                              }
-                                            },
+                                            onTap:
+                                                () => controller
+                                                    .goToWarrantySetup(
+                                                      item.documentid,
+                                                    ),
                                             horizontalTitleGap: 10,
                                             contentPadding:
                                                 EdgeInsets.symmetric(

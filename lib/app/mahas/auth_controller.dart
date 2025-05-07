@@ -80,7 +80,7 @@ class AuthController extends GetxController {
     }
   }
 
-  void requestNotificationPermission() async {
+  Future<bool> requestNotificationPermission() async {
     NotificationSettings settings = await messaging.requestPermission();
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       // Dapatkan token FCM (yang juga mengandalkan APNs di iOS)
@@ -88,14 +88,16 @@ class AuthController extends GetxController {
       // Dapatkan APNs token (iOS only)
       await messaging.getAPNSToken();
     }
+    return true;
   }
 
   //perlu diperbaiki untuk UI/UX yang lebih bagus
-  Future<void> requestCameraPermission() async {
+  Future<bool> requestCameraPermission() async {
     var status = await Permission.camera.status;
     if (status.isDenied || status.isRestricted) {
       status = await Permission.camera.request();
     }
+    return true;
   }
 
   Future<void> signInWithGoogle({bool isLinkingUser = false}) async {

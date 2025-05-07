@@ -19,28 +19,35 @@ class HomeController extends GetxController {
     await authCon.signInWithApple();
   }
 
-  List<MenuItemModel> layananList = [
-    MenuItemModel(
-      title: "receipt",
-      image: "assets/images/receipt.png",
-      onTab: () => Get.toNamed(Routes.RECEIPT_LIST),
-    ),
-    MenuItemModel(
-      title: "warranty",
-      image: "assets/images/warranty.png",
-      onTab: () => Get.toNamed(Routes.WARRANTY_LIST),
-    ),
-  ];
+  List<MenuItemModel> layananList = [];
 
   RxBool historyLoading = true.obs;
   RxBool articlesLoading = true.obs;
 
   @override
   void onInit() {
-    // Future.delayed(Duration(seconds: 3), () => historyLoading.value = false);
+    addLayananList();
     loadArticles();
     loadExpiringWarranties();
     super.onInit();
+  }
+
+  void addLayananList() {
+    layananList.addAll([
+      MenuItemModel(
+        title: "receipt",
+        image: "assets/images/receipt.png",
+        onTab: () => Get.toNamed(Routes.RECEIPT_LIST),
+      ),
+      MenuItemModel(
+        title: "warranty",
+        image: "assets/images/warranty.png",
+        onTab:
+            () => Get.toNamed(Routes.WARRANTY_LIST)?.then((value) {
+              loadExpiringWarranties();
+            }),
+      ),
+    ]);
   }
 
   void loadExpiringWarranties() async {
@@ -50,6 +57,7 @@ class HomeController extends GetxController {
         auth.currentUser!.uid,
       );
       if (result != null && result.isNotEmpty) {
+        listExpiringWarranties.clear();
         listExpiringWarranties.addAll(result);
       }
     }
@@ -71,5 +79,11 @@ class HomeController extends GetxController {
     } else {
       Get.toNamed(Routes.PROFILE_LIST)?.then((value) => update());
     }
+  }
+
+  void goToWarrantySetup(String id) {
+    Get.toNamed(Routes.WARRANTY_SETUP, parameters: {"id": id})?.then((value) {
+      loadExpiringWarranties();
+    });
   }
 }

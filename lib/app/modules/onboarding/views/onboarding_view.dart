@@ -120,12 +120,11 @@ class OnboardingView extends GetView<OnboardingController> {
                     padding: const EdgeInsets.only(bottom: 30),
                     child: Align(
                       alignment: Alignment.bottomCenter,
-
                       child: ButtonComponent(
                         btnColor: MahasColors.white,
                         textColor: MahasColors.primary,
                         onTap: controller.requestPermission,
-                        text: "Klik Disini",
+                        text: "click_here".tr,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

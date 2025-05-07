@@ -87,6 +87,8 @@ const Map<String, String> idID = {
   "month": "bulan",
   "day": "hari",
   "expires_in": "Berakhir dalam",
+  "expires_today": "Berakhir hari ini",
+  "expired": "Sudah kadaluarsa",
   "item_name": "Nama Item",
   "item_name_hint": "Isi nama barang kamu",
   "serial_number": "Nomor Seri",
@@ -138,4 +140,5 @@ const Map<String, String> idID = {
   "request_camera_title": "Izinkan Akses Kamera",
   "request_camera_subtitle":
       "Kami memerlukan izin kamera untuk membantu kamu memotret struk atau dokumen langsung dari aplikasi",
+  "click_here": "Klik disini",
 };
