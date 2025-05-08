@@ -1,13 +1,13 @@
 import 'dart:ui';
 
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/lang/en_us.dart';
 import 'package:docusave/app/mahas/lang/id_id.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class TranslationService extends Translations {
   static Locale get locale {
-    String? localeCode = GetStorage().read("locale");
+    String? localeCode = MahasConfig.userProfile?.selectedLanguage;
     if (localeCode != null && localeCode == "id") {
       return Locale(localeCode, localeCode.toUpperCase());
     } else if (localeCode != null && localeCode == "en") {

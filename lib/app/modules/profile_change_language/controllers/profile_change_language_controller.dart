@@ -1,8 +1,12 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/inputs/input_radio_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
+import 'package:docusave/app/models/user_model.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -48,19 +52,31 @@ class ProfileChangeLanguageController extends GetxController {
           currentSelectedLanguage = item.value;
           if (item.value == 1) {
             Get.updateLocale(Locale('id', 'ID'));
-            box.write("locale", "id");
             pilihBahasaCon.value = item.value;
           } else if (item.value == 2) {
             Get.updateLocale(Locale('en', 'EN'));
-            box.write("locale", "en");
             pilihBahasaCon.value = item.value;
           }
-          bool result = await ReusableWidgets.dialogSuccess(
-            title: "berhasil_ganti_bahasa".tr,
+          UserModel userModel = UserModel(
+            userid: MahasConfig.userProfile?.userid ?? "",
+            name: MahasConfig.userProfile?.name ?? "",
+            email: MahasConfig.userProfile?.email ?? "",
+            selectedLanguage: pilihBahasaCon.value == 1 ? "id" : "en",
+            updatedat: Timestamp.now(),
+            profilepic: MahasConfig.userProfile?.profilepic,
+            subscriptionplan: MahasConfig.userProfile?.subscriptionplan,
+            createdat: MahasConfig.userProfile?.createdat,
           );
-          if (result) {
-            Get.back();
-          }
+          await FirebaseRepository.updateUserProfile(userModel: userModel).then(
+            (value) async {
+              bool result = await ReusableWidgets.dialogSuccess(
+                title: "berhasil_ganti_bahasa".tr,
+              );
+              if (result) {
+                Get.back();
+              }
+            },
+          );
         } else if (konfirmasiBahasa == false) {
           pilihBahasaCon.value = currentSelectedLanguage;
         }

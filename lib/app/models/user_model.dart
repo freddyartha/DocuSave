@@ -8,6 +8,7 @@ class UserModel {
   String userid;
   String name;
   String email;
+  String selectedLanguage;
   String? profilepic;
   String? subscriptionplan;
   Timestamp? createdat;
@@ -17,6 +18,7 @@ class UserModel {
     required this.userid,
     required this.name,
     required this.email,
+    required this.selectedLanguage,
     this.profilepic,
     this.subscriptionplan,
     this.createdat,
@@ -33,6 +35,7 @@ class UserModel {
       userid: dynamicData['userId'],
       name: dynamicData['name'],
       email: dynamicData['email'],
+      selectedLanguage: dynamicData['selectedLanguage'],
       profilepic: dynamicData['profilePic'],
       subscriptionplan: dynamicData['subscriptionPlan'],
       createdat: InputFormatter.dynamicToTimestamp(dynamicData['createdAt']),
@@ -45,6 +48,7 @@ class UserModel {
     'userId': userid,
     'name': name,
     'email': email,
+    'selectedLanguage': selectedLanguage,
     'profilePic': profilepic,
     'subscriptionPlan': subscriptionplan,
     'createdAt': createdat,

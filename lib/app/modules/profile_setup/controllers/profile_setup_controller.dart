@@ -6,6 +6,7 @@ import 'package:docusave/app/mahas/components/images/select_image_component.dart
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
+import 'package:docusave/app/mahas/lang/translation_service.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/user_model.dart';
 import 'package:flutter/material.dart';
@@ -115,6 +116,7 @@ class ProfileSetupController extends GetxController {
           userid: auth.currentUser!.uid,
           name: namaCon.value,
           email: emailCon.value,
+          selectedLanguage: TranslationService.locale.languageCode,
           updatedat: Timestamp.now(),
           profilepic: imageUrl ?? MahasConfig.userProfile?.profilepic,
           subscriptionplan: MahasConfig.userProfile?.subscriptionplan,

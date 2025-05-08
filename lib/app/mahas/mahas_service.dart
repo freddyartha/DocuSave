@@ -3,6 +3,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/local_notification_service.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -40,6 +41,9 @@ class MahasService {
 
     //init get storage
     await GetStorage.init();
+
+    // init notification
+    LocalNotificationService.initialize();
 
     //easyloading
     EasyLoading.instance

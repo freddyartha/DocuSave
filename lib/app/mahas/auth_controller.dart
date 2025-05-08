@@ -6,6 +6,7 @@ import 'package:crypto/crypto.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
+import 'package:docusave/app/mahas/lang/translation_service.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/user_model.dart';
 import 'package:docusave/app/models/user_notification_model.dart';
@@ -31,9 +32,6 @@ class AuthController extends GetxController {
 
   @override
   void onInit() async {
-    // notificationToken = await messaging.getToken();
-    // await messaging.getAPNSToken();
-    // requestNotificationPermission();
     firebaseUser = Rx<User?>(auth.currentUser);
     firebaseUser.bindStream(auth.authStateChanges().distinct());
     debounce(
@@ -54,16 +52,19 @@ class AuthController extends GetxController {
     if (firstOpen != false) {
       Get.toNamed(Routes.ONBOARDING);
     } else {
+      await requestNotificationPermission();
       if (user != null) {
         await FirebaseRepository.addUserToFirestore(
           userModel: UserModel(
             userid: user.uid,
             name: user.displayName ?? "",
             email: user.email ?? "",
+            selectedLanguage: TranslationService.locale.languageCode,
             createdat: Timestamp.now(),
             subscriptionplan: "free",
           ),
         );
+        Get.updateLocale(TranslationService.locale);
         if (notificationToken != null && notificationToken!.isNotEmpty) {
           await FirebaseRepository.addUserNotificationToken(
             userNotificationModel: UserNotificationModel(

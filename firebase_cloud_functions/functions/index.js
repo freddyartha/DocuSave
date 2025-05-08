@@ -7,7 +7,7 @@ admin.initializeApp();
 
 exports.reminderWarranty = onSchedule(
     {
-        schedule: "every day 08:00",
+        schedule: "every day 09:00",
         timeZone: "Asia/Jakarta",
     },
     async (event) => {
@@ -35,19 +35,37 @@ exports.reminderWarranty = onSchedule(
                 .collection("notificationTokens")
                 .get();
 
-            const tokens = tokensSnapshot.docs.map((doc) => doc.data().notificationToken);
+            const tokens = [];
+            const userLanguage = user.data().selectedLanguage || "id";
+            tokensSnapshot.forEach(doc => {
+                const token = doc.data().notificationToken;
+                if (token) tokens.push(token);
+            });
 
             if (tokens.length === 0) continue;
 
             for (const warrantyDoc of snapshot.docs) {
                 const data = warrantyDoc.data();
-
-                const message = {
-                    notification: {
+                const messages = {
+                    id: {
                         title: "Garansi Segera Berakhir!",
                         body: `${data.itemName} akan habis masa garansi tanggal ${data.warrantyExpiryDate.toDate().toLocaleDateString()}`,
                     },
+                    en: {
+                        title: "Warranty Expiring Soon!",
+                        body: `${data.itemName} warranty will expire on ${data.warrantyExpiryDate.toDate().toLocaleDateString()}`,
+
+                    }
+                };
+                const message = {
                     tokens: tokens,
+                    notification: {
+                        title: messages[userLanguage].title,
+                        body: messages[userLanguage].body,
+                    },
+                    data: {
+                        "route": "/warranty-setup"
+                    },
                 };
 
                 await getMessaging().sendEachForMulticast(message);
