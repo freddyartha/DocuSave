@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -69,21 +71,22 @@ class LocalNotificationService {
       sound: true,
     );
 
-    RemoteMessage? initialMessage = await messaging.getInitialMessage();
-    if (initialMessage != null) {
-      await showNotificationHandler(initialMessage);
+    if (Platform.isAndroid) {
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        showNotificationHandler(message);
+        if (message.notification != null) {
+          // var data = message.data;
+          // print(data.);
+        }
+      });
     }
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      showNotificationHandler(message);
-      if (message.notification != null) {
-        // var data = message.data;
-        // print(data.);
-      }
-    });
 
     FirebaseMessaging.onBackgroundMessage(showNotificationHandler);
 
-    FirebaseMessaging.onMessageOpenedApp.listen(showNotificationHandler);
+    // RemoteMessage? initialMessage = await messaging.getInitialMessage();
+    // if (initialMessage != null) {
+    //   await showNotificationHandler(initialMessage);
+    // }
+    // FirebaseMessaging.onMessageOpenedApp.listen(showNotificationHandler);
   }
 }

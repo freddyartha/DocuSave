@@ -1374,6 +1374,8 @@ PODS:
     - Mantle
     - SDWebImage
     - SDWebImageWebPCoder
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - google_mlkit_commons (0.11.0):
     - Flutter
     - MLKitVision
@@ -1632,6 +1634,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_doc_scanner (from `.symlinks/plugins/flutter_doc_scanner/ios`)
   - flutter_image_compress_common (from `.symlinks/plugins/flutter_image_compress_common/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
   - google_mlkit_text_recognition (from `.symlinks/plugins/google_mlkit_text_recognition/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
@@ -1717,6 +1720,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_doc_scanner/ios"
   flutter_image_compress_common:
     :path: ".symlinks/plugins/flutter_image_compress_common/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   google_mlkit_commons:
     :path: ".symlinks/plugins/google_mlkit_commons/ios"
   google_mlkit_text_recognition:
@@ -1771,6 +1776,7 @@ SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_doc_scanner: d930bcd7db6f69805d882330fc9b6f74a9db5c9e
   flutter_image_compress_common: 1697a328fd72bfb335507c6bca1a65fa5ad87df1
+  flutter_local_notifications: a5a732f069baa862e728d839dd2ebb904737effb
   google_mlkit_commons: 2abe6a70e1824e431d16a51085cb475b672c8aab
   google_mlkit_text_recognition: ec2122ec89bfe0d7200763336a6e4ef44810674c
   google_sign_in_ios: 19297361f2c51d7d8ac0201b866ef1fa5d1f94a8
@@ -1806,6 +1812,6 @@ SPEC CHECKSUMS:
   sign_in_with_apple: c5dcc141574c8c54d5ac99dd2163c0c72ad22418
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
 
-PODFILE CHECKSUM: b15e482fc612eaf2f129752b7b64c28a9b732772
+PODFILE CHECKSUM: ce913cf416433ee2ebfec3f44f87ec2524bdd44c
 
 COCOAPODS: 1.16.2
