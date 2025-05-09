@@ -1,8 +1,10 @@
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/texts/rich_text_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
@@ -87,14 +89,14 @@ class LoginView extends GetView<LoginController> {
                     ),
                     RichTextItem(
                       text: "terms".tr,
-                      onTap: () {},
+                      onTap: ReusableStatics.launchPrivacyPolicy,
                       fontColor: MahasColors.primary,
                       underlineColor: MahasColors.primary,
                     ),
                     RichTextItem(text: " &\n", fontSize: MahasFontSize.small),
                     RichTextItem(
                       text: "privacy".tr,
-                      onTap: () {},
+                      onTap: ReusableStatics.launchPrivacyPolicy,
                       fontColor: MahasColors.primary,
                       underlineColor: MahasColors.primary,
                     ),
@@ -106,7 +108,7 @@ class LoginView extends GetView<LoginController> {
                 ),
               ),
               TextComponent(
-                value: "v1.2.0",
+                value: "v ${MahasConfig.packageInfo?.version}",
                 margin: EdgeInsets.only(top: 10, bottom: 30),
               ),
             ],

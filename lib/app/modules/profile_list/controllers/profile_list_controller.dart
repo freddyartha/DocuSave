@@ -1,3 +1,4 @@
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ class ProfileListController extends GetxController {
     MenuItemModel(
       title: "privacy_policy",
       icon: Icons.insert_drive_file_outlined,
+      onTab: ReusableStatics.launchPrivacyPolicy,
     ),
     MenuItemModel(
       title: "account_setting",

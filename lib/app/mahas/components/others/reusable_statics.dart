@@ -191,4 +191,11 @@ class ReusableStatics {
       }
     }
   }
+
+  static Future<void> launchPrivacyPolicy() async => await launchUrl(
+    Uri.parse(
+      "https://www.termsfeed.com/live/4c6ab02d-a200-4431-8d44-8b67a330ef6e",
+    ),
+    mode: LaunchMode.externalApplication,
+  );
 }
