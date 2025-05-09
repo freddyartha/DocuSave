@@ -615,6 +615,7 @@ class ReusableWidgets {
   static Future<bool?> customBottomSheet({
     required List<Widget> children,
     String? title,
+    bool allowPopScope = true,
   }) {
     return Get.bottomSheet<bool>(
       isScrollControlled: true,
@@ -622,8 +623,10 @@ class ReusableWidgets {
       PopScope(
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
-          if (didPop) return;
-          Get.back(result: null);
+          if (allowPopScope) {
+            if (didPop) return;
+            Get.back(result: null);
+          }
         },
         child: Container(
           decoration: BoxDecoration(
@@ -644,21 +647,23 @@ class ReusableWidgets {
                       fontSize: MahasFontSize.h6,
                       margin: EdgeInsets.only(right: 10),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      height: 40,
-                      child: GestureDetector(
-                        onTap: () => Get.back(result: false),
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: MahasColors.black.withValues(alpha: 0.06),
+                    if (allowPopScope) ...[
+                      Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        height: 40,
+                        child: GestureDetector(
+                          onTap: () => Get.back(result: false),
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: MahasColors.black.withValues(alpha: 0.06),
+                            ),
+                            child: Icon(Icons.close, size: 30),
                           ),
-                          child: Icon(Icons.close, size: 30),
                         ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
                 ...children,

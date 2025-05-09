@@ -1,5 +1,6 @@
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
 import 'package:docusave/app/models/article_model.dart';
@@ -30,6 +31,12 @@ class HomeController extends GetxController {
     loadArticles();
     loadExpiringWarranties();
     super.onInit();
+  }
+
+  @override
+  void onReady() async {
+    await ReusableStatics.checkingVersion();
+    super.onReady();
   }
 
   void addLayananList() {

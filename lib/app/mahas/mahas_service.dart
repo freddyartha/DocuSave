@@ -3,7 +3,9 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/local_notification_service.dart';
+import 'package:docusave/app/mahas/models/update_app_values_model.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -16,6 +18,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 final remoteConfig = FirebaseRemoteConfig.instance;
 final auth = FirebaseAuth.instance;
@@ -44,6 +47,9 @@ class MahasService {
 
     // init notification
     LocalNotificationService.initialize();
+
+    // packageInfo
+    MahasConfig.packageInfo = await PackageInfo.fromPlatform();
 
     //easyloading
     EasyLoading.instance
@@ -79,29 +85,20 @@ class MahasService {
         FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
 
         // remote config
-        // await remoteConfig.setConfigSettings(
-        //   RemoteConfigSettings(
-        //     fetchTimeout: const Duration(seconds: 1),
-        //     minimumFetchInterval: Duration.zero,
-        //   ),
-        // );
-        // await remoteConfig.fetchAndActivate();
+        await remoteConfig.setConfigSettings(
+          RemoteConfigSettings(
+            fetchTimeout: const Duration(seconds: 1),
+            minimumFetchInterval: Duration.zero,
+          ),
+        );
+        await remoteConfig.fetchAndActivate();
         // get api from remote config
-        // String noInternetRemoteConfig =
-        //     remoteConfig.getString("no_internet_error_message");
-        // if (noInternetRemoteConfig.isNotEmpty) {
-        //   List<dynamic> dataNoInternet = jsonDecode(noInternetRemoteConfig);
-        //   if (dataNoInternet.isNotEmpty) {
-        //     List<String> strlist = dataNoInternet.cast<String>();
-        //     MahasConfig.noInternetErrorMessage.clear();
-        //     MahasConfig.noInternetErrorMessage.addAll(strlist);
-        //   }
-        // }
-        // String emergencyPhone =
-        //     remoteConfig.getString("call_center_phone_number");
-        // if (emergencyPhone.isNotEmpty) {
-        //   MahasConfig.callCenterPhoneNumber = emergencyPhone;
-        // }
+        String updateRemote = remoteConfig.getString("update_app_values");
+        if (updateRemote.isNotEmpty) {
+          MahasConfig.updateAppValues = UpdateappvaluesModel.fromJson(
+            updateRemote,
+          );
+        }
 
         // auth controller
         AuthController.instance;
