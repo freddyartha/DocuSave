@@ -1,6 +1,7 @@
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
 import 'package:docusave/app/models/article_model.dart';
@@ -12,12 +13,17 @@ class HomeController extends GetxController {
   final RxList<ArticleModel> listBanner = <ArticleModel>[].obs;
   final RxList<WarrantyModel> listExpiringWarranties = <WarrantyModel>[].obs;
   var authCon = AuthController.instance;
+  RxBool demo = false.obs;
   void googleLoginOnPress() async {
     await authCon.signInWithGoogle();
   }
 
   void appleLoginOnPress() async {
     await authCon.signInWithApple();
+  }
+
+  void demoOnPress() async {
+    await authCon.singInWithPassword('demo@demo.com', '123456');
   }
 
   List<MenuItemModel> layananList = [];
@@ -27,6 +33,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() {
+    demo.value = MahasConfig.demo;
     addLayananList();
     loadArticles();
     loadExpiringWarranties();

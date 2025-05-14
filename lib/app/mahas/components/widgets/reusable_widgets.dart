@@ -718,11 +718,11 @@ class ReusableWidgets {
                         fontColor: MahasColors.white,
                         fontWeight: FontWeight.w600,
                         fontSize: MahasFontSize.h6,
+                        maxLines: 10,
                       ),
                       TextComponent(
                         value: item.subtitle,
                         fontColor: MahasColors.white,
-
                         fontSize: MahasFontSize.small,
                       ),
                     ],

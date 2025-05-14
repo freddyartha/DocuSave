@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
@@ -61,22 +63,39 @@ class LoginView extends GetView<LoginController> {
                       iconSize: 30,
                     ),
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: ButtonComponent(
-                      onTap: controller.appleLoginOnPress,
-                      text: "Apple",
-                      icon: "assets/images/apple.png",
-                      textColor: MahasColors.white,
-                      btnColor: MahasColors.black,
-                      borderRadius: MahasRadius.large,
-                      fontSize: MahasFontSize.normal,
-                      fontWeight: FontWeight.w600,
-                      isSvg: false,
-                      iconSize: 30,
+                  if (Platform.isIOS) ...[
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: ButtonComponent(
+                        onTap: controller.appleLoginOnPress,
+                        text: "Apple",
+                        icon: "assets/images/apple.png",
+                        textColor: MahasColors.white,
+                        btnColor: MahasColors.black,
+                        borderRadius: MahasRadius.large,
+                        fontSize: MahasFontSize.normal,
+                        fontWeight: FontWeight.w600,
+                        isSvg: false,
+                        iconSize: 30,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+              Obx(
+                () => Visibility(
+                  visible: controller.demo.isTrue,
+                  child: Center(
+                    child: TextButton(
+                      onPressed: controller.demoOnPress,
+                      child: const TextComponent(
+                        value: "Demo",
+                        fontColor: MahasColors.primary,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
               SizedBox(height: 40),
               Center(

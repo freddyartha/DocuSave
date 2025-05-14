@@ -101,6 +101,8 @@ const Map<String, String> enUS = {
   "success_save_warranty": "Successfully save your warranty card",
   "continue_with": "Continue with",
   "success_save_profile": "Successfully update your profile",
+  "wrong_credential":
+      "Oops! Looks like you don't have an account yet, or there might be a mistake in your email or password. Please double-check!",
 
   //jenis pembayaran
   "cash": "Cash",

@@ -6,4 +6,5 @@ class MahasConfig {
   static PackageInfo? packageInfo;
   static UpdateappvaluesModel updateAppValues = UpdateappvaluesModel();
   static UserModel? userProfile;
+  static bool demo = false;
 }

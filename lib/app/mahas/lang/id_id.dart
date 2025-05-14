@@ -102,6 +102,8 @@ const Map<String, String> idID = {
   "success_save_warranty": "Berhasil menyimpan kartu garansi",
   "continue_with": "Melanjutkan dengan",
   "success_save_profile": "Berhasil memperbaharui profil",
+  "wrong_credential":
+      "Ups! Kayaknya kamu belum punya akun, atau ada yang salah di email/sandi, coba dicek dulu ya",
 
   //jenis pembayaran
   "cash": "Tunai",

@@ -100,6 +100,8 @@ class MahasService {
           );
         }
 
+        MahasConfig.demo = remoteConfig.getBool('demo');
+
         // auth controller
         AuthController.instance;
       });

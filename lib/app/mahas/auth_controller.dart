@@ -239,6 +239,22 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> singInWithPassword(String email, String pass) async {
+    if (EasyLoading.isShow) EasyLoading.dismiss();
+    await EasyLoading.show();
+    try {
+      await auth.signInWithEmailAndPassword(email: email, password: pass);
+    } catch (e) {
+      if (e.toString().toLowerCase().contains("no user record") ||
+          e.toString().toLowerCase().contains("malformed")) {
+        ReusableWidgets.notifBottomSheet(subtitle: "wrong_credential".tr);
+      } else {
+        ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      }
+    }
+    await EasyLoading.dismiss();
+  }
+
   Future<void> signOut({bool deleteToken = true}) async {
     if (EasyLoading.isShow) EasyLoading.dismiss();
     await EasyLoading.show();

@@ -23,6 +23,7 @@ exports.reminderWarranty = onSchedule(
 
             const snapshot = await warrantiesRef
                 .where("warrantyExpiryDate", "<=", sevenDaysLater)
+                .where("warrantyExpiryDate", ">=", now)
                 .where("reminderSent", "==", false)
                 .get();
 
