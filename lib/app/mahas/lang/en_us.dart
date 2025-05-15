@@ -103,6 +103,13 @@ const Map<String, String> enUS = {
   "success_save_profile": "Successfully update your profile",
   "wrong_credential":
       "Oops! Looks like you don't have an account yet, or there might be a mistake in your email or password. Please double-check!",
+  "suggestion_tittle": "Feedback and Suggestions",
+  "success_save_suggestion": "Successfully save your feedback/suggestion",
+  "give_rating": "Give us a Rating",
+  "feedback": "Feedback",
+  "feedback_hint": "Give us your feedback",
+  "suggestion": "Suggestion",
+  "suggestion_hint": "Maybe you have a feature suggestion for this app",
 
   //jenis pembayaran
   "cash": "Cash",

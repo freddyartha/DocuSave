@@ -104,6 +104,13 @@ const Map<String, String> idID = {
   "success_save_profile": "Berhasil memperbaharui profil",
   "wrong_credential":
       "Ups! Kayaknya kamu belum punya akun, atau ada yang salah di email/sandi, coba dicek dulu ya",
+  "suggestion_tittle": "Kritik dan Saran Fitur",
+  "success_save_suggestion": "Berhasil menyimpan kritik/saran",
+  "give_rating": "Berikan kami Penilaian",
+  "feedback": "Masukan",
+  "feedback_hint": "Berikan masukan Anda kepada kami",
+  "suggestion": "Saran",
+  "suggestion_hint": "Mungkin kamu punya saran fitur untuk aplikasi ini",
 
   //jenis pembayaran
   "cash": "Tunai",

@@ -16,6 +16,8 @@ import '../modules/profile_list/bindings/profile_list_binding.dart';
 import '../modules/profile_list/views/profile_list_view.dart';
 import '../modules/profile_setup/bindings/profile_setup_binding.dart';
 import '../modules/profile_setup/views/profile_setup_view.dart';
+import '../modules/profile_suggestion_setup/bindings/profile_suggestion_setup_binding.dart';
+import '../modules/profile_suggestion_setup/views/profile_suggestion_setup_view.dart';
 import '../modules/receipt_list/bindings/receipt_list_binding.dart';
 import '../modules/receipt_list/views/receipt_list_view.dart';
 import '../modules/receipt_setup/bindings/receipt_setup_binding.dart';
@@ -159,6 +161,11 @@ class AppPages {
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFILE_SUGGESTION_SETUP,
+      page: () => const ProfileSuggestionSetupView(),
+      binding: ProfileSuggestionSetupBinding(),
     ),
   ];
 }

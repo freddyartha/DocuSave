@@ -17,6 +17,11 @@ class ProfileListController extends GetxController {
       onTab: ReusableStatics.launchPrivacyPolicy,
     ),
     MenuItemModel(
+      title: "suggestion_tittle",
+      icon: Icons.message_outlined,
+      onTab: () => Get.toNamed(Routes.PROFILE_SUGGESTION_SETUP),
+    ),
+    MenuItemModel(
       title: "account_setting",
       icon: Icons.settings,
       onTab: () => Get.toNamed(Routes.PROFILE_ACCOUNT_SETTING),

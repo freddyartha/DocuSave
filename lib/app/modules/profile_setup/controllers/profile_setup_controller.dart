@@ -77,8 +77,7 @@ class ProfileSetupController extends GetxController {
   bool showConfirmationCondition() {
     if (namaCon.value != MahasConfig.userProfile?.name ||
         emailCon.value != MahasConfig.userProfile?.email ||
-        fileImg != null ||
-        (fileImg == null && tmpProfilePic.value == "")) {
+        fileImg != null) {
       return true;
     } else {
       return false;

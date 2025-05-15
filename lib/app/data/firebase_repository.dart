@@ -7,6 +7,7 @@ import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/article_model.dart';
 import 'package:docusave/app/models/receipt_model.dart';
+import 'package:docusave/app/models/suggestion_model.dart';
 import 'package:docusave/app/models/user_devices_model.dart';
 import 'package:docusave/app/models/user_model.dart';
 import 'package:docusave/app/models/user_notification_model.dart';
@@ -23,6 +24,7 @@ class FirebaseRepository {
   static String articlesCollection = 'articles';
   static String receiptCollection = 'receipts';
   static String warrantyCollection = 'warranties';
+  static String suggestionssCollection = 'suggestions';
 
   //queries
   static final getToReceiptCollection = FirebaseFirestore.instance.collection(
@@ -58,6 +60,7 @@ class FirebaseRepository {
             .collection(userCollection)
             .doc(userModel.userid)
             .set(userModelToJson(userModel));
+        await checkUserExist(userModel.userid);
       }
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -327,6 +330,22 @@ class FirebaseRepository {
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
       return null;
+    }
+  }
+
+  //suggestions
+  static Future<bool> addSuggestionToFirestore({
+    required SuggestionModel suggestionModel,
+  }) async {
+    try {
+      await firestore
+          .collection(suggestionssCollection)
+          .doc(suggestionModel.documentid)
+          .set(suggestionModelToJson(suggestionModel));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
     }
   }
 
