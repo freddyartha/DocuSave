@@ -38,9 +38,9 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app require access to camera to take picture</string>
+	<string>DocuSave needs access to your camera to allow you to take pictures of your documents directly within the app</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app require access to your photo library to pick image</string>
+	<string>DocuSave needs access to your photo library so you can select images of your documents from your device</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
