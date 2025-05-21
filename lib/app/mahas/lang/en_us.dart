@@ -110,6 +110,9 @@ const Map<String, String> enUS = {
   "feedback_hint": "Give us your feedback",
   "suggestion": "Suggestion",
   "suggestion_hint": "Maybe you have a feature suggestion for this app",
+  "select_one": "Please select one option",
+  "select_atleast_one": "Please select at least one option",
+  "field_is_required": "This field is required",
 
   //jenis pembayaran
   "cash": "Cash",

@@ -2,6 +2,7 @@ import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'input_box_component.dart';
 
 enum CheckboxPosition { left, right }
@@ -80,7 +81,7 @@ class InputRadioController {
     });
     if (required && _value == null) {
       setState(() {
-        _errorMessage = 'Pilih salah satu opsi';
+        _errorMessage = "select_one".tr;
       });
       return false;
     }

@@ -71,7 +71,7 @@ class InputDropdownController {
 
   String? _validator(v) {
     if (_required && v == null) {
-      return 'The field is required';
+      return "field_is_required".tr;
     }
     return null;
   }

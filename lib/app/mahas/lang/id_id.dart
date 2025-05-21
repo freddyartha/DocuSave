@@ -111,6 +111,9 @@ const Map<String, String> idID = {
   "feedback_hint": "Berikan masukan Anda kepada kami",
   "suggestion": "Saran",
   "suggestion_hint": "Mungkin kamu punya saran fitur untuk aplikasi ini",
+  "select_one": "Pilih salah satu opsi",
+  "select_atleast_one": "Yuk, pilih minimal satu opsi dulu",
+  "field_is_required": "Kolom ini wajib diisi",
 
   //jenis pembayaran
   "cash": "Tunai",

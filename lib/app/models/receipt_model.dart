@@ -11,7 +11,7 @@ class ReceiptModel {
   Timestamp? purchasedate;
   double totalamount;
   String currency;
-  int category;
+  List<int> category;
   int paymentmethod;
   List<String> receiptimage;
   String? notes;
@@ -49,7 +49,7 @@ class ReceiptModel {
       totalamount:
           InputFormatter.dynamicToDouble(dynamicData['totalAmount']) ?? 0,
       currency: dynamicData['currency'],
-      category: InputFormatter.dynamicToInt(dynamicData['category']) ?? 0,
+      category: [],
       paymentmethod:
           InputFormatter.dynamicToInt(dynamicData['paymentMethod']) ?? 0,
       receiptimage: [],
@@ -57,6 +57,18 @@ class ReceiptModel {
       createdat: dynamicData['createdAt'],
       updatedat: dynamicData['updatedAt'],
     );
+    if (dynamicData['category'] != null) {
+      final detailT = dynamicData['category'];
+      if (detailT is List) {
+        for (var e in detailT) {
+          model.category.add(InputFormatter.dynamicToInt(e) ?? 0);
+        }
+      } else {
+        model.category.add(
+          InputFormatter.dynamicToInt(dynamicData['category']) ?? 0,
+        );
+      }
+    }
     if (dynamicData['receiptImage'] != null) {
       final detailT = dynamicData['receiptImage'];
       for (var e in detailT) {

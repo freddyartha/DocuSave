@@ -8,6 +8,7 @@ import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 enum InputTextType { text, email, password, number, paragraf, money, ktp }
 
@@ -31,7 +32,7 @@ class InputTextController extends ChangeNotifier {
 
   String? _validator(String? v, {FormFieldValidator<String>? otherValidator}) {
     if (_required && (v?.isEmpty ?? false)) {
-      return 'The field is required';
+      return "field_is_required".tr;
     }
     if (type == InputTextType.email) {
       const pattern =

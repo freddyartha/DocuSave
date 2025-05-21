@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
+import 'package:docusave/app/mahas/components/inputs/input_checkbox_multiple_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
@@ -10,6 +11,7 @@ import 'package:docusave/app/mahas/components/others/ocr_reader_statics.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
+import 'package:docusave/app/mahas/constants/input_formatter.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/receipt_model.dart';
 import 'package:flutter/material.dart';
@@ -39,17 +41,18 @@ class ReceiptSetupController extends GetxController
   final InputTextController currencyCon = InputTextController(
     type: InputTextType.text,
   );
-  final InputDropdownController categoryCon = InputDropdownController(
-    items: [
-      DropdownItem(text: "food_beverage".tr, value: 1),
-      DropdownItem(text: "transportation".tr, value: 2),
-      DropdownItem(text: "electronics".tr, value: 3),
-      DropdownItem(text: "healthcare".tr, value: 4),
-      DropdownItem(text: "entertainment".tr, value: 5),
-      DropdownItem(text: "personal_care".tr, value: 6),
-      DropdownItem(text: "education".tr, value: 7),
-    ],
-  );
+  final InputCheckboxMultipleController categoryCon =
+      InputCheckboxMultipleController(
+        items: [
+          CheckboxItem(text: "food_beverage".tr, value: 1),
+          CheckboxItem(text: "transportation".tr, value: 2),
+          CheckboxItem(text: "electronics".tr, value: 3),
+          CheckboxItem(text: "healthcare".tr, value: 4),
+          CheckboxItem(text: "entertainment".tr, value: 5),
+          CheckboxItem(text: "personal_care".tr, value: 6),
+          CheckboxItem(text: "education".tr, value: 7),
+        ],
+      );
   final InputDropdownController paymentMethodCon = InputDropdownController(
     items: [
       DropdownItem(text: "cash".tr, value: 1),
@@ -147,7 +150,7 @@ class ReceiptSetupController extends GetxController
     currencyCon.onChanged = (value) {
       if (!buttonActive.value) buttonActive.value = true;
     };
-    categoryCon.onChanged = (value) {
+    categoryCon.onChanged = () {
       if (!buttonActive.value) buttonActive.value = true;
     };
     paymentMethodCon.onChanged = (value) {
@@ -251,7 +254,7 @@ class ReceiptSetupController extends GetxController
             purchaseDateCon.value != null ||
             totalAmountCon.value != null ||
             currencyCon.value != null ||
-            categoryCon.value != null ||
+            categoryCon.value != [] ||
             paymentMethodCon.value != null ||
             notesCon.value != null)) {
       return true;
@@ -307,7 +310,10 @@ class ReceiptSetupController extends GetxController
           purchasedate: purchaseDateCon.value,
           totalamount: totalAmountCon.value,
           currency: currencyCon.value,
-          category: categoryCon.value,
+          category:
+              categoryCon.value
+                  .map((item) => InputFormatter.dynamicToInt(item) ?? 0)
+                  .toList(),
           paymentmethod: paymentMethodCon.value,
           receiptimage: imageUrl,
           notes: notesCon.value,

@@ -65,7 +65,7 @@ class InputDatetimeController {
             (type == InputDatetimeType.time && _time == null) ||
             (type == InputDatetimeType.dateRange && _dateRange == null))) {
       setState(() {
-        _errorMessage = 'Kolom harus diisi';
+        _errorMessage = 'field_is_required'.tr;
       });
       return false;
     }

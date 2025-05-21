@@ -1,5 +1,6 @@
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
+import 'package:docusave/app/mahas/components/inputs/input_checkbox_multiple_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
@@ -190,10 +191,9 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                                       )
                                       : null,
                             ),
-                            InputDropdownComponent(
+                            InputCheckboxMultipleComponent(
                               controller: controller.categoryCon,
                               label: "category".tr,
-                              placeHolder: "category_hint".tr,
                               required: true,
                               marginBottom: 15,
                               editable: controller.editable.value,
