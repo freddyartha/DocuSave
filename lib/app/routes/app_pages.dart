@@ -22,6 +22,10 @@ import '../modules/receipt_list/bindings/receipt_list_binding.dart';
 import '../modules/receipt_list/views/receipt_list_view.dart';
 import '../modules/receipt_setup/bindings/receipt_setup_binding.dart';
 import '../modules/receipt_setup/views/receipt_setup_view.dart';
+import '../modules/service_list/bindings/service_list_binding.dart';
+import '../modules/service_list/views/service_list_view.dart';
+import '../modules/service_setup/bindings/service_setup_binding.dart';
+import '../modules/service_setup/views/service_setup_view.dart';
 import '../modules/spash_screen/bindings/spash_screen_binding.dart';
 import '../modules/spash_screen/views/spash_screen_view.dart';
 import '../modules/warranty_list/bindings/warranty_list_binding.dart';
@@ -166,6 +170,16 @@ class AppPages {
       name: _Paths.PROFILE_SUGGESTION_SETUP,
       page: () => const ProfileSuggestionSetupView(),
       binding: ProfileSuggestionSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.SERVICE_LIST,
+      page: () => const ServiceListView(),
+      binding: ServiceListBinding(),
+    ),
+    GetPage(
+      name: _Paths.SERVICE_SETUP,
+      page: () => const ServiceSetupView(),
+      binding: ServiceSetupBinding(),
     ),
   ];
 }

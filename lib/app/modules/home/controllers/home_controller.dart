@@ -61,6 +61,11 @@ class HomeController extends GetxController {
               loadExpiringWarranties();
             }),
       ),
+      MenuItemModel(
+        title: "service",
+        image: "assets/images/service.png",
+        onTab: () => Get.toNamed(Routes.SERVICE_LIST),
+      ),
     ]);
   }
 

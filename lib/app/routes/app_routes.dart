@@ -18,6 +18,8 @@ abstract class Routes {
   static const WARRANTY_SETUP = _Paths.WARRANTY_SETUP;
   static const ONBOARDING = _Paths.ONBOARDING;
   static const PROFILE_SUGGESTION_SETUP = _Paths.PROFILE_SUGGESTION_SETUP;
+  static const SERVICE_LIST = _Paths.SERVICE_LIST;
+  static const SERVICE_SETUP = _Paths.SERVICE_SETUP;
 }
 
 abstract class _Paths {
@@ -35,4 +37,6 @@ abstract class _Paths {
   static const WARRANTY_SETUP = '/warranty-setup';
   static const ONBOARDING = '/onboarding';
   static const PROFILE_SUGGESTION_SETUP = '/profile-suggestion-setup';
+  static const SERVICE_LIST = '/service-list';
+  static const SERVICE_SETUP = '/service-setup';
 }

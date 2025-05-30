@@ -7,6 +7,7 @@ import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/article_model.dart';
 import 'package:docusave/app/models/receipt_model.dart';
+import 'package:docusave/app/models/service_model.dart';
 import 'package:docusave/app/models/suggestion_model.dart';
 import 'package:docusave/app/models/user_devices_model.dart';
 import 'package:docusave/app/models/user_model.dart';
@@ -24,7 +25,8 @@ class FirebaseRepository {
   static String articlesCollection = 'articles';
   static String receiptCollection = 'receipts';
   static String warrantyCollection = 'warranties';
-  static String suggestionssCollection = 'suggestions';
+  static String suggestionsCollection = 'suggestions';
+  static String servicesCollection = 'services';
 
   //queries
   static final getToReceiptCollection = FirebaseFirestore.instance.collection(
@@ -32,6 +34,9 @@ class FirebaseRepository {
   );
   static final getToWarrantyCollection = FirebaseFirestore.instance.collection(
     "$userCollection/${auth.currentUser?.uid}/$warrantyCollection",
+  );
+  static final getToServiceCollection = FirebaseFirestore.instance.collection(
+    "$userCollection/${auth.currentUser?.uid}/$servicesCollection",
   );
 
   static Future<bool> checkUserExist(String userId) async {
@@ -339,7 +344,7 @@ class FirebaseRepository {
   }) async {
     try {
       await firestore
-          .collection(suggestionssCollection)
+          .collection(suggestionsCollection)
           .doc(suggestionModel.documentid)
           .set(suggestionModelToJson(suggestionModel));
       return true;
@@ -474,6 +479,73 @@ class FirebaseRepository {
     try {
       await firestore
           .collection("$userCollection/$userUid/$warrantyCollection")
+          .doc(documentId)
+          .delete();
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  //Service
+  static Future<bool> addServiceToFirestore({
+    required String userUid,
+    required ServiceModel serviceModel,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$servicesCollection")
+          .doc(serviceModel.documentid)
+          .set(serviceModelToJson(serviceModel));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> updateServiceById({
+    required String userUid,
+    required ServiceModel serviceModel,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$receiptCollection")
+          .doc(serviceModel.documentid)
+          .update(serviceModelToJson(serviceModel));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<ServiceModel?> getServiceById({
+    required String documentId,
+    required String userUid,
+  }) async {
+    try {
+      var result =
+          await firestore
+              .collection("$userCollection/$userUid/$servicesCollection")
+              .doc(documentId)
+              .get();
+
+      return ServiceModel.fromDynamic(result.data());
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return null;
+    }
+  }
+
+  static Future<bool> deleteServiceById({
+    required String documentId,
+    required String userUid,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$servicesCollection")
           .doc(documentId)
           .delete();
       return true;

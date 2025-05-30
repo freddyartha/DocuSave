@@ -232,9 +232,9 @@ class HomeView extends GetView<HomeController> {
                             child: GridView.count(
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
-                              crossAxisCount: 2,
+                              crossAxisCount: 3,
                               mainAxisSpacing: 15,
-                              crossAxisSpacing: 15,
+                              crossAxisSpacing: 10,
                               physics: NeverScrollableScrollPhysics(),
                               children:
                                   controller.layananList
@@ -266,14 +266,16 @@ class HomeView extends GetView<HomeController> {
                                               children: [
                                                 ImageComponent(
                                                   localUrl: item.image,
-                                                  height: Get.width * 0.25,
-                                                  width: Get.width * 0.25,
+                                                  height: Get.width * 0.15,
+                                                  width: Get.width * 0.15,
                                                 ),
                                                 TextComponent(
                                                   value: item.title!.tr,
+                                                  fontSize: MahasFontSize.small,
                                                   fontWeight: FontWeight.w600,
                                                   height: 1,
                                                   textAlign: TextAlign.center,
+                                                  maxLines: 2,
                                                 ),
                                               ],
                                             ),
