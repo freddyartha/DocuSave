@@ -136,6 +136,7 @@ const Map<String, String> idID = {
   "after_service_images": "Foto Sesudah Servis",
   "click_to_select_images": "Klik di sini untuk memilih gambar",
   "no_image": "Tidak ada gambar",
+  "clear_images": "Hapus Gambar",
 
   //service status
   "service_status_completed": "Selesai",

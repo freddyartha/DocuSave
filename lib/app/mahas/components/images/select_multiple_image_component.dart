@@ -187,7 +187,7 @@ class _SelectImagesState extends State<SelectMultipleImagesComponent> {
                             padding: const EdgeInsets.only(bottom: 10),
                             child: ButtonComponent(
                               onTap: widget.controller.clearImages,
-                              text: "Clear Images",
+                              text: "clear_images".tr,
                               btnColor: MahasColors.red,
                               leading: Icon(
                                 Icons.delete_forever_rounded,

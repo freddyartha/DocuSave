@@ -135,6 +135,7 @@ const Map<String, String> enUS = {
   "after_service_images": "After Service Images",
   "click_to_select_images": "Click here to select images",
   "no_image": "No image",
+  "clear_images": "Clear Images",
 
   //service status
   "service_status_completed": "Completed",
