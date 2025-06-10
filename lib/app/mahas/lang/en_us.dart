@@ -130,6 +130,11 @@ const Map<String, String> enUS = {
   "service_status": "Service Status",
   "pickup_date": "Pickup Date",
   "pickup_date_hint": "When will you pick it up?",
+  "select_source": "Select image source",
+  "before_service_images": "Before Service Images",
+  "after_service_images": "After Service Images",
+  "click_to_select_images": "Click here to select images",
+  "no_image": "No image",
 
   //service status
   "service_status_completed": "Completed",

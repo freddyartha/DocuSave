@@ -1,11 +1,11 @@
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
+import 'package:docusave/app/mahas/components/images/select_multiple_image_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_radio_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 
 import '../controllers/service_setup_controller.dart';
@@ -138,7 +138,18 @@ class ServiceSetupView extends GetView<ServiceSetupController> {
                               marginBottom: 15,
                               editable: controller.editable.value,
                             ),
-
+                            SelectMultipleImagesComponent(
+                              controller: controller.beforeServiceImagesCon,
+                              editable: controller.editable.value,
+                              label: "before_service_images".tr,
+                              marginBottom: 15,
+                            ),
+                            SelectMultipleImagesComponent(
+                              controller: controller.afterServiceImagesCon,
+                              editable: controller.editable.value,
+                              label: "after_service_images".tr,
+                              marginBottom: 15,
+                            ),
                             controller.editable.value
                                 ? Column(
                                   spacing: 15,

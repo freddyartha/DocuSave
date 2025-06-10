@@ -67,7 +67,7 @@ class SelectImageComponent {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   TextComponent(
-                    value: "change_profile_pic".tr,
+                    value: "select_source".tr,
                     fontWeight: FontWeight.w600,
                     fontSize: MahasFontSize.h6,
                   ),
@@ -121,9 +121,47 @@ class SelectImageComponent {
     );
   }
 
+  static Future<List<CroppedFile>?> selectMultipleImages({
+    bool cropImages = true,
+    CropAspectRatio cropAspectRatio = const CropAspectRatio(
+      ratioX: 1,
+      ratioY: 1,
+    ),
+  }) async {
+    if (Get.isBottomSheetOpen == true) Get.back();
+
+    final ImagePicker picker = ImagePicker();
+    final List<XFile> pickedFiles = await picker.pickMultiImage(
+      maxWidth: 1280,
+      maxHeight: 720,
+    );
+
+    if (pickedFiles.isNotEmpty) {
+      if (!cropImages) {
+        // Jika tidak ingin crop, konversi langsung ke CroppedFile
+        return pickedFiles.map((file) => CroppedFile(file.path)).toList();
+      }
+
+      // Jika ingin crop satu per satu
+      List<CroppedFile> croppedFiles = [];
+      for (var pickedFile in pickedFiles) {
+        final cropped = await _cropImage(
+          imageFilePath: pickedFile.path,
+          cropAspectRatio: cropAspectRatio,
+        );
+        if (cropped != null) {
+          croppedFiles.add(cropped);
+        }
+      }
+      return croppedFiles;
+    } else {
+      return null;
+    }
+  }
+
   static Future<CroppedFile?> selectImageSource({
     required ImageSource source,
-
+    bool allowCrop = true,
     CropAspectRatio cropAspectRatio = const CropAspectRatio(
       ratioX: 1,
       ratioY: 1,
@@ -138,10 +176,14 @@ class SelectImageComponent {
     );
 
     if (pickedFile != null) {
-      return await _cropImage(
-        imageFilePath: pickedFile.path,
-        cropAspectRatio: cropAspectRatio,
-      );
+      if (allowCrop) {
+        return await _cropImage(
+          imageFilePath: pickedFile.path,
+          cropAspectRatio: cropAspectRatio,
+        );
+      } else {
+        return CroppedFile(pickedFile.path);
+      }
     } else {
       return null;
     }

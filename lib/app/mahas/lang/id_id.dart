@@ -131,6 +131,11 @@ const Map<String, String> idID = {
   "service_status": "Status Servis",
   "pickup_date": "Tanggal Ambil",
   "pickup_date_hint": "Kapan mau diambil? Pilih aja",
+  "select_source": "Pilih sumber gambar",
+  "before_service_images": "Foto Sebelum Servis",
+  "after_service_images": "Foto Sesudah Servis",
+  "click_to_select_images": "Klik di sini untuk memilih gambar",
+  "no_image": "Tidak ada gambar",
 
   //service status
   "service_status_completed": "Selesai",

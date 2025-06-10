@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
+import 'package:docusave/app/mahas/components/images/select_multiple_image_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_radio_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
@@ -11,12 +14,18 @@ import 'package:docusave/app/models/service_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class ServiceSetupController extends GetxController {
   RxString id = "".obs;
   RxBool loadingData = false.obs;
   RxBool editable = true.obs;
   RxBool buttonActive = false.obs;
+
+  final SelectMultipleImagesController beforeServiceImagesCon =
+      SelectMultipleImagesController();
+  final SelectMultipleImagesController afterServiceImagesCon =
+      SelectMultipleImagesController();
 
   final InputTextController productNameCon = InputTextController();
   final InputDatetimeController serviceDateCon = InputDatetimeController();
@@ -67,6 +76,8 @@ class ServiceSetupController extends GetxController {
         expiryDateCon.value = r.warrantyexpirydate;
         statusCon.value = r.servicestatus;
         pickUpDateCon.value = r.pickupdate;
+        beforeServiceImagesCon.value = r.beforeserviceimages;
+        afterServiceImagesCon.value = r.afterserviceimages;
       }
     } else {
       currencyOnTap();
@@ -137,6 +148,12 @@ class ServiceSetupController extends GetxController {
         expiryDateCon.value = null;
       }
     };
+    beforeServiceImagesCon.onChanged = () {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
+    afterServiceImagesCon.onChanged = () {
+      if (!buttonActive.value) buttonActive.value = true;
+    };
   }
 
   bool showConfirmationCondition() {
@@ -174,31 +191,28 @@ class ServiceSetupController extends GetxController {
       if (!expiryDateCon.isValid) return;
       if (!statusCon.isValid) return;
       if (!pickUpDateCon.isValid) return;
+      if (!beforeServiceImagesCon.isValid) return;
+      if (!afterServiceImagesCon.isValid) return;
 
       buttonActive.value = false;
       if (auth.currentUser != null) {
-        // List<String> imageUrl = [];
-        // if (scannedDoc.first.contains(RegExp('http', caseSensitive: false))) {
-        //   imageUrl.addAll(scannedDoc);
-        // } else {
-        //   if (EasyLoading.isShow) EasyLoading.dismiss();
-        //   await EasyLoading.show(status: "save_image".tr);
-        //   for (var img in scannedDoc) {
-        //     String? compressedImagePath = await ReusableStatics.compressImage(
-        //       img,
-        //     );
-        //     if (compressedImagePath != null) {
-        //       var result = await FirebaseRepository.saveImageToFirebaseStorage(
-        //         imageLocationType: ImageLocationType.receipt,
-        //         fileName: ReusableStatics.idGenerator(simple: true),
-        //         imageFile: File(compressedImagePath),
-        //       );
-        //       if (result != null) {
-        //         imageUrl.add(result);
-        //       }
-        //     }
-        //   }
-        // }
+        List<String> beforeServiceUrl = [];
+        List<String> afterServiceUrl = [];
+        if (beforeServiceImagesCon.value.isNotEmpty ||
+            afterServiceImagesCon.value.isNotEmpty) {
+          if (EasyLoading.isShow) EasyLoading.dismiss();
+          await EasyLoading.show(status: "save_image".tr);
+          await uploadImages(
+            controller: beforeServiceImagesCon,
+            imageLocationType: ImageLocationType.beforeService,
+            firebasePathList: beforeServiceUrl,
+          );
+          await uploadImages(
+            controller: afterServiceImagesCon,
+            imageLocationType: ImageLocationType.afterService,
+            firebasePathList: afterServiceUrl,
+          );
+        }
 
         if (EasyLoading.isShow) EasyLoading.dismiss();
         await EasyLoading.show(status: "save_data".tr);
@@ -213,8 +227,8 @@ class ServiceSetupController extends GetxController {
           currency: currencyCon.value,
           warrantyperioddays: warrantyPeriodCon.value,
           warrantyexpirydate: expiryDateCon.value,
-          beforeserviceimages: [],
-          afterserviceimages: [],
+          beforeserviceimages: beforeServiceUrl,
+          afterserviceimages: afterServiceUrl,
           servicestatus: statusCon.value,
           pickupdate: pickUpDateCon.value,
           pickupremindersent: false,
@@ -252,6 +266,22 @@ class ServiceSetupController extends GetxController {
   void deleteData() async {
     if (EasyLoading.isShow) EasyLoading.dismiss();
     await EasyLoading.show(status: "delete_data".tr);
+    if (beforeServiceImagesCon.value.isNotEmpty) {
+      for (var delImg in beforeServiceImagesCon.value) {
+        await FirebaseRepository.removeImageFromFirebaseStorage(
+          imageLocationType: ImageLocationType.beforeService,
+          fileName: FirebaseRepository.getFileNameWithoutExtension(delImg),
+        );
+      }
+    }
+    if (afterServiceImagesCon.value.isNotEmpty) {
+      for (var delImg in afterServiceImagesCon.value) {
+        await FirebaseRepository.removeImageFromFirebaseStorage(
+          imageLocationType: ImageLocationType.afterService,
+          fileName: FirebaseRepository.getFileNameWithoutExtension(delImg),
+        );
+      }
+    }
     bool? result = await FirebaseRepository.deleteServiceById(
       documentId: id.value,
       userUid: auth.currentUser!.uid,
@@ -260,5 +290,42 @@ class ServiceSetupController extends GetxController {
       Get.back(result: true);
     }
     await EasyLoading.dismiss();
+  }
+
+  Future<void> uploadImages({
+    required SelectMultipleImagesController controller,
+    required ImageLocationType imageLocationType,
+    required List<String> firebasePathList,
+  }) async {
+    if (controller.value.isNotEmpty) {
+      for (var img in controller.value) {
+        if (img is CroppedFile) {
+          String? compressedImagePath = await ReusableStatics.compressImage(
+            img.path,
+          );
+          if (compressedImagePath != null) {
+            var result = await FirebaseRepository.saveImageToFirebaseStorage(
+              imageLocationType: imageLocationType,
+              fileName: ReusableStatics.idGenerator(simple: true),
+              imageFile: File(compressedImagePath),
+            );
+            if (result != null) {
+              firebasePathList.add(result);
+            }
+          }
+        } else {
+          firebasePathList.add(img.toString());
+        }
+      }
+
+      if (controller.removedNetwokImages.isNotEmpty) {
+        for (var delImg in controller.removedNetwokImages) {
+          FirebaseRepository.removeImageFromFirebaseStorage(
+            imageLocationType: imageLocationType,
+            fileName: delImg,
+          );
+        }
+      }
+    }
   }
 }

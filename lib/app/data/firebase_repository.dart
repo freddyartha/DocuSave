@@ -16,7 +16,13 @@ import 'package:docusave/app/models/warranty_model.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
-enum ImageLocationType { profile, receipt, warranty }
+enum ImageLocationType {
+  profile,
+  receipt,
+  warranty,
+  beforeService,
+  afterService,
+}
 
 class FirebaseRepository {
   static String userCollection = 'users';
@@ -116,6 +122,16 @@ class FirebaseRepository {
     }
   }
 
+  static String getFileNameWithoutExtension(String url) {
+    Uri uri = Uri.parse(url);
+    String fullPath = Uri.decodeFull(
+      uri.path.split('/o/').last.split('?').first,
+    );
+    String fileNameWithExtension = fullPath.split('/').last;
+    String fileName = fileNameWithExtension.split('.').first;
+    return fileName;
+  }
+
   static Future<void> removeImageFromFirebaseStorage({
     required ImageLocationType imageLocationType,
     required String fileName,
@@ -145,8 +161,12 @@ class FirebaseRepository {
       storageRef = firebaseStorage.child('profile/$fileName.jpg');
     } else if (imageLocationType == ImageLocationType.receipt) {
       storageRef = firebaseStorage.child('receipt/$fileName.jpg');
-    } else {
+    } else if (imageLocationType == ImageLocationType.warranty) {
       storageRef = firebaseStorage.child('warranty/$fileName.jpg');
+    } else if (imageLocationType == ImageLocationType.beforeService) {
+      storageRef = firebaseStorage.child('before_service/$fileName.jpg');
+    } else {
+      storageRef = firebaseStorage.child('after_service/$fileName.jpg');
     }
     return storageRef;
   }
@@ -511,7 +531,7 @@ class FirebaseRepository {
   }) async {
     try {
       await firestore
-          .collection("$userCollection/$userUid/$receiptCollection")
+          .collection("$userCollection/$userUid/$servicesCollection")
           .doc(serviceModel.documentid)
           .update(serviceModelToJson(serviceModel));
       return true;

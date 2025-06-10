@@ -675,6 +675,86 @@ class ReusableWidgets {
     );
   }
 
+  static Future<void> showImageBottomSheet(
+    String item,
+    bool isNetworkImage,
+  ) async {
+    final screenWidth = Get.width;
+    final screenHeight = Get.height * 0.75;
+
+    // Ambil ukuran gambar dari File
+    Future<Size> getFileImageSize(File file) async {
+      final bytes = await file.readAsBytes();
+      final codec = await ui.instantiateImageCodec(bytes);
+      final frame = await codec.getNextFrame();
+      final image = frame.image;
+      return Size(image.width.toDouble(), image.height.toDouble());
+    }
+
+    await customBottomSheet(
+      children: [
+        LayoutBuilder(
+          builder: (context, constraints) {
+            if (isNetworkImage) {
+              Size? imageSize;
+              double? aspectRatio;
+              double? imageHeight;
+              final image = Image.network(item);
+
+              image.image
+                  .resolve(const ImageConfiguration())
+                  .addListener(
+                    ImageStreamListener((ImageInfo info, bool _) {
+                      imageSize = Size(
+                        info.image.width.toDouble(),
+                        info.image.height.toDouble(),
+                      );
+                      aspectRatio = imageSize!.width / imageSize!.height;
+                      imageHeight = screenWidth / aspectRatio!;
+                    }),
+                  );
+
+              return ImageComponent(
+                zoomable: true,
+                networkUrl: item,
+                width: screenWidth,
+                height:
+                    imageHeight! > screenHeight ? screenHeight : imageHeight,
+                boxFit: BoxFit.contain,
+              );
+            } else {
+              return FutureBuilder<Size>(
+                future: getFileImageSize(File(item)),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: MahasColors.primary,
+                      ),
+                    );
+                  }
+
+                  final imageSize = snapshot.data!;
+                  final aspectRatio = imageSize.width / imageSize.height;
+                  final imageHeight = screenWidth / aspectRatio;
+
+                  return ImageComponent(
+                    zoomable: true,
+                    imageFromFile: item,
+                    width: screenWidth,
+                    height:
+                        imageHeight > screenHeight ? screenHeight : imageHeight,
+                    boxFit: BoxFit.contain,
+                  );
+                },
+              );
+            }
+          },
+        ),
+      ],
+    );
+  }
+
   static Widget carouselWidget({required List<ArticleModel> imageList}) {
     return CarouselSlider(
       items:
@@ -793,7 +873,7 @@ class ReusableWidgets {
                 width: screenWidth,
                 height:
                     imageHeight! > screenHeight ? screenHeight : imageHeight,
-                boxFit: BoxFit.fill,
+                boxFit: BoxFit.contain,
               );
             } else {
               return FutureBuilder<Size>(
@@ -817,7 +897,7 @@ class ReusableWidgets {
                     width: screenWidth,
                     height:
                         imageHeight > screenHeight ? screenHeight : imageHeight,
-                    boxFit: BoxFit.fill,
+                    boxFit: BoxFit.contain,
                   );
                 },
               );
