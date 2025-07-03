@@ -232,9 +232,9 @@ class HomeView extends GetView<HomeController> {
                             child: GridView.count(
                               padding: EdgeInsets.zero,
                               shrinkWrap: true,
-                              crossAxisCount: 3,
-                              mainAxisSpacing: 15,
-                              crossAxisSpacing: 10,
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 20,
+                              crossAxisSpacing: 20,
                               physics: NeverScrollableScrollPhysics(),
                               children:
                                   controller.layananList
@@ -247,17 +247,9 @@ class HomeView extends GetView<HomeController> {
                                               color: MahasColors.white,
                                               borderRadius:
                                                   BorderRadius.circular(
-                                                    MahasRadius.regular,
+                                                    MahasRadius.extraLarge,
                                                   ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: MahasColors.black
-                                                      .withValues(alpha: 0.5),
-                                                  blurRadius: 8,
-                                                  spreadRadius: 1,
-                                                  offset: Offset(0, 0),
-                                                ),
-                                              ],
+                                              border: Border.all(),
                                             ),
                                             child: Column(
                                               mainAxisAlignment:
@@ -266,12 +258,11 @@ class HomeView extends GetView<HomeController> {
                                               children: [
                                                 ImageComponent(
                                                   localUrl: item.image,
-                                                  height: Get.width * 0.15,
-                                                  width: Get.width * 0.15,
+                                                  height: Get.width * 0.18,
+                                                  width: Get.width * 0.18,
                                                 ),
                                                 TextComponent(
                                                   value: item.title!.tr,
-                                                  fontSize: MahasFontSize.small,
                                                   fontWeight: FontWeight.w600,
                                                   height: 1,
                                                   textAlign: TextAlign.center,

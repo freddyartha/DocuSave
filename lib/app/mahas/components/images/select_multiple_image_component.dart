@@ -125,7 +125,6 @@ class SelectMultipleImagesComponent extends StatefulWidget {
   final bool required;
   final String? label;
   final bool editable;
-  final String? placeHolder;
   final double? marginBottom;
 
   const SelectMultipleImagesComponent({
@@ -134,7 +133,6 @@ class SelectMultipleImagesComponent extends StatefulWidget {
     this.required = false,
     this.label,
     this.editable = true,
-    this.placeHolder,
     this.marginBottom,
   });
 

@@ -55,6 +55,9 @@ class ServiceSetupController extends GetxController {
 
   @override
   void onInit() async {
+    serviceDateCon.value = DateTime.now();
+    currencyCon.value = "IDR";
+
     id.value = Get.parameters["id"] ?? "";
     if (id.value.isNotEmpty) {
       editable.value = false;
@@ -159,12 +162,10 @@ class ServiceSetupController extends GetxController {
   bool showConfirmationCondition() {
     if (editable.value &&
         (productNameCon.value != null ||
-            serviceDateCon.value != null ||
             storeNameCon.value != null ||
             problemDescCon.value != null ||
             serviceDescCon.value != null ||
             priceCon.value != null ||
-            currencyCon.value != null ||
             warrantyPeriodCon.value != null ||
             expiryDateCon.value != null ||
             statusCon.value != null ||

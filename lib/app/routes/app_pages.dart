@@ -6,6 +6,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/money_tracker_home/bindings/money_tracker_home_binding.dart';
+import '../modules/money_tracker_home/views/money_tracker_home_view.dart';
+import '../modules/money_tracker_setup/bindings/money_tracker_setup_binding.dart';
+import '../modules/money_tracker_setup/views/money_tracker_setup_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/profile_account_setting/bindings/profile_account_setting_binding.dart';
@@ -180,6 +184,16 @@ class AppPages {
       name: _Paths.SERVICE_SETUP,
       page: () => const ServiceSetupView(),
       binding: ServiceSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.MONEY_TRACKER_HOME,
+      page: () => const MoneyTrackerHomeView(),
+      binding: MoneyTrackerHomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.MONEY_TRACKER_SETUP,
+      page: () => const MoneyTrackerSetupView(),
+      binding: MoneyTrackerSetupBinding(),
     ),
   ];
 }

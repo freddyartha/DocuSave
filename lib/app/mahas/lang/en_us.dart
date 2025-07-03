@@ -71,6 +71,7 @@ const Map<String, String> enUS = {
   "payment_method_hint": "Select Payment Method",
   "notes": "Notes",
   "notes_hint": "For your future reference",
+  "money_notes_hint": "E.g. dinner purchase",
   "failed_read_ocr":
       "Failed to read the text on the image, please enter the data manually!",
   "select_date": "Select Date",
@@ -136,6 +137,13 @@ const Map<String, String> enUS = {
   "click_to_select_images": "Click here to select images",
   "no_image": "No image",
   "clear_images": "Clear Images",
+  "money_tracker": "Money Tracker",
+  "transaction_type": "Transaction Type",
+  "success_save_transaction": "Successfully save your transaction",
+
+  //money tracker type
+  "pemasukan": "Income",
+  "pengeluaran": "Expense",
 
   //service status
   "service_status_completed": "Completed",

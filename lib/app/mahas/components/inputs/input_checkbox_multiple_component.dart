@@ -131,9 +131,9 @@ class _InputCheckboxMultipleComponentState
                 return CheckboxListTile(
                   dense: true,
                   contentPadding: EdgeInsets.all(0),
-                  visualDensity: VisualDensity.compact,
+                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
                   controlAffinity: ListTileControlAffinity.leading,
-                  title: TextComponent(value: e.text),
+                  title: TextComponent(value: e.text, height: 1),
                   value: isChecked,
                   onChanged: (bool? checked) {
                     if (widget.editable) {

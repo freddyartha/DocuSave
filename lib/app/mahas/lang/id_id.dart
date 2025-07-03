@@ -61,7 +61,7 @@ const Map<String, String> idID = {
   "store_name": "Nama Toko",
   "store_name_hint": "Nama Toko tempat kamu belanja",
   "purchase_date": "Tanggal Pembelian",
-  "purchase_date_hint": "Tanggal kaamu belanja",
+  "purchase_date_hint": "Tanggal kamu belanja",
   "total_amount": "Total Belanja",
   "total_amount_hint": "Total Pembelanjaan di nota kamu",
   "currency": "Mata Uang",
@@ -72,6 +72,7 @@ const Map<String, String> idID = {
   "payment_method_hint": "Pilih Metode Pembayaran",
   "notes": "Catatan",
   "notes_hint": "Sebagai pengingat kamu di masa depan",
+  "money_notes_hint": "Contoh: membeli makan malam",
   "failed_read_ocr":
       "Oops, gagal membaca teks di gambarnya, tolong masukkan detail datanya secara manual ya!",
   "select_date": "Pilih Tanggal",
@@ -137,6 +138,13 @@ const Map<String, String> idID = {
   "click_to_select_images": "Klik di sini untuk memilih gambar",
   "no_image": "Tidak ada gambar",
   "clear_images": "Hapus Gambar",
+  "money_tracker": "Catatan Keuangan",
+  "transaction_type": "Tipe Transaksi",
+  "success_save_transaction": "Berhasil menyimpan transaksi",
+
+  //money tracker type
+  "pemasukan": "Pemasukan",
+  "pengeluaran": "Pengeluaran",
 
   //service status
   "service_status_completed": "Selesai",

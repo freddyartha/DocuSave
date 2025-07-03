@@ -66,6 +66,11 @@ class HomeController extends GetxController {
         image: "assets/images/service.png",
         onTab: () => Get.toNamed(Routes.SERVICE_LIST),
       ),
+      MenuItemModel(
+        title: "money_tracker",
+        image: "assets/images/money_tracker.png",
+        onTab: () => Get.toNamed(Routes.MONEY_TRACKER_HOME),
+      ),
     ]);
   }
 

@@ -15,6 +15,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -111,6 +112,9 @@ class ReusableStatics {
         ? null
         : "${'expires_in'.tr} ${parts.join(' ')}";
   }
+
+  static String getMonthKey(DateTime date) =>
+      DateFormat('yyyy-MM').format(date);
 
   static DateTime addMonths(DateTime date, int months) {
     int year = date.year + ((date.month + months - 1) ~/ 12);

@@ -77,6 +77,9 @@ class ReceiptSetupController extends GetxController
 
   @override
   void onInit() async {
+    purchaseDateCon.value = DateTime.now();
+    currencyCon.value = "IDR";
+
     animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
@@ -251,10 +254,8 @@ class ReceiptSetupController extends GetxController
         (scannedDoc.isNotEmpty ||
             receiptIdCon.value != null ||
             storeNameCon.value != null ||
-            purchaseDateCon.value != null ||
             totalAmountCon.value != null ||
-            currencyCon.value != null ||
-            categoryCon.value != [] ||
+            categoryCon.value.isNotEmpty ||
             paymentMethodCon.value != null ||
             notesCon.value != null)) {
       return true;

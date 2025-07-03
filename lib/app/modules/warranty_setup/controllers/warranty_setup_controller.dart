@@ -54,6 +54,8 @@ class WarrantySetupController extends GetxController
 
   @override
   void onInit() async {
+    purchaseDateCon.value = DateTime.now();
+
     animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
@@ -209,7 +211,6 @@ class WarrantySetupController extends GetxController
             storeNameCon.value != null ||
             itemNameCon.value != null ||
             serialNumberCon.value != null ||
-            purchaseDateCon.value != null ||
             warrantyPeriodCon.value != null ||
             warrantyExpiryCon.value != null ||
             warrantyProviderCon.value != null ||

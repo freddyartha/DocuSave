@@ -2,13 +2,16 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/article_model.dart';
+import 'package:docusave/app/models/money_tracker_summary_model.dart';
 import 'package:docusave/app/models/receipt_model.dart';
 import 'package:docusave/app/models/service_model.dart';
 import 'package:docusave/app/models/suggestion_model.dart';
+import 'package:docusave/app/models/money_tracker_model.dart';
 import 'package:docusave/app/models/user_devices_model.dart';
 import 'package:docusave/app/models/user_model.dart';
 import 'package:docusave/app/models/user_notification_model.dart';
@@ -33,6 +36,8 @@ class FirebaseRepository {
   static String warrantyCollection = 'warranties';
   static String suggestionsCollection = 'suggestions';
   static String servicesCollection = 'services';
+  static String moneyTrackerCollection = 'moneyTracker';
+  static String moneyTrackerSummaryCollection = 'moneyTrackerSummary';
 
   //queries
   static final getToReceiptCollection = FirebaseFirestore.instance.collection(
@@ -44,6 +49,10 @@ class FirebaseRepository {
   static final getToServiceCollection = FirebaseFirestore.instance.collection(
     "$userCollection/${auth.currentUser?.uid}/$servicesCollection",
   );
+  static final getToMoneyTrackerCollection = FirebaseFirestore.instance
+      .collection(
+        "$userCollection/${auth.currentUser?.uid}/$moneyTrackerCollection",
+      );
 
   static Future<bool> checkUserExist(String userId) async {
     try {
@@ -602,6 +611,168 @@ class FirebaseRepository {
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
       return null;
+    }
+  }
+
+  static Future<bool> updateMoneyTrackerById({
+    required String userUid,
+    required MoneyTrackerModel moneyTrackerModel,
+  }) async {
+    try {
+      await firestore
+          .collection("$userCollection/$userUid/$moneyTrackerCollection")
+          .doc(moneyTrackerModel.documentid)
+          .update(moneyTrackerModelToJson(moneyTrackerModel));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<MoneyTrackerModel?> getMoneyTrackerById({
+    required String documentId,
+    required String userUid,
+  }) async {
+    try {
+      var result =
+          await firestore
+              .collection("$userCollection/$userUid/$moneyTrackerCollection")
+              .doc(documentId)
+              .get();
+
+      return MoneyTrackerModel.fromDynamic(result.data());
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return null;
+    }
+  }
+
+  static Future<bool> addMoneyTrackerToFirestore({
+    required String userUid,
+    required String monthKey,
+    required MoneyTrackerModel moneyTrackerModel,
+    required MoneyTrackerSummaryModel moneyTrackerSummaryModel,
+  }) async {
+    try {
+      final summaryRef = firestore
+          .collection("$userCollection/$userUid/$moneyTrackerSummaryCollection")
+          .doc(monthKey);
+
+      await firestore.runTransaction((transaction) async {
+        //summary
+        final summarySnapshot = await transaction.get(summaryRef);
+
+        //money tracker
+        transaction.set(
+          firestore
+              .collection("$userCollection/$userUid/$moneyTrackerCollection")
+              .doc(moneyTrackerModel.documentid),
+          moneyTrackerModelToJson(moneyTrackerModel),
+        );
+
+        //summary
+        if (!summarySnapshot.exists) {
+          // Jika summary bulan ini belum ada
+          transaction.set(
+            summaryRef,
+            moneyTrackerSummaryModelToJson(moneyTrackerSummaryModel),
+          );
+        } else {
+          // Jika sudah ada, update total
+          final currentData = MoneyTrackerSummaryModel.fromDynamic(
+            summarySnapshot.data(),
+          );
+          transaction.update(
+            summaryRef,
+            moneyTrackerSummaryModelToJson(
+              MoneyTrackerSummaryModel(
+                documentid: currentData.documentid,
+                totalincome:
+                    currentData.totalincome +
+                    moneyTrackerSummaryModel.totalincome,
+                totalexpense:
+                    currentData.totalexpense +
+                    moneyTrackerSummaryModel.totalexpense,
+                createdat: currentData.createdat,
+                updatedat: Timestamp.now(),
+              ),
+            ),
+          );
+        }
+      });
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> subtractMoneyTrackerSummaryFirestore({
+    required String userUid,
+    required String moneyTrackerDocumentId,
+  }) async {
+    try {
+      summaryRef(String monthKey) => firestore
+          .collection("$userCollection/$userUid/$moneyTrackerSummaryCollection")
+          .doc(monthKey);
+
+      final moneyTrackerRef = firestore
+          .collection("$userCollection/$userUid/$moneyTrackerCollection")
+          .doc(moneyTrackerDocumentId);
+
+      await firestore.runTransaction((transaction) async {
+        final moneyTrackerSnapshot = await transaction.get(moneyTrackerRef);
+
+        if (moneyTrackerSnapshot.exists) {
+          final moneyTrackerData = MoneyTrackerModel.fromDynamic(
+            moneyTrackerSnapshot.data(),
+          );
+
+          final summarySnapshot = await transaction.get(
+            summaryRef(
+              ReusableStatics.getMonthKey(moneyTrackerData.date.toDate()),
+            ),
+          );
+          final summaryData = MoneyTrackerSummaryModel.fromDynamic(
+            summarySnapshot.data(),
+          );
+
+          double removedIncome = 0;
+          double removedExpense = 0;
+          if (moneyTrackerData.type == 1) {
+            removedIncome = moneyTrackerData.totalamount;
+          } else {
+            removedExpense = moneyTrackerData.totalamount;
+          }
+
+          //update summary
+          transaction.update(
+            summaryRef(
+              ReusableStatics.getMonthKey(moneyTrackerData.date.toDate()),
+            ),
+            moneyTrackerSummaryModelToJson(
+              MoneyTrackerSummaryModel(
+                documentid: summaryData.documentid,
+                totalincome: summaryData.totalincome - removedIncome,
+                totalexpense: summaryData.totalexpense - removedExpense,
+                createdat: summaryData.createdat,
+                updatedat: Timestamp.now(),
+              ),
+            ),
+          );
+
+          //delete money Tracker
+          await firestore
+              .collection("$userCollection/$userUid/$moneyTrackerCollection")
+              .doc(moneyTrackerDocumentId)
+              .delete();
+        }
+      });
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
     }
   }
 }
