@@ -140,6 +140,8 @@ const Map<String, String> enUS = {
   "money_tracker": "Money Tracker",
   "transaction_type": "Transaction Type",
   "success_save_transaction": "Successfully save your transaction",
+  "select_currency": "Select Currency",
+  "total_amount_money_tracker": "Total Amount",
 
   //money tracker type
   "pemasukan": "Income",

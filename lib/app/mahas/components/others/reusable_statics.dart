@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
+import 'package:docusave/app/mahas/components/inputs/input_checkbox_multiple_component.dart';
+import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
@@ -202,4 +204,28 @@ class ReusableStatics {
     ),
     mode: LaunchMode.externalApplication,
   );
+
+  static List<CheckboxItem> listKategori = [
+    CheckboxItem(text: "food_beverage".tr, value: 1),
+    CheckboxItem(text: "transportation".tr, value: 2),
+    CheckboxItem(text: "electronics".tr, value: 3),
+    CheckboxItem(text: "healthcare".tr, value: 4),
+    CheckboxItem(text: "entertainment".tr, value: 5),
+    CheckboxItem(text: "personal_care".tr, value: 6),
+    CheckboxItem(text: "education".tr, value: 7),
+    CheckboxItem(text: "pemasukan".tr, value: 8),
+  ];
+
+  static List<DropdownItem> listPaymentMethod = [
+    DropdownItem(text: "cash".tr, value: 1),
+    DropdownItem(text: "bank_transfer".tr, value: 2),
+    DropdownItem(text: "debit_card".tr, value: 3),
+    DropdownItem(text: "credit_card".tr, value: 4),
+    DropdownItem(text: "e_wallet".tr, value: 5),
+    DropdownItem(text: "qris".tr, value: 6),
+    DropdownItem(text: "virtual_account".tr, value: 7),
+    DropdownItem(text: "paylater".tr, value: 8),
+    DropdownItem(text: "cod".tr, value: 9),
+    DropdownItem(text: "voucher".tr, value: 10),
+  ];
 }

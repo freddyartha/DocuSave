@@ -1,6 +1,7 @@
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/others/list_component.dart';
+import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/receipt_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
@@ -8,10 +9,9 @@ import 'package:get/get.dart';
 class ReceiptListController extends GetxController {
   final searchCon = InputTextController();
   late ListComponentController<ReceiptModel> listCon;
-  final defaultQuery = FirebaseRepository.getToReceiptCollection.orderBy(
-    'createdAt',
-    descending: true,
-  );
+  final defaultQuery = FirebaseRepository.getToReceiptCollection(
+    auth.currentUser!.uid,
+  ).orderBy('createdAt', descending: true);
   // final List<ItemValueModel> filterList = [
   //   ItemValueModel(item: "store_name".tr, value: false.obs),
   //   ItemValueModel(item: "currency".tr, value: false.obs),

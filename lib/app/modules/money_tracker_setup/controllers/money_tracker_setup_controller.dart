@@ -22,6 +22,8 @@ class MoneyTrackerSetupController extends GetxController {
   RxBool editable = true.obs;
   RxBool buttonActive = false.obs;
 
+  late final MoneyTrackerModel? moneyTrackerModel;
+
   final InputRadioController typeCon = InputRadioController(
     items: [
       RadioButtonItem(text: "pemasukan".tr, value: 1),
@@ -29,17 +31,7 @@ class MoneyTrackerSetupController extends GetxController {
     ],
   );
   final InputCheckboxMultipleController categoryCon =
-      InputCheckboxMultipleController(
-        items: [
-          CheckboxItem(text: "food_beverage".tr, value: 1),
-          CheckboxItem(text: "transportation".tr, value: 2),
-          CheckboxItem(text: "electronics".tr, value: 3),
-          CheckboxItem(text: "healthcare".tr, value: 4),
-          CheckboxItem(text: "entertainment".tr, value: 5),
-          CheckboxItem(text: "personal_care".tr, value: 6),
-          CheckboxItem(text: "education".tr, value: 7),
-        ],
-      );
+      InputCheckboxMultipleController(items: ReusableStatics.listKategori);
   final InputTextController notesCon = InputTextController(
     type: InputTextType.paragraf,
   );
@@ -51,24 +43,15 @@ class MoneyTrackerSetupController extends GetxController {
   );
   final InputDatetimeController dateTransactionCon = InputDatetimeController();
   final InputDropdownController paymentMethodCon = InputDropdownController(
-    items: [
-      DropdownItem(text: "cash".tr, value: 1),
-      DropdownItem(text: "bank_transfer".tr, value: 2),
-      DropdownItem(text: "debit_card".tr, value: 3),
-      DropdownItem(text: "credit_card".tr, value: 4),
-      DropdownItem(text: "e_wallet".tr, value: 5),
-      DropdownItem(text: "qris".tr, value: 6),
-      DropdownItem(text: "virtual_account".tr, value: 7),
-      DropdownItem(text: "paylater".tr, value: 8),
-      DropdownItem(text: "cod".tr, value: 9),
-      DropdownItem(text: "voucher".tr, value: 10),
-    ],
+    items: ReusableStatics.listPaymentMethod,
   );
 
   @override
   void onInit() async {
     dateTransactionCon.value = DateTime.now();
     currencyCon.value = "IDR";
+    typeCon.value = 2;
+    paymentMethodCon.value = 1;
 
     id.value = Get.parameters["id"] ?? "";
     if (id.value.isNotEmpty) {
@@ -80,6 +63,7 @@ class MoneyTrackerSetupController extends GetxController {
       );
       loadingData.value = false;
       if (r != null) {
+        moneyTrackerModel = r;
         typeCon.value = r.type;
         categoryCon.value = r.category;
         notesCon.value = r.note;
@@ -142,11 +126,9 @@ class MoneyTrackerSetupController extends GetxController {
 
   bool showConfirmationCondition() {
     if (editable.value &&
-        (typeCon.value != null ||
-            categoryCon.value.isNotEmpty ||
+        (categoryCon.value.isNotEmpty ||
             notesCon.value != null ||
-            totalAmountCon.value != null ||
-            paymentMethodCon.value != null)) {
+            totalAmountCon.value != null)) {
       return true;
     } else {
       return false;
@@ -192,9 +174,11 @@ class MoneyTrackerSetupController extends GetxController {
 
         bool result =
             id.isNotEmpty
-                ? await FirebaseRepository.updateMoneyTrackerById(
-                  moneyTrackerModel: model,
+                ? await FirebaseRepository.updateMoneyTrackerToFirestore(
                   userUid: auth.currentUser!.uid,
+                  monthKey: monthKey,
+                  oldMoneyTrackerModel: moneyTrackerModel!,
+                  updatedMoneyTrackerModel: model,
                 )
                 : await FirebaseRepository.addMoneyTrackerToFirestore(
                   userUid: auth.currentUser!.uid,
@@ -207,30 +191,6 @@ class MoneyTrackerSetupController extends GetxController {
                     createdat: Timestamp.now(),
                   ),
                 );
-
-        // await FirebaseRepository.addMoneyTrackerToFirestore(
-        //   moneyTrackerModel: model,
-        //   userUid: auth.currentUser!.uid,
-        // ).then((value) async {
-        //   bool result = false;
-        //   if (value) {
-
-        //     result =
-        //         await FirebaseRepository.addMoneyTrackerSummaryToFirestore(
-        //           userUid: auth.currentUser!.uid,
-        //           monthKey: monthKey,
-        //           moneyTrackerSummaryModel: MoneyTrackerSummaryModel(
-        //             documentid: monthKey,
-        //             totalincome:
-        //                 typeCon.value == 1 ? totalAmountCon.value : 0,
-        //             totalexpense:
-        //                 typeCon.value == 2 ? totalAmountCon.value : 0,
-        //             createdat: Timestamp.now(),
-        //           ),
-        //         );
-        //   }
-        //   return result;
-        // });
 
         update();
         await EasyLoading.dismiss();

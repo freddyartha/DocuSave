@@ -79,6 +79,7 @@ class MoneyTrackerModel {
     'type': type,
     'category': category,
     'totalAmount': totalamount,
+    'currency': currency,
     'date': date,
     'note': note,
     'paymentMethod': paymentmethod,

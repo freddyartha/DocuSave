@@ -51,7 +51,6 @@ class MoneyTrackerSetupView extends GetView<MoneyTrackerSetupController> {
                             InputCheckboxMultipleComponent(
                               controller: controller.categoryCon,
                               label: "category".tr,
-                              required: true,
                               marginBottom: 15,
                               editable: controller.editable.value,
                             ),
@@ -64,8 +63,7 @@ class MoneyTrackerSetupView extends GetView<MoneyTrackerSetupController> {
                             ),
                             InputTextComponent(
                               controller: controller.totalAmountCon,
-                              label: "total_amount".tr,
-                              placeHolder: "total_amount_hint".tr,
+                              label: "total_amount_money_tracker".tr,
                               required: true,
                               marginBottom: 15,
                               editable: controller.editable.value,

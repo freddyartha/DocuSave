@@ -1,6 +1,7 @@
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/others/list_component.dart';
+import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/warranty_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
@@ -8,10 +9,9 @@ import 'package:get/get.dart';
 class WarrantyListController extends GetxController {
   final searchCon = InputTextController();
   late ListComponentController<WarrantyModel> listCon;
-  final defaultQuery = FirebaseRepository.getToWarrantyCollection.orderBy(
-    'createdAt',
-    descending: true,
-  );
+  final defaultQuery = FirebaseRepository.getToWarrantyCollection(
+    auth.currentUser!.uid,
+  ).orderBy('createdAt', descending: true);
 
   @override
   void onInit() {

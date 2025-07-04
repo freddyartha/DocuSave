@@ -40,20 +40,43 @@ class FirebaseRepository {
   static String moneyTrackerSummaryCollection = 'moneyTrackerSummary';
 
   //queries
-  static final getToReceiptCollection = FirebaseFirestore.instance.collection(
-    "$userCollection/${auth.currentUser?.uid}/$receiptCollection",
+  static CollectionReference getToReceiptCollection(String userUid) =>
+      firestore.collection("$userCollection/$userUid/$receiptCollection");
+  static CollectionReference getToWarrantyCollection(String userUid) =>
+      firestore.collection("$userCollection/$userUid/$warrantyCollection");
+  static CollectionReference getToServiceCollection(String userUid) =>
+      firestore.collection("$userCollection/$userUid/$servicesCollection");
+  static CollectionReference getToMoneyTrackerCollection(String userUid) =>
+      firestore.collection("$userCollection/$userUid/$moneyTrackerCollection");
+  static CollectionReference getToSummaryMoneyTrackerCollection(
+    String userUid,
+  ) => firestore.collection(
+    "$userCollection/$userUid/$moneyTrackerSummaryCollection",
   );
-  static final getToWarrantyCollection = FirebaseFirestore.instance.collection(
-    "$userCollection/${auth.currentUser?.uid}/$warrantyCollection",
-  );
-  static final getToServiceCollection = FirebaseFirestore.instance.collection(
-    "$userCollection/${auth.currentUser?.uid}/$servicesCollection",
-  );
-  static final getToMoneyTrackerCollection = FirebaseFirestore.instance
-      .collection(
-        "$userCollection/${auth.currentUser?.uid}/$moneyTrackerCollection",
-      );
 
+  //private get by id
+  static DocumentReference _goToReceiptById(
+    String userUid,
+    String documentId,
+  ) => getToReceiptCollection(userUid).doc(documentId);
+  static DocumentReference _goToWarrantyById(
+    String userUid,
+    String documentId,
+  ) => getToWarrantyCollection(userUid).doc(documentId);
+  static DocumentReference _goToServiceById(
+    String userUid,
+    String documentId,
+  ) => getToServiceCollection(userUid).doc(documentId);
+  static DocumentReference _goToMoneyTrackerById(
+    String userUid,
+    String documentId,
+  ) => getToMoneyTrackerCollection(userUid).doc(documentId);
+  static DocumentReference _goToSummaryMoneyTrackerById(
+    String userUid,
+    String monthKey,
+  ) => getToSummaryMoneyTrackerCollection(userUid).doc(monthKey);
+
+  //firestore actions
   static Future<bool> checkUserExist(String userId) async {
     try {
       DocumentSnapshot snapshot =
@@ -389,10 +412,10 @@ class FirebaseRepository {
     required ReceiptModel receiptModel,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$receiptCollection")
-          .doc(receiptModel.documentid)
-          .set(receiptModelToJson(receiptModel));
+      await _goToReceiptById(
+        userUid,
+        receiptModel.documentid,
+      ).set(receiptModelToJson(receiptModel));
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -405,10 +428,10 @@ class FirebaseRepository {
     required ReceiptModel receiptModel,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$receiptCollection")
-          .doc(receiptModel.documentid)
-          .update(receiptModelToJson(receiptModel));
+      await _goToReceiptById(
+        userUid,
+        receiptModel.documentid,
+      ).update(receiptModelToJson(receiptModel));
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -421,12 +444,7 @@ class FirebaseRepository {
     required String userUid,
   }) async {
     try {
-      var result =
-          await firestore
-              .collection("$userCollection/$userUid/$receiptCollection")
-              .doc(documentId)
-              .get();
-
+      var result = await _goToReceiptById(userUid, documentId).get();
       return ReceiptModel.fromDynamic(result.data());
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -439,10 +457,7 @@ class FirebaseRepository {
     required String userUid,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$receiptCollection")
-          .doc(documentId)
-          .delete();
+      await _goToReceiptById(userUid, documentId).delete();
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -456,10 +471,10 @@ class FirebaseRepository {
     required WarrantyModel model,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$warrantyCollection")
-          .doc(model.documentid)
-          .set(warrantyModelToJson(model));
+      await _goToWarrantyById(
+        userUid,
+        model.documentid,
+      ).set(warrantyModelToJson(model));
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -472,10 +487,10 @@ class FirebaseRepository {
     required WarrantyModel model,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$warrantyCollection")
-          .doc(model.documentid)
-          .update(warrantyModelToJson(model));
+      await _goToWarrantyById(
+        userUid,
+        model.documentid,
+      ).update(warrantyModelToJson(model));
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -488,12 +503,7 @@ class FirebaseRepository {
     required String userUid,
   }) async {
     try {
-      var result =
-          await firestore
-              .collection("$userCollection/$userUid/$warrantyCollection")
-              .doc(documentId)
-              .get();
-
+      var result = await _goToWarrantyById(userUid, documentId).get();
       return WarrantyModel.fromDynamic(result.data());
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -506,10 +516,7 @@ class FirebaseRepository {
     required String userUid,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$warrantyCollection")
-          .doc(documentId)
-          .delete();
+      await _goToWarrantyById(userUid, documentId).delete();
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -523,10 +530,10 @@ class FirebaseRepository {
     required ServiceModel serviceModel,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$servicesCollection")
-          .doc(serviceModel.documentid)
-          .set(serviceModelToJson(serviceModel));
+      await _goToServiceById(
+        userUid,
+        serviceModel.documentid,
+      ).set(serviceModelToJson(serviceModel));
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -539,10 +546,10 @@ class FirebaseRepository {
     required ServiceModel serviceModel,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$servicesCollection")
-          .doc(serviceModel.documentid)
-          .update(serviceModelToJson(serviceModel));
+      await _goToServiceById(
+        userUid,
+        serviceModel.documentid,
+      ).update(serviceModelToJson(serviceModel));
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -555,12 +562,7 @@ class FirebaseRepository {
     required String userUid,
   }) async {
     try {
-      var result =
-          await firestore
-              .collection("$userCollection/$userUid/$servicesCollection")
-              .doc(documentId)
-              .get();
-
+      var result = await _goToServiceById(userUid, documentId).get();
       return ServiceModel.fromDynamic(result.data());
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -573,10 +575,7 @@ class FirebaseRepository {
     required String userUid,
   }) async {
     try {
-      await firestore
-          .collection("$userCollection/$userUid/$servicesCollection")
-          .doc(documentId)
-          .delete();
+      await _goToServiceById(userUid, documentId).delete();
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -595,8 +594,7 @@ class FirebaseRepository {
       );
 
       final snapshot =
-          await firestore
-              .collection("$userCollection/$userUid/$warrantyCollection")
+          await getToWarrantyCollection(userUid)
               .where(
                 'warrantyExpiryDate',
                 isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart),
@@ -614,33 +612,12 @@ class FirebaseRepository {
     }
   }
 
-  static Future<bool> updateMoneyTrackerById({
-    required String userUid,
-    required MoneyTrackerModel moneyTrackerModel,
-  }) async {
-    try {
-      await firestore
-          .collection("$userCollection/$userUid/$moneyTrackerCollection")
-          .doc(moneyTrackerModel.documentid)
-          .update(moneyTrackerModelToJson(moneyTrackerModel));
-      return true;
-    } catch (e) {
-      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
-      return false;
-    }
-  }
-
   static Future<MoneyTrackerModel?> getMoneyTrackerById({
     required String documentId,
     required String userUid,
   }) async {
     try {
-      var result =
-          await firestore
-              .collection("$userCollection/$userUid/$moneyTrackerCollection")
-              .doc(documentId)
-              .get();
-
+      var result = await _goToMoneyTrackerById(userUid, documentId).get();
       return MoneyTrackerModel.fromDynamic(result.data());
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
@@ -655,9 +632,11 @@ class FirebaseRepository {
     required MoneyTrackerSummaryModel moneyTrackerSummaryModel,
   }) async {
     try {
-      final summaryRef = firestore
-          .collection("$userCollection/$userUid/$moneyTrackerSummaryCollection")
-          .doc(monthKey);
+      final summaryRef = _goToSummaryMoneyTrackerById(userUid, monthKey);
+      final moneyTrackerRef = _goToMoneyTrackerById(
+        userUid,
+        moneyTrackerModel.documentid,
+      );
 
       await firestore.runTransaction((transaction) async {
         //summary
@@ -665,9 +644,7 @@ class FirebaseRepository {
 
         //money tracker
         transaction.set(
-          firestore
-              .collection("$userCollection/$userUid/$moneyTrackerCollection")
-              .doc(moneyTrackerModel.documentid),
+          moneyTrackerRef,
           moneyTrackerModelToJson(moneyTrackerModel),
         );
 
@@ -708,19 +685,78 @@ class FirebaseRepository {
     }
   }
 
+  static Future<bool> updateMoneyTrackerToFirestore({
+    required String userUid,
+    required String monthKey,
+    required MoneyTrackerModel oldMoneyTrackerModel,
+    required MoneyTrackerModel updatedMoneyTrackerModel,
+  }) async {
+    try {
+      final summaryRef = _goToSummaryMoneyTrackerById(userUid, monthKey);
+      final moneyTrackerRef = _goToMoneyTrackerById(
+        userUid,
+        oldMoneyTrackerModel.documentid,
+      );
+
+      await firestore.runTransaction((transaction) async {
+        //summary
+        final summarySnapshot = await transaction.get(summaryRef);
+
+        if (summarySnapshot.exists) {
+          final summaryData = MoneyTrackerSummaryModel.fromDynamic(
+            summarySnapshot.data(),
+          );
+
+          double updatedIncome = summaryData.totalincome;
+          double updatedExpense = summaryData.totalexpense;
+          if (oldMoneyTrackerModel.type == 1) {
+            updatedIncome =
+                updatedIncome -
+                oldMoneyTrackerModel.totalamount +
+                updatedMoneyTrackerModel.totalamount;
+          } else {
+            updatedExpense =
+                updatedExpense -
+                oldMoneyTrackerModel.totalamount +
+                updatedMoneyTrackerModel.totalamount;
+          }
+
+          transaction.update(
+            summaryRef,
+            moneyTrackerSummaryModelToJson(
+              MoneyTrackerSummaryModel(
+                documentid: summaryData.documentid,
+                totalincome: updatedIncome,
+                totalexpense: updatedExpense,
+                createdat: summaryData.createdat,
+                updatedat: Timestamp.now(),
+              ),
+            ),
+          );
+        }
+
+        //update money tracker
+        transaction.update(
+          moneyTrackerRef,
+          moneyTrackerModelToJson(updatedMoneyTrackerModel),
+        );
+      });
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
   static Future<bool> subtractMoneyTrackerSummaryFirestore({
     required String userUid,
     required String moneyTrackerDocumentId,
   }) async {
+    final moneyTrackerRef = _goToMoneyTrackerById(
+      userUid,
+      moneyTrackerDocumentId,
+    );
     try {
-      summaryRef(String monthKey) => firestore
-          .collection("$userCollection/$userUid/$moneyTrackerSummaryCollection")
-          .doc(monthKey);
-
-      final moneyTrackerRef = firestore
-          .collection("$userCollection/$userUid/$moneyTrackerCollection")
-          .doc(moneyTrackerDocumentId);
-
       await firestore.runTransaction((transaction) async {
         final moneyTrackerSnapshot = await transaction.get(moneyTrackerRef);
 
@@ -729,11 +765,12 @@ class FirebaseRepository {
             moneyTrackerSnapshot.data(),
           );
 
-          final summarySnapshot = await transaction.get(
-            summaryRef(
-              ReusableStatics.getMonthKey(moneyTrackerData.date.toDate()),
-            ),
+          final summaryRef = _goToSummaryMoneyTrackerById(
+            userUid,
+            ReusableStatics.getMonthKey(moneyTrackerData.date.toDate()),
           );
+
+          final summarySnapshot = await transaction.get(summaryRef);
           final summaryData = MoneyTrackerSummaryModel.fromDynamic(
             summarySnapshot.data(),
           );
@@ -748,9 +785,7 @@ class FirebaseRepository {
 
           //update summary
           transaction.update(
-            summaryRef(
-              ReusableStatics.getMonthKey(moneyTrackerData.date.toDate()),
-            ),
+            summaryRef,
             moneyTrackerSummaryModelToJson(
               MoneyTrackerSummaryModel(
                 documentid: summaryData.documentid,
@@ -762,17 +797,27 @@ class FirebaseRepository {
             ),
           );
 
-          //delete money Tracker
-          await firestore
-              .collection("$userCollection/$userUid/$moneyTrackerCollection")
-              .doc(moneyTrackerDocumentId)
-              .delete();
+          // delete money Tracker
+          transaction.delete(moneyTrackerRef);
         }
       });
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
       return false;
+    }
+  }
+
+  static Future<MoneyTrackerSummaryModel?> getMoneyTrackerSummaryByMonthKey({
+    required String monthKey,
+    required String userUid,
+  }) async {
+    try {
+      var result = await _goToSummaryMoneyTrackerById(userUid, monthKey).get();
+      return MoneyTrackerSummaryModel.fromDynamic(result.data());
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return null;
     }
   }
 }
