@@ -6,8 +6,12 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/money_tracker_chart/bindings/money_tracker_chart_binding.dart';
+import '../modules/money_tracker_chart/views/money_tracker_chart_view.dart';
 import '../modules/money_tracker_home/bindings/money_tracker_home_binding.dart';
 import '../modules/money_tracker_home/views/money_tracker_home_view.dart';
+import '../modules/money_tracker_list/bindings/money_tracker_list_binding.dart';
+import '../modules/money_tracker_list/views/money_tracker_list_view.dart';
 import '../modules/money_tracker_setup/bindings/money_tracker_setup_binding.dart';
 import '../modules/money_tracker_setup/views/money_tracker_setup_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
@@ -194,6 +198,16 @@ class AppPages {
       name: _Paths.MONEY_TRACKER_SETUP,
       page: () => const MoneyTrackerSetupView(),
       binding: MoneyTrackerSetupBinding(),
+    ),
+    GetPage(
+      name: _Paths.MONEY_TRACKER_LIST,
+      page: () => const MoneyTrackerListView(),
+      binding: MoneyTrackerListBinding(),
+    ),
+    GetPage(
+      name: _Paths.MONEY_TRACKER_CHART,
+      page: () => const MoneyTrackerChartView(),
+      binding: MoneyTrackerChartBinding(),
     ),
   ];
 }

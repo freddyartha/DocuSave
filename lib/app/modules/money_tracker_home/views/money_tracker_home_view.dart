@@ -1,6 +1,9 @@
 import 'package:docusave/app/mahas/components/images/image_component.dart';
+import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
+import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -13,11 +16,10 @@ class MoneyTrackerHomeView extends GetView<MoneyTrackerHomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       appBar: ReusableWidgets.generalAppBarWidget(
         title: "money_tracker".tr,
-        backgroundColor: Colors.transparent,
-        textColor: MahasColors.white,
+        backgroundColor: MahasColors.white,
         actions: [
           GestureDetector(
             onTap: controller.goToTransactionSetup,
@@ -33,60 +35,73 @@ class MoneyTrackerHomeView extends GetView<MoneyTrackerHomeController> {
         ],
       ),
       backgroundColor: MahasColors.white,
-      body: Stack(
-        children: [
-          ReusableWidgets.generalTopHeaderAppBarWidget(children: []),
-
-          // SafeArea(
-          //   child: ListComponent(
-          //     controller: controller.listCon,
-          //     itemBuilder:
-          //         (item, index) => ReusableWidgets.generalShadowedContainer(
-          //           margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
-          //           child: ListTile(
-          //             onTap:
-          //                 () =>
-          //                     controller.goToServiceSetup(id: item.documentid),
-          //             titleAlignment: ListTileTitleAlignment.top,
-          //             horizontalTitleGap: 10,
-          //             visualDensity: VisualDensity.compact,
-          //             contentPadding: EdgeInsets.symmetric(
-          //               vertical: 5,
-          //               horizontal: 10,
-          //             ),
-          //             title: TextComponent(
-          //               value: item.storename,
-          //               fontWeight: FontWeight.w600,
-          //               fontSize: MahasFontSize.h6,
-          //             ),
-          //             subtitle: TextComponent(
-          //               value:
-          //                   "${item.currency} ${InputFormatter.toCurrency(item.price)}",
-          //             ),
-          //             trailing: Container(
-          //               decoration: BoxDecoration(
-          //                 borderRadius: BorderRadius.circular(
-          //                   MahasRadius.regular,
-          //                 ),
-          //                 color: MahasColors.mutedGrey,
-          //               ),
-          //               padding: EdgeInsets.symmetric(
-          //                 vertical: 3,
-          //                 horizontal: 8,
-          //               ),
-          //               child: TextComponent(
-          //                 value: InputFormatter.displayDate(
-          //                   item.createdat.toDate(),
-          //                 ),
-          //                 fontSize: MahasFontSize.small,
-          //                 fontColor: MahasColors.white,
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //   ),
-          // ),
-        ],
+      body: SafeArea(
+        bottom: false,
+        child: Obx(
+          () => Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: MahasColors.primary),
+                    borderRadius: BorderRadius.circular(MahasRadius.regular),
+                  ),
+                  child: Row(
+                    spacing: 5,
+                    children: List.generate(controller.headerMenus.length, (
+                      index,
+                    ) {
+                      var item = controller.headerMenus[index];
+                      return Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            controller.selectedIndex.value = index;
+                            item.onTab != null ? item.onTab!() : null;
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 5.0,
+                              vertical: 8.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color:
+                                  index == controller.selectedIndex.value
+                                      ? MahasColors.primary
+                                      : Colors.white,
+                              borderRadius: BorderRadius.circular(
+                                MahasRadius.regular - 1,
+                              ),
+                            ),
+                            child: Center(
+                              child: TextComponent(
+                                value: item.title,
+                                fontColor:
+                                    index == controller.selectedIndex.value
+                                        ? Colors.white
+                                        : MahasColors.primary,
+                                fontSize: MahasFontSize.h6,
+                                fontWeight: FontWeight.w600,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: controller.tabController,
+                  children: controller.pages,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

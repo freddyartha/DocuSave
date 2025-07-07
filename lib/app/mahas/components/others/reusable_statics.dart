@@ -5,6 +5,7 @@ import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_checkbox_multiple_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_dropdown_component.dart';
+import 'package:docusave/app/mahas/components/inputs/input_radio_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
@@ -228,4 +229,16 @@ class ReusableStatics {
     DropdownItem(text: "cod".tr, value: 9),
     DropdownItem(text: "voucher".tr, value: 10),
   ];
+
+  static List<RadioButtonItem> listTypeMoneyTracker = [
+    RadioButtonItem(text: "pemasukan".tr, value: 1),
+    RadioButtonItem(text: "pengeluaran".tr, value: 2),
+  ];
+
+  static String getTypeMoneyTrackerFromId(int id) {
+    if (id == 1) {
+      return "pemasukan".tr;
+    }
+    return "pengeluaran".tr;
+  }
 }

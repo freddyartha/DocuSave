@@ -152,11 +152,11 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    widget.controller._listViewController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   widget.controller._listViewController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

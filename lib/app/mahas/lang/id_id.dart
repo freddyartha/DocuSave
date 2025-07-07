@@ -143,6 +143,10 @@ const Map<String, String> idID = {
   "success_save_transaction": "Berhasil menyimpan transaksi",
   "select_currency": "Pilih Mata Uang",
   "total_amount_money_tracker": "Jumlah Uang",
+  "pemasukan_bulan": "Pemasukan Bulan Ini",
+  "pengeluaran_bulan": "Pengeluran Bulan Ini",
+  "income_expense": "Pemasukan & Pengeluaran Bulan Ini",
+  "more_charts": "Lihat lebih banyak chart",
 
   //money tracker type
   "pemasukan": "Pemasukan",

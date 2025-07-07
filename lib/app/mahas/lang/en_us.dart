@@ -142,6 +142,10 @@ const Map<String, String> enUS = {
   "success_save_transaction": "Successfully save your transaction",
   "select_currency": "Select Currency",
   "total_amount_money_tracker": "Total Amount",
+  "pemasukan_bulan": "This Month's Income",
+  "pengeluaran_bulan": "This Month's Expense",
+  "income_expense": "This Month's Income & Expense",
+  "more_charts": "View more charts",
 
   //money tracker type
   "pemasukan": "Income",

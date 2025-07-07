@@ -264,4 +264,25 @@ class InputFormatter {
     return parts.first +
         parts.skip(1).map((e) => e[0].toUpperCase() + e.substring(1)).join();
   }
+
+  int getWeeksInCurrentMonth() {
+    final now = DateTime.now();
+    final firstDay = DateTime(now.year, now.month, 1);
+    final lastDay = DateTime(now.year, now.month + 1, 0);
+
+    int firstWeek = _weekNumber(firstDay);
+    int lastWeek = _weekNumber(lastDay);
+
+    return lastWeek - firstWeek + 1;
+  }
+
+  int _weekNumber(DateTime date) {
+    final firstDayOfYear = DateTime(date.year, 1, 1);
+    final daysOffset = firstDayOfYear.weekday - 1;
+    final startOfFirstWeek = firstDayOfYear.subtract(
+      Duration(days: daysOffset),
+    );
+    final diff = date.difference(startOfFirstWeek).inDays;
+    return (diff / 7).ceil();
+  }
 }

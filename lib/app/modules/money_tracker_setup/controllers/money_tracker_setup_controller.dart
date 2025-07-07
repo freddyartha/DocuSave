@@ -25,10 +25,7 @@ class MoneyTrackerSetupController extends GetxController {
   late final MoneyTrackerModel? moneyTrackerModel;
 
   final InputRadioController typeCon = InputRadioController(
-    items: [
-      RadioButtonItem(text: "pemasukan".tr, value: 1),
-      RadioButtonItem(text: "pengeluaran".tr, value: 2),
-    ],
+    items: ReusableStatics.listTypeMoneyTracker,
   );
   final InputCheckboxMultipleController categoryCon =
       InputCheckboxMultipleController(items: ReusableStatics.listKategori);
