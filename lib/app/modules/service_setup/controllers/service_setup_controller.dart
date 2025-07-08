@@ -60,13 +60,13 @@ class ServiceSetupController extends GetxController {
 
     id.value = Get.parameters["id"] ?? "";
     if (id.value.isNotEmpty) {
-      editable.value = false;
-      loadingData.value = true;
+      editable(false);
+      loadingData(true);
       var r = await FirebaseRepository.getServiceById(
         documentId: id.value,
         userUid: auth.currentUser!.uid,
       );
-      loadingData.value = false;
+      loadingData(false);
       if (r != null) {
         productNameCon.value = r.productname;
         serviceDateCon.value = r.servicedate;
@@ -112,37 +112,37 @@ class ServiceSetupController extends GetxController {
 
   void activateButton() {
     productNameCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     serviceDateCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     storeNameCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     problemDescCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     serviceDescCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     priceCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     currencyCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     expiryDateCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     statusCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     pickUpDateCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     warrantyPeriodCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
       if (pickUpDateCon.value != null && value.isNotEmpty) {
         DateTime serviceDate = (pickUpDateCon.value as Timestamp).toDate();
         DateTime expiryDate = serviceDate.add(Duration(days: int.parse(value)));
@@ -152,10 +152,10 @@ class ServiceSetupController extends GetxController {
       }
     };
     beforeServiceImagesCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     afterServiceImagesCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
   }
 
@@ -195,7 +195,7 @@ class ServiceSetupController extends GetxController {
       if (!beforeServiceImagesCon.isValid) return;
       if (!afterServiceImagesCon.isValid) return;
 
-      buttonActive.value = false;
+      buttonActive(false);
       if (auth.currentUser != null) {
         List<String> beforeServiceUrl = [];
         List<String> afterServiceUrl = [];
@@ -258,7 +258,7 @@ class ServiceSetupController extends GetxController {
           );
           if (result != null) Get.back(result: true);
         } else {
-          buttonActive.value = true;
+          buttonActive(true);
         }
       }
     }

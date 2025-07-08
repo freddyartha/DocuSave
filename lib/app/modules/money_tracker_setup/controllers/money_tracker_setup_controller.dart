@@ -49,16 +49,17 @@ class MoneyTrackerSetupController extends GetxController {
     currencyCon.value = "IDR";
     typeCon.value = 2;
     paymentMethodCon.value = 1;
+    categoryCon.value = [1];
 
     id.value = Get.parameters["id"] ?? "";
     if (id.value.isNotEmpty) {
-      editable.value = false;
-      loadingData.value = true;
+      editable(false);
+      loadingData(true);
       var r = await FirebaseRepository.getMoneyTrackerById(
         documentId: id.value,
         userUid: auth.currentUser!.uid,
       );
-      loadingData.value = false;
+      loadingData(false);
       if (r != null) {
         moneyTrackerModel = r;
         typeCon.value = r.type;
@@ -99,33 +100,38 @@ class MoneyTrackerSetupController extends GetxController {
 
   void activateButton() {
     typeCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
+      categoryCon.clearValue();
+      if (value.value == 1) {
+        categoryCon.value = [9];
+      }
+      if (value.value == 2) {
+        categoryCon.value = [1];
+      }
     };
     categoryCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     notesCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     totalAmountCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     currencyCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     dateTransactionCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     paymentMethodCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
   }
 
   bool showConfirmationCondition() {
     if (editable.value &&
-        (categoryCon.value.isNotEmpty ||
-            notesCon.value != null ||
-            totalAmountCon.value != null)) {
+        (notesCon.value != null || totalAmountCon.value != null)) {
       return true;
     } else {
       return false;
@@ -144,7 +150,7 @@ class MoneyTrackerSetupController extends GetxController {
       if (!currencyCon.isValid) return;
       if (!dateTransactionCon.isValid) return;
       if (!paymentMethodCon.isValid) return;
-      buttonActive.value = false;
+      buttonActive(false);
       if (auth.currentUser != null) {
         if (EasyLoading.isShow) EasyLoading.dismiss();
         await EasyLoading.show(status: "save_data".tr);
@@ -168,6 +174,9 @@ class MoneyTrackerSetupController extends GetxController {
         final monthKey = ReusableStatics.getMonthKey(
           dateTransactionCon.value.toDate(),
         );
+        final weekList = InputFormatter.getWeeksInCurrentMonth(
+          date: dateTransactionCon.value.toDate(),
+        );
 
         bool result =
             id.isNotEmpty
@@ -185,6 +194,7 @@ class MoneyTrackerSetupController extends GetxController {
                     documentid: monthKey,
                     totalincome: typeCon.value == 1 ? totalAmountCon.value : 0,
                     totalexpense: typeCon.value == 2 ? totalAmountCon.value : 0,
+                    weeklyexpense: List.generate(weekList, (_) => 0),
                     createdat: Timestamp.now(),
                   ),
                 );
@@ -198,7 +208,7 @@ class MoneyTrackerSetupController extends GetxController {
           );
           if (result != null) Get.back(result: true);
         } else {
-          buttonActive.value = true;
+          buttonActive(true);
         }
       }
     }

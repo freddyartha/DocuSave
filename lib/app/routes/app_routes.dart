@@ -24,6 +24,7 @@ abstract class Routes {
   static const MONEY_TRACKER_SETUP = _Paths.MONEY_TRACKER_SETUP;
   static const MONEY_TRACKER_LIST = _Paths.MONEY_TRACKER_LIST;
   static const MONEY_TRACKER_CHART = _Paths.MONEY_TRACKER_CHART;
+  static const MONEY_TRACKER_BUDGET = _Paths.MONEY_TRACKER_BUDGET;
 }
 
 abstract class _Paths {
@@ -47,4 +48,5 @@ abstract class _Paths {
   static const MONEY_TRACKER_SETUP = '/money-tracker-setup';
   static const MONEY_TRACKER_LIST = '/money-tracker-list';
   static const MONEY_TRACKER_CHART = '/money-tracker-chart';
+  static const MONEY_TRACKER_BUDGET = '/money-tracker-budget';
 }

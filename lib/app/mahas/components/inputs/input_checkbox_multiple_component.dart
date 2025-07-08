@@ -50,6 +50,8 @@ class InputCheckboxMultipleController {
     }
   }
 
+  void clearValue() => setState(() => listvalue.clear());
+
   void _init(Function(VoidCallback fn) setStateX) {
     setState = setStateX;
     _isInit = true;

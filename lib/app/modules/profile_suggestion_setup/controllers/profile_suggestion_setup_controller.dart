@@ -36,10 +36,10 @@ class ProfileSuggestionSetupController extends GetxController {
 
   void activateButton() {
     feedbackCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     suggestionCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
   }
 
@@ -50,7 +50,7 @@ class ProfileSuggestionSetupController extends GetxController {
       if (!validation) return;
       if (!feedbackCon.isValid) return;
       if (!suggestionCon.isValid) return;
-      buttonActive.value = false;
+      buttonActive(false);
       if (auth.currentUser != null) {
         if (EasyLoading.isShow) EasyLoading.dismiss();
         await EasyLoading.show(status: "save_data".tr);
@@ -76,7 +76,7 @@ class ProfileSuggestionSetupController extends GetxController {
           );
           if (result != null) Get.back(result: true);
         } else {
-          buttonActive.value = true;
+          buttonActive(true);
         }
       }
     }

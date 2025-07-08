@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
+import 'package:docusave/app/mahas/constants/input_formatter.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/article_model.dart';
+import 'package:docusave/app/models/money_tracker_budget_model.dart';
 import 'package:docusave/app/models/money_tracker_summary_model.dart';
 import 'package:docusave/app/models/receipt_model.dart';
 import 'package:docusave/app/models/service_model.dart';
@@ -660,6 +662,14 @@ class FirebaseRepository {
           final currentData = MoneyTrackerSummaryModel.fromDynamic(
             summarySnapshot.data(),
           );
+          final weekIndex =
+              InputFormatter.getWeekOfMonth(moneyTrackerModel.date.toDate()) -
+              1;
+          if (moneyTrackerModel.type == 2) {
+            currentData.weeklyexpense[weekIndex] +=
+                moneyTrackerModel.totalamount;
+          }
+
           transaction.update(
             summaryRef,
             moneyTrackerSummaryModelToJson(
@@ -671,6 +681,7 @@ class FirebaseRepository {
                 totalexpense:
                     currentData.totalexpense +
                     moneyTrackerSummaryModel.totalexpense,
+                weeklyexpense: currentData.weeklyexpense,
                 createdat: currentData.createdat,
                 updatedat: Timestamp.now(),
               ),
@@ -709,6 +720,11 @@ class FirebaseRepository {
 
           double updatedIncome = summaryData.totalincome;
           double updatedExpense = summaryData.totalexpense;
+          final weekIndex =
+              InputFormatter.getWeekOfMonth(
+                updatedMoneyTrackerModel.date.toDate(),
+              ) -
+              1;
           if (oldMoneyTrackerModel.type == 1) {
             updatedIncome =
                 updatedIncome -
@@ -717,6 +733,10 @@ class FirebaseRepository {
           } else {
             updatedExpense =
                 updatedExpense -
+                oldMoneyTrackerModel.totalamount +
+                updatedMoneyTrackerModel.totalamount;
+            summaryData.weeklyexpense[weekIndex] =
+                summaryData.weeklyexpense[weekIndex] -
                 oldMoneyTrackerModel.totalamount +
                 updatedMoneyTrackerModel.totalamount;
           }
@@ -728,6 +748,7 @@ class FirebaseRepository {
                 documentid: summaryData.documentid,
                 totalincome: updatedIncome,
                 totalexpense: updatedExpense,
+                weeklyexpense: summaryData.weeklyexpense,
                 createdat: summaryData.createdat,
                 updatedat: Timestamp.now(),
               ),
@@ -777,10 +798,15 @@ class FirebaseRepository {
 
           double removedIncome = 0;
           double removedExpense = 0;
+          final weekIndex =
+              InputFormatter.getWeekOfMonth(moneyTrackerData.date.toDate()) - 1;
           if (moneyTrackerData.type == 1) {
             removedIncome = moneyTrackerData.totalamount;
           } else {
             removedExpense = moneyTrackerData.totalamount;
+            summaryData.weeklyexpense[weekIndex] =
+                summaryData.weeklyexpense[weekIndex] -
+                moneyTrackerData.totalamount;
           }
 
           //update summary
@@ -791,6 +817,7 @@ class FirebaseRepository {
                 documentid: summaryData.documentid,
                 totalincome: summaryData.totalincome - removedIncome,
                 totalexpense: summaryData.totalexpense - removedExpense,
+                weeklyexpense: summaryData.weeklyexpense,
                 createdat: summaryData.createdat,
                 updatedat: Timestamp.now(),
               ),
@@ -814,7 +841,38 @@ class FirebaseRepository {
   }) async {
     try {
       var result = await _goToSummaryMoneyTrackerById(userUid, monthKey).get();
-      return MoneyTrackerSummaryModel.fromDynamic(result.data());
+      if (result.exists) {
+        return MoneyTrackerSummaryModel.fromDynamic(result.data());
+      }
+      return null;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return null;
+    }
+  }
+
+  static Future<MoneyTrackerSummaryModel?> addBudgetMoneyTrackerToFirestore({
+    required String userUid,
+    required MoneyTrackerBudgetModel moneyTrackerBudgetModel,
+  }) async {
+    try {
+      final summaryRef = _goToSummaryMoneyTrackerById(
+        userUid,
+        moneyTrackerBudgetModel.documentid,
+      );
+
+      await firestore.runTransaction((transaction) async {
+        transaction.set(
+          summaryRef,
+          moneyTrackerBudgetModelToJson(moneyTrackerBudgetModel),
+          SetOptions(merge: true),
+        );
+      });
+      final summarySnapshot = await summaryRef.get();
+      if (summarySnapshot.exists) {
+        return MoneyTrackerSummaryModel.fromDynamic(summarySnapshot.data());
+      }
+      return null;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());
       return null;

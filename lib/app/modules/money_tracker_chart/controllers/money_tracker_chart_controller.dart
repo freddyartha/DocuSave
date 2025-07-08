@@ -1,5 +1,6 @@
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
+import 'package:docusave/app/mahas/constants/input_formatter.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/mahas/models/chart_model.dart';
@@ -9,9 +10,12 @@ import 'package:get/get.dart';
 
 class MoneyTrackerChartController extends GetxController {
   RxBool loadingData = false.obs;
+  RxBool chartIsEmpty = false.obs;
   late MoneyTrackerSummaryModel? summaryModel;
-  final List<ChartModel> chartModelList = [];
   final List<ItemValueModel> listSummary = [];
+  final List<ChartModel> chartModelList = [];
+  final List<ChartModel> chartMingguanList = [];
+  final List<ItemValueModel> listSummaryMingguan = [];
   @override
   void onInit() {
     getThisMonthChart();
@@ -26,7 +30,17 @@ class MoneyTrackerChartController extends GetxController {
       monthKey: ReusableStatics.getMonthKey(DateTime.now()),
       userUid: auth.currentUser!.uid,
     );
+    if (summaryModel == null) {
+      loadingData(false);
+      chartIsEmpty(true);
+    } else {
+      _chartBulanIni();
+      _chartMingguan();
+      loadingData(false);
+    }
+  }
 
+  void _chartBulanIni() {
     final income = summaryModel!.totalincome;
     final expense = summaryModel!.totalexpense;
 
@@ -49,7 +63,6 @@ class MoneyTrackerChartController extends GetxController {
         color: MahasColors.primary,
       ),
     ]);
-
     listSummary.addAll([
       ItemValueModel(
         item: "pemasukan_bulan".tr,
@@ -60,7 +73,35 @@ class MoneyTrackerChartController extends GetxController {
         value: summaryModel!.totalexpense,
       ),
     ]);
+  }
 
-    loadingData(false);
+  void _chartMingguan() {
+    final currentWeek = InputFormatter.getWeekOfMonth(DateTime.now()) - 1;
+    final budget = summaryModel!.weeklybudget![currentWeek];
+    final weeklyExpense = summaryModel!.weeklyexpense[currentWeek];
+
+    final weeklybudgetPercent =
+        budget == 0 ? 0 : ((weeklyExpense / budget) * 100).clamp(0, 999);
+    final weeklyExpPercent =
+        budget == 0
+            ? 0
+            : (((budget - weeklyExpense) / budget) * 100).clamp(-999, 999);
+    chartMingguanList.addAll([
+      ChartModel(
+        label: "Out\n${weeklyExpPercent.toStringAsFixed(1)}%",
+        value: summaryModel!.weeklyexpense[currentWeek],
+        color: MahasColors.darkgray,
+      ),
+      ChartModel(
+        label: "Budget\n${weeklybudgetPercent.toStringAsFixed(1)}%",
+        value: budget > weeklyExpense ? budget - weeklyExpense : 0.0,
+        color: MahasColors.primary,
+      ),
+    ]);
+
+    listSummaryMingguan.addAll([
+      ItemValueModel(item: "Budget Minggu Ini".tr, value: budget),
+      ItemValueModel(item: "Pengeluaran Minggu ini".tr, value: weeklyExpense),
+    ]);
   }
 }

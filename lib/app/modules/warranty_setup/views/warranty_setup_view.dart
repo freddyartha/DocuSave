@@ -232,8 +232,7 @@ class WarrantySetupView extends GetView<WarrantySetupController> {
                                 )
                                 : ReusableWidgets.generalEditDeleteButtonWidget(
                                   deleteOnTap: controller.deleteData,
-                                  editOnTap:
-                                      () => controller.editable.value = true,
+                                  editOnTap: () => controller.editable(true),
                                 ),
                           ],
                         ),

@@ -239,8 +239,7 @@ class ReceiptSetupView extends GetView<ReceiptSetupController> {
                                 )
                                 : ReusableWidgets.generalEditDeleteButtonWidget(
                                   deleteOnTap: controller.deleteData,
-                                  editOnTap:
-                                      () => controller.editable.value = true,
+                                  editOnTap: () => controller.editable(true),
                                 ),
                           ],
                         ),

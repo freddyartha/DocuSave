@@ -176,8 +176,7 @@ class ServiceSetupView extends GetView<ServiceSetupController> {
                                 )
                                 : ReusableWidgets.generalEditDeleteButtonWidget(
                                   deleteOnTap: controller.deleteData,
-                                  editOnTap:
-                                      () => controller.editable.value = true,
+                                  editOnTap: () => controller.editable(true),
                                 ),
                           ],
                         ),

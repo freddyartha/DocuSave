@@ -16,44 +16,90 @@ class MoneyTrackerChartView extends GetView<MoneyTrackerChartController> {
       () =>
           controller.loadingData.value
               ? ReusableWidgets.formLoadingWidget()
-              : ListView(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      children: [
-                        PieChartComponent(
-                          label: "income_expense".tr,
-                          model: controller.chartModelList,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children:
-                              controller.listSummary
-                                  .map(
-                                    (item) => Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        TextComponent(value: item.item),
-                                        TextComponent(
-                                          value: InputFormatter.toCurrency(
-                                            item.value,
-                                          ),
-                                          fontWeight: FontWeight.w600,
+              : controller.chartIsEmpty.value && !controller.loadingData.value
+              ? ReusableWidgets.generalNotFoundWidget()
+              : SafeArea(
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  padding: EdgeInsets.fromLTRB(8, 0, 8, 20),
+                  children: [
+                    Card(
+                      elevation: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            PieChartComponent(
+                              label: "Pemasukan & Pengeluaran Minggu Ini",
+                              model: controller.chartMingguanList,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:
+                                  controller.listSummaryMingguan
+                                      .map(
+                                        (item) => Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            TextComponent(value: item.item),
+                                            TextComponent(
+                                              value: InputFormatter.toCurrency(
+                                                item.value,
+                                              ),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  )
-                                  .toList(),
+                                      )
+                                      .toList(),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+
+                    SizedBox(height: 10),
+                    Card(
+                      elevation: 5,
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          children: [
+                            PieChartComponent(
+                              label: "income_expense".tr,
+                              model: controller.chartModelList,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children:
+                                  controller.listSummary
+                                      .map(
+                                        (item) => Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            TextComponent(value: item.item),
+                                            TextComponent(
+                                              value: InputFormatter.toCurrency(
+                                                item.value,
+                                              ),
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                      .toList(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
     );
   }

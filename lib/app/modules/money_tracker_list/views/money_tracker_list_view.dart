@@ -46,6 +46,8 @@ class MoneyTrackerListView extends GetView<MoneyTrackerListController> {
                   value:
                       "${item.currency} ${InputFormatter.toCurrency(item.totalamount)}",
                   fontWeight: FontWeight.w600,
+                  fontColor:
+                      item.type == 1 ? MahasColors.green : MahasColors.red,
                 ),
                 trailing: Container(
                   decoration: BoxDecoration(

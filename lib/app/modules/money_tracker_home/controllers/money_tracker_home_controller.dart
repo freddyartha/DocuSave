@@ -1,4 +1,6 @@
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
+import 'package:docusave/app/modules/money_tracker_budget/controllers/money_tracker_budget_controller.dart';
+import 'package:docusave/app/modules/money_tracker_budget/views/money_tracker_budget_view.dart';
 import 'package:docusave/app/modules/money_tracker_chart/controllers/money_tracker_chart_controller.dart';
 import 'package:docusave/app/modules/money_tracker_chart/views/money_tracker_chart_view.dart';
 import 'package:docusave/app/modules/money_tracker_list/controllers/money_tracker_list_controller.dart';
@@ -13,10 +15,15 @@ class MoneyTrackerHomeController extends GetxController
   final List<MenuItemModel> headerMenus = [];
   late TabController tabController;
   List<Widget> pages = [
+    const MoneyTrackerBudgetView(),
     const MoneyTrackerChartView(),
     const MoneyTrackerListView(),
   ];
 
+  final MoneyTrackerBudgetController budgetController =
+      Get.isRegistered<MoneyTrackerBudgetController>()
+          ? Get.find<MoneyTrackerBudgetController>()
+          : Get.put(MoneyTrackerBudgetController());
   final MoneyTrackerListController listController =
       Get.isRegistered<MoneyTrackerListController>()
           ? Get.find<MoneyTrackerListController>()
@@ -29,12 +36,13 @@ class MoneyTrackerHomeController extends GetxController
   @override
   void onInit() {
     headerMenus.addAll([
-      MenuItemModel(title: "Chart", onTab: moveSelected),
-      MenuItemModel(title: "History", onTab: moveSelected),
+      MenuItemModel(title: "budget".tr, onTab: moveSelected),
+      MenuItemModel(title: "chart".tr, onTab: moveSelected),
+      MenuItemModel(title: "history".tr, onTab: moveSelected),
     ]);
     tabController = TabController(
       initialIndex: selectedIndex.value,
-      length: 2,
+      length: 3,
       vsync: this,
     );
     tabController.addListener(() {
@@ -54,7 +62,6 @@ class MoneyTrackerHomeController extends GetxController
     )?.then((value) async {
       if (value == true) {
         chartController.getThisMonthChart();
-        listController.listCon.refresh();
       }
     });
   }

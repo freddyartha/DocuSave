@@ -3,7 +3,6 @@ import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/texts/text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
-import 'package:docusave/app/mahas/constants/mahas_font_size.dart';
 import 'package:docusave/app/mahas/constants/mahas_radius.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -162,22 +161,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
   Widget build(BuildContext context) {
     return widget.controller._isLoading == false &&
             widget.controller._isEmpty == true
-        ? Container(
-          margin: EdgeInsets.symmetric(horizontal: 40),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 20,
-            children: [
-              Image.asset("assets/images/not_found.png"),
-              TextComponent(
-                value: "general_not_found".tr,
-                fontSize: MahasFontSize.h6,
-                fontWeight: FontWeight.w600,
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        )
+        ? ReusableWidgets.generalNotFoundWidget()
         : widget.controller._isLoading == true
         ? Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -227,24 +211,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
                 ),
             widget.controller._isFilterEmpty
                 ? Expanded(
-                  child: Center(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 40),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 20,
-                        children: [
-                          Image.asset("assets/images/not_found.png"),
-                          TextComponent(
-                            value: "general_not_found".tr,
-                            fontSize: MahasFontSize.h6,
-                            fontWeight: FontWeight.w600,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  child: Center(child: ReusableWidgets.generalNotFoundWidget()),
                 )
                 : Expanded(
                   child: RefreshIndicator(

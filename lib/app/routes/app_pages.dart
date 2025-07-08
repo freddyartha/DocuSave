@@ -6,6 +6,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/money_tracker_budget/bindings/money_tracker_budget_binding.dart';
+import '../modules/money_tracker_budget/views/money_tracker_budget_view.dart';
 import '../modules/money_tracker_chart/bindings/money_tracker_chart_binding.dart';
 import '../modules/money_tracker_chart/views/money_tracker_chart_view.dart';
 import '../modules/money_tracker_home/bindings/money_tracker_home_binding.dart';
@@ -208,6 +210,11 @@ class AppPages {
       name: _Paths.MONEY_TRACKER_CHART,
       page: () => const MoneyTrackerChartView(),
       binding: MoneyTrackerChartBinding(),
+    ),
+    GetPage(
+      name: _Paths.MONEY_TRACKER_BUDGET,
+      page: () => const MoneyTrackerBudgetView(),
+      binding: MoneyTrackerBudgetBinding(),
     ),
   ];
 }

@@ -75,7 +75,7 @@ class HomeController extends GetxController {
   }
 
   void loadExpiringWarranties() async {
-    historyLoading.value = true;
+    historyLoading(true);
     if (auth.currentUser != null) {
       var result = await FirebaseRepository.getExpiringWarranties(
         auth.currentUser!.uid,
@@ -85,16 +85,16 @@ class HomeController extends GetxController {
         listExpiringWarranties.addAll(result);
       }
     }
-    historyLoading.value = false;
+    historyLoading(false);
   }
 
   void loadArticles() async {
-    articlesLoading.value = true;
+    articlesLoading(true);
     var data = await FirebaseRepository.getArticles();
     if (data != null) {
       listBanner.addAll(data);
     }
-    articlesLoading.value = false;
+    articlesLoading(false);
   }
 
   void goToProfileList() {

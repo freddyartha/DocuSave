@@ -1174,4 +1174,21 @@ class ReusableWidgets {
       ),
     ],
   );
+
+  static Widget generalNotFoundWidget() => Container(
+    margin: EdgeInsets.symmetric(horizontal: 40),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 20,
+      children: [
+        Image.asset("assets/images/not_found.png"),
+        TextComponent(
+          value: "general_not_found".tr,
+          fontSize: MahasFontSize.h6,
+          fontWeight: FontWeight.w600,
+          textAlign: TextAlign.center,
+        ),
+      ],
+    ),
+  );
 }

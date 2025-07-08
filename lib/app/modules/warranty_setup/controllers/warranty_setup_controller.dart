@@ -67,13 +67,13 @@ class WarrantySetupController extends GetxController
 
     id.value = Get.parameters["id"] ?? "";
     if (id.value.isNotEmpty) {
-      editable.value = false;
-      loadingData.value = true;
+      editable(false);
+      loadingData(true);
       var r = await FirebaseRepository.getWarrantytById(
         documentId: id.value,
         userUid: auth.currentUser!.uid,
       );
-      loadingData.value = false;
+      loadingData(false);
       if (r != null) {
         scannedDoc.addAll(r.warrantyimage);
         storeNameCon.value = r.storename;
@@ -94,19 +94,19 @@ class WarrantySetupController extends GetxController
 
   void activateButton() {
     storeNameCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     itemNameCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     serialNumberCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     purchaseDateCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     warrantyPeriodCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
       if (purchaseDateCon.value != null && value.isNotEmpty) {
         DateTime purchaseDate = (purchaseDateCon.value as Timestamp).toDate();
         DateTime expiryDate = ReusableStatics.addMonths(
@@ -119,16 +119,16 @@ class WarrantySetupController extends GetxController
       }
     };
     warrantyExpiryCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     warrantyProviderCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     receiptIdCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     notesCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
   }
 
@@ -237,7 +237,7 @@ class WarrantySetupController extends GetxController
       if (!receiptIdCon.isValid) return;
       if (!notesCon.isValid) return;
 
-      buttonActive.value = false;
+      buttonActive(false);
       if (auth.currentUser != null) {
         List<String> imageUrl = [];
         if (scannedDoc.first.contains(RegExp('http', caseSensitive: false))) {
@@ -301,7 +301,7 @@ class WarrantySetupController extends GetxController
           );
           if (result != null) Get.back(result: true);
         } else {
-          buttonActive.value = true;
+          buttonActive(true);
         }
       }
     }

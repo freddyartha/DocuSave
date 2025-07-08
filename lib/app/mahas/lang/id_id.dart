@@ -146,7 +146,12 @@ const Map<String, String> idID = {
   "pemasukan_bulan": "Pemasukan Bulan Ini",
   "pengeluaran_bulan": "Pengeluran Bulan Ini",
   "income_expense": "Pemasukan & Pengeluaran Bulan Ini",
-  "more_charts": "Lihat lebih banyak chart",
+  "history": "Riwayat",
+  "chart": "Grafik",
+  "budget": "Anggaran",
+  "week_number": "Minggu ke-@value",
+  "this_month_expense": "Anggaran belanja bulan ini",
+  "this_month_expense_subtitle": "Berapa anggaran belanja kamu bulan ini",
 
   //money tracker type
   "pemasukan": "Pemasukan",
@@ -177,6 +182,8 @@ const Map<String, String> idID = {
   "entertainment": "Hiburan",
   "personal_care": "Perawatan Pribadi",
   "education": "Pendidikan",
+  "salary": "Gaji",
+  "business_profit": "Keuntungan Usaha",
 
   //onboarding
   "onboarding_title_1": "Yuk, Kenalan Sama DocuSave!",

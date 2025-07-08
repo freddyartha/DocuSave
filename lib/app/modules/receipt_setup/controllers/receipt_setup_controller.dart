@@ -70,13 +70,13 @@ class ReceiptSetupController extends GetxController
 
     id.value = Get.parameters["id"] ?? "";
     if (id.value.isNotEmpty) {
-      editable.value = false;
-      loadingData.value = true;
+      editable(false);
+      loadingData(true);
       var r = await FirebaseRepository.getReceiptById(
         documentId: id.value,
         userUid: auth.currentUser!.uid,
       );
-      loadingData.value = false;
+      loadingData(false);
       if (r != null) {
         scannedDoc.addAll(r.receiptimage);
         receiptIdCon.value = r.receiptid;
@@ -118,28 +118,28 @@ class ReceiptSetupController extends GetxController
 
   void activateButton() {
     receiptIdCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     storeNameCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     purchaseDateCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     totalAmountCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     currencyCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     categoryCon.onChanged = () {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     paymentMethodCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     notesCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
   }
 
@@ -256,7 +256,7 @@ class ReceiptSetupController extends GetxController
       if (!categoryCon.isValid) return;
       if (!paymentMethodCon.isValid) return;
       if (!notesCon.isValid) return;
-      buttonActive.value = false;
+      buttonActive(false);
       if (auth.currentUser != null) {
         List<String> imageUrl = [];
         if (scannedDoc.first.contains(RegExp('http', caseSensitive: false))) {
@@ -321,7 +321,7 @@ class ReceiptSetupController extends GetxController
           );
           if (result != null) Get.back(result: true);
         } else {
-          buttonActive.value = true;
+          buttonActive(true);
         }
       }
     }

@@ -145,7 +145,12 @@ const Map<String, String> enUS = {
   "pemasukan_bulan": "This Month's Income",
   "pengeluaran_bulan": "This Month's Expense",
   "income_expense": "This Month's Income & Expense",
-  "more_charts": "View more charts",
+  "history": "Riwayat",
+  "chart": "Grafik",
+  "budget": "Anggaran",
+  "week_number": "Week @value",
+  "this_month_expense": "This month's expense budget",
+  "this_month_expense_subtitle": "How much is your expense budget this month?",
 
   //money tracker type
   "pemasukan": "Income",
@@ -176,6 +181,8 @@ const Map<String, String> enUS = {
   "entertainment": "Entertainment",
   "personal_care": "Personal Care",
   "education": "Education",
+  "salary": "Salary",
+  "business_profit": "Business Profit",
 
   //onboarding
   "onboarding_title_1": "Let's Get to Know DocuSave!",

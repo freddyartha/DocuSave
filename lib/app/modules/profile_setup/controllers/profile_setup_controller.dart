@@ -37,10 +37,10 @@ class ProfileSetupController extends GetxController {
       editPictureLabel.value = "change_image";
     }
     namaCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
     emailCon.onChanged = (value) {
-      if (!buttonActive.value) buttonActive.value = true;
+      if (!buttonActive.value) buttonActive(true);
     };
 
     super.onInit();
@@ -62,7 +62,7 @@ class ProfileSetupController extends GetxController {
     var data = await SelectImageComponent.selectImageSource(source: source);
     if (data != null) fileImg = data;
     editPictureLabel.value = "change_image";
-    if (!buttonActive.value) buttonActive.value = true;
+    if (!buttonActive.value) buttonActive(true);
     update();
   }
 
@@ -70,7 +70,7 @@ class ProfileSetupController extends GetxController {
     fileImg = null;
     editPictureLabel.value = "add_image";
     tmpProfilePic.value = "";
-    if (!buttonActive.value) buttonActive.value = true;
+    if (!buttonActive.value) buttonActive(true);
     update();
   }
 
@@ -93,8 +93,8 @@ class ProfileSetupController extends GetxController {
       if (!emailCon.isValid) return;
       if (EasyLoading.isShow) EasyLoading.dismiss();
       await EasyLoading.show();
-      isLoading.value = true;
-      buttonActive.value = false;
+      isLoading(true);
+      buttonActive(false);
       if (auth.currentUser != null) {
         String? imageUrl;
         if (fileImg != null) {
@@ -125,7 +125,7 @@ class ProfileSetupController extends GetxController {
           userModel: userModel,
         );
         update();
-        isLoading.value = false;
+        isLoading(false);
         await EasyLoading.dismiss();
         if (result == true) {
           MahasConfig.userProfile = userModel;
@@ -136,11 +136,11 @@ class ProfileSetupController extends GetxController {
           );
           if (result != null) Get.back();
         } else {
-          buttonActive.value = true;
+          buttonActive(true);
         }
       }
       update();
-      isLoading.value = false;
+      isLoading(false);
       await EasyLoading.dismiss();
     }
   }

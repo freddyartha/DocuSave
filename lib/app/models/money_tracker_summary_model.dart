@@ -10,6 +10,11 @@ class MoneyTrackerSummaryModel {
   String documentid;
   double totalincome;
   double totalexpense;
+  List<double> weeklyexpense;
+  double? expensebudget;
+  String? currencycode;
+  int? totalweeks;
+  List<double>? weeklybudget;
   Timestamp createdat;
   Timestamp? updatedat;
 
@@ -17,6 +22,11 @@ class MoneyTrackerSummaryModel {
     required this.documentid,
     required this.totalincome,
     required this.totalexpense,
+    required this.weeklyexpense,
+    this.expensebudget,
+    this.currencycode,
+    this.totalweeks,
+    this.weeklybudget,
     required this.createdat,
     this.updatedat,
   });
@@ -33,7 +43,12 @@ class MoneyTrackerSummaryModel {
           InputFormatter.dynamicToDouble(dynamicData['totalIncome']) ?? 0,
       totalexpense:
           InputFormatter.dynamicToDouble(dynamicData['totalExpense']) ?? 0,
-
+      weeklyexpense: [],
+      currencycode: dynamicData['currencyCode'],
+      expensebudget:
+          InputFormatter.dynamicToDouble(dynamicData['expenseBudget']) ?? 0,
+      totalweeks: InputFormatter.dynamicToInt(dynamicData['totalWeeks']) ?? 0,
+      weeklybudget: [],
       createdat:
           InputFormatter.dynamicToTimestamp(dynamicData['createdAt']) ??
           Timestamp.now(),
@@ -42,6 +57,32 @@ class MoneyTrackerSummaryModel {
           Timestamp.now(),
     );
 
+    if (dynamicData['weeklyExpense'] != null) {
+      final detailT = dynamicData['weeklyExpense'];
+      if (detailT is List) {
+        for (var e in detailT) {
+          model.weeklyexpense.add(InputFormatter.dynamicToDouble(e) ?? 0);
+        }
+      } else {
+        model.weeklyexpense.add(
+          InputFormatter.dynamicToDouble(dynamicData['weeklyExpense']) ?? 0,
+        );
+      }
+    }
+
+    if (dynamicData['weeklyBudget'] != null) {
+      final detailT = dynamicData['weeklyBudget'];
+      if (detailT is List) {
+        for (var e in detailT) {
+          model.weeklybudget!.add(InputFormatter.dynamicToDouble(e) ?? 0);
+        }
+      } else {
+        model.weeklybudget!.add(
+          InputFormatter.dynamicToDouble(dynamicData['weeklyBudget']) ?? 0,
+        );
+      }
+    }
+
     return model;
   }
 
@@ -49,6 +90,7 @@ class MoneyTrackerSummaryModel {
     'documentId': documentid,
     'totalIncome': totalincome,
     'totalExpense': totalexpense,
+    'weeklyExpense': weeklyexpense,
     'createdAt': createdat,
     'updatedAt': updatedat,
   };

@@ -41,7 +41,7 @@ class MoneyTrackerHomeView extends GetView<MoneyTrackerHomeController> {
           () => Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 20),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: MahasColors.primary),
