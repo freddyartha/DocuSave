@@ -62,6 +62,7 @@ class MoneyTrackerHomeController extends GetxController
     )?.then((value) async {
       if (value == true) {
         chartController.getThisMonthChart();
+        listController.listCon.refresh();
       }
     });
   }

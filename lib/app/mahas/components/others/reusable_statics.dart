@@ -216,6 +216,7 @@ class ReusableStatics {
     CheckboxItem(text: "education".tr, value: 7),
     CheckboxItem(text: "salary".tr, value: 9),
     CheckboxItem(text: "business_profit".tr, value: 10),
+    CheckboxItem(text: "saving".tr, value: 11),
   ];
 
   static List<DropdownItem> listPaymentMethod = [

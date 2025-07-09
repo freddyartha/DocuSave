@@ -151,6 +151,12 @@ const Map<String, String> enUS = {
   "week_number": "Week @value",
   "this_month_expense": "This month's expense budget",
   "this_month_expense_subtitle": "How much is your expense budget this month?",
+  "weekly_income_expense": "This Week's Income & Expense",
+  "pemasukan_minggu": "This Week's Income",
+  "pengeluaran_minggu": "This Week's Expense",
+  "week_budget_spending": "Anggaran vs Pengeluaran Bulan Ini",
+  "budget_spending_warning":
+      "Expenses with the type 'Savings' aren't counted as part of the budget/spending",
 
   //money tracker type
   "pemasukan": "Income",
@@ -183,6 +189,7 @@ const Map<String, String> enUS = {
   "education": "Education",
   "salary": "Salary",
   "business_profit": "Business Profit",
+  "saving": "Savings",
 
   //onboarding
   "onboarding_title_1": "Let's Get to Know DocuSave!",

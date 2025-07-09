@@ -16,6 +16,7 @@ class MoneyTrackerChartController extends GetxController {
   final List<ChartModel> chartModelList = [];
   final List<ChartModel> chartMingguanList = [];
   final List<ItemValueModel> listSummaryMingguan = [];
+
   @override
   void onInit() {
     getThisMonthChart();
@@ -25,6 +26,8 @@ class MoneyTrackerChartController extends GetxController {
   Future<void> getThisMonthChart() async {
     listSummary.clear();
     chartModelList.clear();
+    chartMingguanList.clear();
+    listSummaryMingguan.clear();
     loadingData(true);
     summaryModel = await FirebaseRepository.getMoneyTrackerSummaryByMonthKey(
       monthKey: ReusableStatics.getMonthKey(DateTime.now()),
@@ -100,8 +103,8 @@ class MoneyTrackerChartController extends GetxController {
     ]);
 
     listSummaryMingguan.addAll([
-      ItemValueModel(item: "Budget Minggu Ini".tr, value: budget),
-      ItemValueModel(item: "Pengeluaran Minggu ini".tr, value: weeklyExpense),
+      ItemValueModel(item: "pemasukan_minggu".tr, value: budget),
+      ItemValueModel(item: "pengeluaran_minggu".tr, value: weeklyExpense),
     ]);
   }
 }

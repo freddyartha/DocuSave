@@ -149,9 +149,15 @@ const Map<String, String> idID = {
   "history": "Riwayat",
   "chart": "Grafik",
   "budget": "Anggaran",
-  "week_number": "Minggu ke-@value",
+  "week_number": "Minggu @value",
   "this_month_expense": "Anggaran belanja bulan ini",
   "this_month_expense_subtitle": "Berapa anggaran belanja kamu bulan ini",
+  "weekly_income_expense": "Pemasukan & Pengeluaran Minggu Ini",
+  "pemasukan_minggu": "Pemasukan Minggu Ini",
+  "pengeluaran_minggu": "Pengeluran Minggu Ini",
+  "week_budget_spending": "Anggaran vs Pengeluaran Bulan Ini",
+  "budget_spending_warning":
+      "Pengeluaran dengan tipe 'Tabungan' tidak dihitung sebagai bagian dari anggaran/pengeluaran",
 
   //money tracker type
   "pemasukan": "Pemasukan",
@@ -184,6 +190,7 @@ const Map<String, String> idID = {
   "education": "Pendidikan",
   "salary": "Gaji",
   "business_profit": "Keuntungan Usaha",
+  "saving": "Tabungan",
 
   //onboarding
   "onboarding_title_1": "Yuk, Kenalan Sama DocuSave!",

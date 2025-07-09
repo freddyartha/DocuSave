@@ -665,7 +665,8 @@ class FirebaseRepository {
           final weekIndex =
               InputFormatter.getWeekOfMonth(moneyTrackerModel.date.toDate()) -
               1;
-          if (moneyTrackerModel.type == 2) {
+          if (moneyTrackerModel.type == 2 &&
+              !moneyTrackerModel.category.contains(11)) {
             currentData.weeklyexpense[weekIndex] +=
                 moneyTrackerModel.totalamount;
           }
@@ -725,7 +726,7 @@ class FirebaseRepository {
                 updatedMoneyTrackerModel.date.toDate(),
               ) -
               1;
-          if (oldMoneyTrackerModel.type == 1) {
+          if (updatedMoneyTrackerModel.type == 1) {
             updatedIncome =
                 updatedIncome -
                 oldMoneyTrackerModel.totalamount +
@@ -735,10 +736,13 @@ class FirebaseRepository {
                 updatedExpense -
                 oldMoneyTrackerModel.totalamount +
                 updatedMoneyTrackerModel.totalamount;
-            summaryData.weeklyexpense[weekIndex] =
-                summaryData.weeklyexpense[weekIndex] -
-                oldMoneyTrackerModel.totalamount +
-                updatedMoneyTrackerModel.totalamount;
+
+            if (!updatedMoneyTrackerModel.category.contains(11)) {
+              summaryData.weeklyexpense[weekIndex] =
+                  summaryData.weeklyexpense[weekIndex] -
+                  oldMoneyTrackerModel.totalamount +
+                  updatedMoneyTrackerModel.totalamount;
+            }
           }
 
           transaction.update(
@@ -804,9 +808,12 @@ class FirebaseRepository {
             removedIncome = moneyTrackerData.totalamount;
           } else {
             removedExpense = moneyTrackerData.totalamount;
-            summaryData.weeklyexpense[weekIndex] =
-                summaryData.weeklyexpense[weekIndex] -
-                moneyTrackerData.totalamount;
+
+            if (!moneyTrackerData.category.contains(11)) {
+              summaryData.weeklyexpense[weekIndex] =
+                  summaryData.weeklyexpense[weekIndex] -
+                  moneyTrackerData.totalamount;
+            }
           }
 
           //update summary
