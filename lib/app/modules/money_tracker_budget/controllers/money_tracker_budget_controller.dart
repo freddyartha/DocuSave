@@ -5,6 +5,7 @@ import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/constants/input_formatter.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
+import 'package:docusave/app/mahas/models/item_value_model.dart';
 import 'package:docusave/app/models/money_tracker_budget_model.dart';
 import 'package:docusave/app/models/money_tracker_summary_model.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class MoneyTrackerBudgetController extends GetxController {
   RxBool editable = true.obs;
   RxBool buttonActive = false.obs;
   RxBool showDetail = false.obs;
+  RxBool isUpdate = false.obs;
 
   InputTextController budgetBulanCon = InputTextController(
     type: InputTextType.money,
@@ -24,6 +26,7 @@ class MoneyTrackerBudgetController extends GetxController {
     type: InputTextType.text,
   );
   var weekControllers = <InputTextController>[].obs;
+  var editedControllerIndexes = <ItemValueModel>[].obs;
   MoneyTrackerSummaryModel? summaryModel;
 
   @override
@@ -92,9 +95,50 @@ class MoneyTrackerBudgetController extends GetxController {
           weekControllers[i].value = summaryModel!.weeklybudget![i];
         }
       }
+
+      for (var i = 0; i < weekControllers.length; i++) {
+        weekControllers[i].onChanged = (value) {
+          double v = InputFormatter.currencyToDouble(value.toString());
+
+          // Cari apakah index sudah ada
+          final existingIndex = editedControllerIndexes.indexWhere(
+            (e) => e.item == i,
+          );
+
+          if (existingIndex != -1) {
+            editedControllerIndexes[existingIndex].value = v;
+          } else {
+            editedControllerIndexes.add(ItemValueModel(item: i, value: v));
+          }
+
+          buttonActive(true);
+
+          // Hitung total dari semua value yang diedit
+          final total = editedControllerIndexes.fold<double>(
+            0.0,
+            (c, e) => c + e.value,
+          );
+
+          // // Ubah menjadi set agar pencarian lebih cepat
+          // final editedItems =
+          //     editedControllerIndexes.map((e) => e.item).toSet();
+
+          for (var j = 0; j < weekControllers.length; j++) {
+            final matched = editedControllerIndexes.firstWhereOrNull(
+              (e) => e.item == j,
+            );
+
+            weekControllers[j].value =
+                matched?.value ??
+                (summaryModel!.expensebudget! - total) /
+                    (weekCount - editedControllerIndexes.length);
+          }
+        };
+      }
+
       budgetBulanCon.onChanged = (value) {
         buttonActive(true);
-        double v = double.parse(value.replaceAll('.', ''));
+        double v = InputFormatter.currencyToDouble(value);
         for (var w in weekControllers) {
           w.value = v / weekCount;
         }
@@ -114,7 +158,9 @@ class MoneyTrackerBudgetController extends GetxController {
 
       //perhitungan minggu
       final int weekcount = InputFormatter.getWeeksInCurrentMonth();
-      _generateTextComponents(weekcount);
+      if (!isUpdate.value) {
+        _generateTextComponents(weekcount);
+      }
 
       if (auth.currentUser != null) {
         if (EasyLoading.isShow) EasyLoading.dismiss();
@@ -139,6 +185,8 @@ class MoneyTrackerBudgetController extends GetxController {
         if (result != null) {
           showDetail(true);
           currencyCon.value = null;
+          editable(false);
+          isUpdate(false);
           summaryModel = result;
         } else {
           editable(true);

@@ -113,6 +113,7 @@ class MoneyTrackerBudgetView extends GetView<MoneyTrackerBudgetController> {
                       ),
                       child: SafeArea(
                         child: ListView(
+                          physics: ClampingScrollPhysics(),
                           children: [
                             ...List.generate(
                               controller.weekControllers.length,
@@ -121,7 +122,7 @@ class MoneyTrackerBudgetView extends GetView<MoneyTrackerBudgetController> {
                                   "value": "ke-${index + 1}",
                                 }),
                                 controller: controller.weekControllers[index],
-                                editable: false,
+                                editable: controller.editable.value,
                                 marginBottom: 15,
                               ),
                             ),
@@ -133,6 +134,7 @@ class MoneyTrackerBudgetView extends GetView<MoneyTrackerBudgetController> {
                                   onTap: () {
                                     controller.editable(true);
                                     controller.showDetail(false);
+                                    controller.isUpdate(true);
                                   },
                                   text: "edit".tr,
                                   btnColor: MahasColors.primary,

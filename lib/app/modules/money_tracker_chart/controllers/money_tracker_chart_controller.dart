@@ -66,6 +66,7 @@ class MoneyTrackerChartController extends GetxController {
         color: MahasColors.primary,
       ),
     ]);
+
     listSummary.addAll([
       ItemValueModel(
         item: "pemasukan_bulan".tr,

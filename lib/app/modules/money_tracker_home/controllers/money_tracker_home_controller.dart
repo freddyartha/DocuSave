@@ -53,6 +53,9 @@ class MoneyTrackerHomeController extends GetxController
 
   void moveSelected() {
     tabController.index = selectedIndex.value;
+    if (selectedIndex.value == 1) {
+      chartController.getThisMonthChart();
+    }
   }
 
   void goToTransactionSetup({String? id}) {

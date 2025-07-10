@@ -1,6 +1,6 @@
 class ItemValueModel {
-  final String item;
-  final dynamic value;
+  dynamic item;
+  dynamic value;
 
   ItemValueModel({required this.item, required this.value});
 }
