@@ -219,6 +219,19 @@ class ReusableStatics {
     CheckboxItem(text: "saving".tr, value: 11),
   ];
 
+  static List<CheckboxItem> listCheckBoxPaymentMethod = [
+    CheckboxItem(text: "cash".tr, value: 1),
+    CheckboxItem(text: "bank_transfer".tr, value: 2),
+    CheckboxItem(text: "debit_card".tr, value: 3),
+    CheckboxItem(text: "credit_card".tr, value: 4),
+    CheckboxItem(text: "e_wallet".tr, value: 5),
+    CheckboxItem(text: "qris".tr, value: 6),
+    CheckboxItem(text: "virtual_account".tr, value: 7),
+    CheckboxItem(text: "paylater".tr, value: 8),
+    CheckboxItem(text: "cod".tr, value: 9),
+    CheckboxItem(text: "voucher".tr, value: 10),
+  ];
+
   static List<DropdownItem> listPaymentMethod = [
     DropdownItem(text: "cash".tr, value: 1),
     DropdownItem(text: "bank_transfer".tr, value: 2),
@@ -235,6 +248,11 @@ class ReusableStatics {
   static List<RadioButtonItem> listTypeMoneyTracker = [
     RadioButtonItem(text: "pemasukan".tr, value: 1),
     RadioButtonItem(text: "pengeluaran".tr, value: 2),
+  ];
+
+  static List<CheckboxItem> listCheckBoxTypeMoneyTracker = [
+    CheckboxItem(text: "pemasukan".tr, value: 1),
+    CheckboxItem(text: "pengeluaran".tr, value: 2),
   ];
 
   static String getTypeMoneyTrackerFromId(int id) {

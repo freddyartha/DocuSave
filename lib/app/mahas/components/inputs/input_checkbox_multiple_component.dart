@@ -118,47 +118,44 @@ class _InputCheckboxMultipleComponentState
       isRequired: widget.required,
       errorMessage: widget.controller._errorMessage,
       marginBottom: widget.marginBottom,
-      children: Padding(
-        padding: const EdgeInsets.only(top: 4),
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.zero,
-          physics: const NeverScrollableScrollPhysics(),
-          children:
-              widget.controller.items.map((e) {
-                final isChecked = widget.controller.listvalue.any(
-                  (item) => item.value == e.value,
-                );
+      children: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
+        physics: const NeverScrollableScrollPhysics(),
+        children:
+            widget.controller.items.map((e) {
+              final isChecked = widget.controller.listvalue.any(
+                (item) => item.value == e.value,
+              );
 
-                return CheckboxListTile(
-                  dense: true,
-                  contentPadding: EdgeInsets.all(0),
-                  visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-                  controlAffinity: ListTileControlAffinity.leading,
-                  title: TextComponent(value: e.text, height: 1),
-                  value: isChecked,
-                  onChanged: (bool? checked) {
-                    if (widget.editable) {
-                      setState(() {
-                        final exists = widget.controller.listvalue.any(
+              return CheckboxListTile(
+                dense: true,
+                contentPadding: EdgeInsets.zero,
+                visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+                controlAffinity: ListTileControlAffinity.leading,
+                title: TextComponent(value: e.text, height: 1),
+                value: isChecked,
+                onChanged: (bool? checked) {
+                  if (widget.editable) {
+                    setState(() {
+                      final exists = widget.controller.listvalue.any(
+                        (item) => item.value == e.value,
+                      );
+                      if (checked == true && !exists) {
+                        widget.controller.listvalue.add(e);
+                      } else if (checked == false && exists) {
+                        widget.controller.listvalue.removeWhere(
                           (item) => item.value == e.value,
                         );
-                        if (checked == true && !exists) {
-                          widget.controller.listvalue.add(e);
-                        } else if (checked == false && exists) {
-                          widget.controller.listvalue.removeWhere(
-                            (item) => item.value == e.value,
-                          );
-                        }
-                        if (widget.controller.onChanged != null) {
-                          widget.controller.onChanged!();
-                        }
-                      });
-                    }
-                  },
-                );
-              }).toList(),
-        ),
+                      }
+                      if (widget.controller.onChanged != null) {
+                        widget.controller.onChanged!();
+                      }
+                    });
+                  }
+                },
+              );
+            }).toList(),
       ),
     );
   }

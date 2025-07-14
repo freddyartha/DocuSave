@@ -145,9 +145,9 @@ const Map<String, String> enUS = {
   "pemasukan_bulan": "This Month's Income",
   "pengeluaran_bulan": "This Month's Expense",
   "income_expense": "This Month's Income & Expense",
-  "history": "Riwayat",
-  "chart": "Grafik",
-  "budget": "Anggaran",
+  "history": "History",
+  "chart": "Chart",
+  "budget": "Budget",
   "week_number": "Week @value",
   "this_month_expense": "This month's expense budget",
   "this_month_expense_subtitle": "How much is your expense budget this month?",
@@ -157,6 +157,9 @@ const Map<String, String> enUS = {
   "week_budget_spending": "Anggaran vs Pengeluaran Bulan Ini",
   "budget_spending_warning":
       "Expenses with the type 'Savings' aren't counted as part of the budget/spending",
+  "clear": "Clear",
+  "from_date": "From Date",
+  "to_date": "To Date",
 
   //money tracker type
   "pemasukan": "Income",

@@ -34,7 +34,6 @@ class ListComponentController<T> {
   bool _isLoading = false;
   bool _hasMore = true;
   bool _isEmpty = false;
-  bool _isFilterEmpty = false;
 
   Future refresh() async {
     _hasMore = true;
@@ -62,6 +61,7 @@ class ListComponentController<T> {
     }
     final snapshot = await query.get();
     if (snapshot.docs.isNotEmpty) {
+      _isEmpty = false;
       if (snapshot.docs.length <= pageSize) {
         _lastDoc = null;
         _hasMore = false;
@@ -99,9 +99,9 @@ class ListComponentController<T> {
             _items.clear();
             _items.addAll(searchOnType!(value));
             if (_items.isEmpty) {
-              _isFilterEmpty = true;
+              _isEmpty = true;
             } else {
-              _isFilterEmpty = false;
+              _isEmpty = false;
             }
             Get.focusScope?.unfocus();
           });
@@ -109,7 +109,7 @@ class ListComponentController<T> {
       } else {
         Get.focusScope?.unfocus();
         setState(() {
-          _isFilterEmpty = false;
+          _isEmpty = false;
           _items.clear();
           _items.addAll(_tmpItems);
         });
@@ -159,10 +159,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.controller._isLoading == false &&
-            widget.controller._isEmpty == true
-        ? ReusableWidgets.generalNotFoundWidget()
-        : widget.controller._isLoading == true
+    return widget.controller._isLoading == true
         ? Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: ReusableWidgets.listLoadingWidget(count: 10),
@@ -209,7 +206,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
                     ],
                   ),
                 ),
-            widget.controller._isFilterEmpty
+            widget.controller._isEmpty
                 ? Expanded(
                   child: Center(child: ReusableWidgets.generalNotFoundWidget()),
                 )

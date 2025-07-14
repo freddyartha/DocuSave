@@ -158,6 +158,9 @@ const Map<String, String> idID = {
   "week_budget_spending": "Anggaran vs Pengeluaran Bulan Ini",
   "budget_spending_warning":
       "Pengeluaran dengan tipe 'Tabungan' tidak dihitung sebagai bagian dari anggaran/pengeluaran",
+  "clear": "Bersihkan",
+  "from_date": "Dari Tanggal",
+  "to_date": "Sampai Tanggal",
 
   //money tracker type
   "pemasukan": "Pemasukan",

@@ -63,6 +63,7 @@ class MoneyTrackerSetupController extends GetxController {
       if (r != null) {
         moneyTrackerModel = r;
         typeCon.value = r.type;
+        categoryCon.value = [];
         categoryCon.value = r.category;
         notesCon.value = r.note;
         totalAmountCon.value = r.totalamount;
