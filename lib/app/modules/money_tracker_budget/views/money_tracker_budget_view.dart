@@ -119,7 +119,7 @@ class MoneyTrackerBudgetView extends GetView<MoneyTrackerBudgetController> {
                               controller.weekControllers.length,
                               (index) => InputTextComponent(
                                 label: "week_number".trParams({
-                                  "value": "ke-${index + 1}",
+                                  "value": "${index + 1}",
                                 }),
                                 controller: controller.weekControllers[index],
                                 editable: controller.editable.value,

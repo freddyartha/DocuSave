@@ -80,7 +80,7 @@ class ReceiptListView extends GetView<ReceiptListController> {
                         ),
                         child: TextComponent(
                           value: InputFormatter.displayDate(
-                            item.createdat.toDate(),
+                            item.purchasedate.toDate(),
                           ),
                           fontSize: MahasFontSize.small,
                           fontColor: MahasColors.white,

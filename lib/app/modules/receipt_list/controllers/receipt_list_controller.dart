@@ -1,9 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
+import 'package:docusave/app/mahas/components/inputs/input_checkbox_multiple_component.dart';
+import 'package:docusave/app/mahas/components/inputs/input_datetime_component.dart';
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/others/list_component.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
+import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/receipt_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ReceiptListController extends GetxController {
@@ -11,13 +17,22 @@ class ReceiptListController extends GetxController {
   late ListComponentController<ReceiptModel> listCon;
   final defaultQuery = FirebaseRepository.getToReceiptCollection(
     auth.currentUser!.uid,
-  ).orderBy('createdAt', descending: true);
-  // final List<ItemValueModel> filterList = [
-  //   ItemValueModel(item: "store_name".tr, value: false.obs),
-  //   ItemValueModel(item: "currency".tr, value: false.obs),
-  //   ItemValueModel(item: "category".tr, value: false.obs),
-  //   ItemValueModel(item: "payment_method".tr, value: false.obs),
-  // ];
+  ).orderBy('purchaseDate', descending: true);
+  late Query filteredQuery;
+
+  final InputDatetimeController fromDateCon = InputDatetimeController(
+    maxDate: DateTime.now(),
+  );
+  final InputDatetimeController toDateCon = InputDatetimeController(
+    maxDate: DateTime.now(),
+  );
+
+  final InputCheckboxMultipleController paymentMethodCon =
+      InputCheckboxMultipleController(
+        items: ReusableStatics.listCheckBoxPaymentMethod,
+      );
+  final InputCheckboxMultipleController categoryCon =
+      InputCheckboxMultipleController(items: ReusableStatics.listKategori);
 
   @override
   void onInit() {
@@ -41,94 +56,100 @@ class ReceiptListController extends GetxController {
               notes.contains(query);
         }).toList();
       },
-      // filterOnTap: () async {
-      //   Query filterQuery = listCon.query;
-      //   bool? result = await ReusableWidgets.confirmationBottomSheet(
-      //     title: "Urutkan Berdasarkan",
-      //     children: [
-      //       StatefulBuilder(
-      //         builder: (BuildContext context, StateSetter setState) {
-      //           return Wrap(
-      //             runSpacing: 10,
-      //             spacing: 10,
-      //             alignment: WrapAlignment.center,
-      //             children: List.generate(filterList.length, (i) {
-      //               var item = filterList[i];
-      //               RxBool selectedValue = item.value as RxBool;
-      //               return GestureDetector(
-      //                 onTap: () {
-      //                   setState(() {
-      //                     selectedValue.toggle();
-      //                   });
-      //                 },
-      //                 child: Container(
-      //                   width: Get.width / 3.5,
-      //                   decoration: BoxDecoration(
-      //                     color:
-      //                         selectedValue.value == true
-      //                             ? MahasColors.primary
-      //                             : null,
-      //                     border: Border.all(
-      //                       color:
-      //                           selectedValue.value == true
-      //                               ? MahasColors.primary
-      //                               : MahasColors.mutedGrey,
-      //                     ),
-      //                     borderRadius: BorderRadius.circular(
-      //                       MahasRadius.large,
-      //                     ),
-      //                   ),
-      //                   constraints: BoxConstraints(minHeight: 45),
-      //                   child: Container(
-      //                     padding: EdgeInsets.all(10),
-      //                     alignment: Alignment.center,
-      //                     child: TextComponent(
-      //                       value: item.item,
-      //                       height: 1,
-      //                       fontSize: MahasFontSize.small,
-      //                       fontColor:
-      //                           selectedValue.value == true
-      //                               ? MahasColors.white
-      //                               : MahasColors.mutedGrey,
-      //                       fontWeight: FontWeight.w500,
-      //                       textAlign: TextAlign.center,
-      //                     ),
-      //                   ),
-      //                 ),
-      //               );
-      //             }),
-      //           );
-      //         },
-      //       ),
-      //     ],
-      //   );
+      filterOnTap: () async {
+        listCon.query = defaultQuery;
+        toDateCon.value ??= DateTime.now();
+        bool? result = await ReusableWidgets.confirmationBottomSheet(
+          textCancel: "clear".tr,
+          title: "Filter",
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: InputDatetimeComponent(
+                    controller: fromDateCon,
+                    label: "from_date".tr,
+                    placeHolder: "from_date".tr,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: InputDatetimeComponent(
+                    controller: toDateCon,
+                    label: "to_date".tr,
+                    placeHolder: "to_date".tr,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            SizedBox(
+              height: Get.height * 0.45,
+              child: ListView(
+                physics: ClampingScrollPhysics(),
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
+                children: [
+                  InputCheckboxMultipleComponent(
+                    controller: paymentMethodCon,
+                    label: "payment_method".tr,
+                    marginBottom: 20,
+                  ),
+                  InputCheckboxMultipleComponent(
+                    controller: categoryCon,
+                    label: "category".tr,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        );
 
-      //   if (result == true) {
-      //     for (var f in filterList) {
-      //       if (f.value == true) {
-      //         String orderString = InputFormatter.titleToCamelCase(f.item);
-      //         filterQuery = filterQuery.orderBy(orderString);
-      //       }
-      //     }
-      //     listCon.query = filterQuery;
-      //     listCon.refresh();
-      //   } else if (result == false) {
-      //     filterQuery = listCon.query;
-      //     for (var e in filterList) {
-      //       if (e.value == true) {
-      //         e.value.toggle();
-      //       }
-      //     }
-      //   } else {
-      //     for (var e in filterList) {
-      //       if (e.value == true) {
-      //         e.value.toggle();
-      //       }
-      //     }
-      //   }
-      // },
+        if (result == true) {
+          filteredQuery = defaultQuery;
+
+          if (paymentMethodCon.value.isNotEmpty) {
+            filteredQuery = filteredQuery.where(
+              'paymentMethod',
+              whereIn: paymentMethodCon.value,
+            );
+          }
+          if (categoryCon.value.isNotEmpty) {
+            filteredQuery = filteredQuery.where(
+              'category',
+              arrayContainsAny: categoryCon.value,
+            );
+          }
+          if (fromDateCon.value != null && toDateCon.value != null) {
+            filteredQuery = filteredQuery.where(
+              'purchaseDate',
+              isGreaterThanOrEqualTo: fromDateCon.value,
+            );
+            filteredQuery = filteredQuery.where(
+              'purchaseDate',
+              isLessThanOrEqualTo: toDateCon.value,
+            );
+          }
+          listCon.query = filteredQuery;
+          listCon.refresh();
+        } else if (result == false) {
+          clearFilterValues();
+          listCon.query = defaultQuery;
+          listCon.refresh();
+        } else {
+          clearFilterValues();
+        }
+      },
     );
+
     super.onInit();
+  }
+
+  void clearFilterValues() {
+    paymentMethodCon.clearValue();
+    categoryCon.clearValue();
+    fromDateCon.value = null;
+    toDateCon.value = null;
   }
 
   void goToReceiptSetup({String? id}) {
@@ -137,6 +158,7 @@ class ReceiptListController extends GetxController {
       parameters: id != null ? {"id": id} : null,
     )?.then((value) {
       if (value == true) {
+        listCon.query = filteredQuery;
         listCon.refresh();
       }
     });

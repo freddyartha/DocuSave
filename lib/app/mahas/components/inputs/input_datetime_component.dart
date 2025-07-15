@@ -14,6 +14,7 @@ import 'input_box_component.dart';
 class InputDatetimeController {
   late bool _required;
   final InputDatetimeType type;
+  final DateTime? maxDate;
   late bool _isDialogFormat;
   late BuildContext _context;
   late Function(VoidCallback fn) setState;
@@ -24,7 +25,11 @@ class InputDatetimeController {
   TimeOfDay? _time;
   String? _errorMessage;
 
-  InputDatetimeController({this.type = InputDatetimeType.date, this.onChanged});
+  InputDatetimeController({
+    this.type = InputDatetimeType.date,
+    this.maxDate,
+    this.onChanged,
+  });
 
   Function()? onChanged;
 
@@ -81,7 +86,7 @@ class InputDatetimeController {
           context: _context,
           initialDate: _date ?? DateTime.now(),
           firstDate: DateTime(1900),
-          lastDate: DateTime.now().add(Duration(days: 3650)),
+          lastDate: maxDate ?? DateTime.now().add(Duration(days: 3650)),
           locale: TranslationService.locale,
           cancelText: "cancel".tr,
           confirmText: "ok".tr,
@@ -113,7 +118,7 @@ class InputDatetimeController {
               builder: (BuildContext context, StateSetter setState) {
                 return TableCalendar(
                   firstDay: DateTime(1900),
-                  lastDay: DateTime.now().add(Duration(days: 3650)),
+                  lastDay: maxDate ?? DateTime.now().add(Duration(days: 3650)),
                   focusedDay: _date ?? DateTime.now(),
                   locale: TranslationService.locale.languageCode,
                   selectedDayPredicate: (day) => isSameDay(_date, day),

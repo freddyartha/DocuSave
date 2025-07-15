@@ -34,7 +34,7 @@ class MoneyTrackerChartView extends GetView<MoneyTrackerChartController> {
                         child: Column(
                           children: [
                             PieChartComponent(
-                              label: "weekly_income_expense".tr,
+                              label: "weekly_budget_expense".tr,
                               model: controller.chartMingguanList,
                             ),
                             Row(

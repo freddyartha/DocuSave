@@ -8,7 +8,7 @@ class ReceiptModel {
   String documentid;
   String? receiptid;
   String storename;
-  Timestamp? purchasedate;
+  Timestamp purchasedate;
   double totalamount;
   String currency;
   List<int> category;
@@ -22,7 +22,7 @@ class ReceiptModel {
     required this.documentid,
     this.receiptid,
     required this.storename,
-    this.purchasedate,
+    required this.purchasedate,
     required this.totalamount,
     required this.currency,
     required this.category,
@@ -43,9 +43,9 @@ class ReceiptModel {
       documentid: dynamicData['documentId'],
       receiptid: dynamicData['receiptId'],
       storename: dynamicData['storeName'],
-      purchasedate: InputFormatter.dynamicToTimestamp(
-        dynamicData['purchaseDate'],
-      ),
+      purchasedate:
+          InputFormatter.dynamicToTimestamp(dynamicData['purchaseDate']) ??
+          Timestamp.now(),
       totalamount:
           InputFormatter.dynamicToDouble(dynamicData['totalAmount']) ?? 0,
       currency: dynamicData['currency'],
@@ -54,8 +54,12 @@ class ReceiptModel {
           InputFormatter.dynamicToInt(dynamicData['paymentMethod']) ?? 0,
       receiptimage: [],
       notes: dynamicData['notes'],
-      createdat: dynamicData['createdAt'],
-      updatedat: dynamicData['updatedAt'],
+      createdat:
+          InputFormatter.dynamicToTimestamp(dynamicData['createdAt']) ??
+          Timestamp.now(),
+      updatedat:
+          InputFormatter.dynamicToTimestamp(dynamicData['updatedAt']) ??
+          Timestamp.now(),
     );
     if (dynamicData['category'] != null) {
       final detailT = dynamicData['category'];

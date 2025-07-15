@@ -7,17 +7,15 @@ class InputFormatter {
   static String displayDate(
     DateTime? date, {
     bool mini = false,
-    bool britishDateFormat = false,
     bool showDayName = false,
   }) {
     if (date == null) return "-";
     String format = "dd MMMM yyyy";
 
     if (mini) format = "dd MMM yyyy";
-    if (britishDateFormat) format = "dd/MM/yyyy";
     if (showDayName) format = "EEEE, $format";
 
-    var dateFormat = DateFormat(format);
+    var dateFormat = DateFormat(format, TranslationService.locale.languageCode);
     return dateFormat.format(date);
   }
 

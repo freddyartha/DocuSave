@@ -179,7 +179,7 @@ class _ListComponentState<T> extends State<ListComponent<T>> {
                       Expanded(
                         child: InputTextComponent(
                           controller: widget.controller.searchCon,
-                          placeHolder: "Cari",
+                          placeHolder: "search".tr,
                           prefixIcon: Icon(Icons.search_outlined),
                           marginBottom: 0,
                         ),

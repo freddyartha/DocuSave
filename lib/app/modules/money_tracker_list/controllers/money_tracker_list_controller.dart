@@ -19,8 +19,12 @@ class MoneyTrackerListController extends GetxController {
   ).orderBy('date', descending: true);
   late Query filteredQuery;
 
-  final InputDatetimeController fromDateCon = InputDatetimeController();
-  final InputDatetimeController toDateCon = InputDatetimeController();
+  final InputDatetimeController fromDateCon = InputDatetimeController(
+    maxDate: DateTime.now(),
+  );
+  final InputDatetimeController toDateCon = InputDatetimeController(
+    maxDate: DateTime.now(),
+  );
   final InputCheckboxMultipleController typeCon =
       InputCheckboxMultipleController(
         items: ReusableStatics.listCheckBoxTypeMoneyTracker,
@@ -71,6 +75,7 @@ class MoneyTrackerListController extends GetxController {
                   child: InputDatetimeComponent(
                     controller: fromDateCon,
                     label: "from_date".tr,
+                    placeHolder: "from_date".tr,
                   ),
                 ),
                 SizedBox(width: 10),
@@ -78,6 +83,7 @@ class MoneyTrackerListController extends GetxController {
                   child: InputDatetimeComponent(
                     controller: toDateCon,
                     label: "to_date".tr,
+                    placeHolder: "to_date".tr,
                   ),
                 ),
               ],
@@ -155,6 +161,7 @@ class MoneyTrackerListController extends GetxController {
   void clearFilterValues() {
     typeCon.clearValue();
     paymentMethodCon.clearValue();
+    categoryCon.clearValue();
     fromDateCon.value = null;
     toDateCon.value = null;
   }
@@ -163,7 +170,7 @@ class MoneyTrackerListController extends GetxController {
     Get.toNamed(
       Routes.MONEY_TRACKER_SETUP,
       parameters: id != null ? {"id": id} : null,
-    )?.then((value) async {
+    )?.then((value) {
       if (value == true) {
         listCon.query = filteredQuery;
         listCon.refresh();

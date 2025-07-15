@@ -152,8 +152,8 @@ const Map<String, String> idID = {
   "week_number": "Minggu @value",
   "this_month_expense": "Anggaran belanja bulan ini",
   "this_month_expense_subtitle": "Berapa anggaran belanja kamu bulan ini",
-  "weekly_income_expense": "Pemasukan & Pengeluaran Minggu Ini",
-  "pemasukan_minggu": "Pemasukan Minggu Ini",
+  "weekly_budget_expense": "Anggaran & Pengeluaran Minggu Ini",
+  "budget_minggu": "Anggaran Minggu Ini",
   "pengeluaran_minggu": "Pengeluran Minggu Ini",
   "week_budget_spending": "Anggaran vs Pengeluaran Bulan Ini",
   "budget_spending_warning":
@@ -161,6 +161,7 @@ const Map<String, String> idID = {
   "clear": "Bersihkan",
   "from_date": "Dari Tanggal",
   "to_date": "Sampai Tanggal",
+  "search": "Cari...",
 
   //money tracker type
   "pemasukan": "Pemasukan",

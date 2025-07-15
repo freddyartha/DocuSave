@@ -54,6 +54,7 @@ class MoneyTrackerChartController extends GetxController {
             ? 0
             : (((income - expense) / income) * 100).clamp(-999, 999);
 
+    chartModelList.clear();
     chartModelList.addAll([
       ChartModel(
         label: "Out\n${expensePercentage.toStringAsFixed(1)}%",
@@ -84,27 +85,26 @@ class MoneyTrackerChartController extends GetxController {
     final budget = summaryModel!.weeklybudget![currentWeek];
     final weeklyExpense = summaryModel!.weeklyexpense[currentWeek];
 
-    final weeklybudgetPercent =
-        budget == 0 ? 0 : ((weeklyExpense / budget) * 100).clamp(0, 999);
-    final weeklyExpPercent =
-        budget == 0
-            ? 0
-            : (((budget - weeklyExpense) / budget) * 100).clamp(-999, 999);
+    final weeklyExpPercent = budget == 0 ? 0 : ((weeklyExpense / budget) * 100);
+    final remaining = weeklyExpense >= budget ? 0.0 : budget - weeklyExpense;
+
+    chartMingguanList.clear();
     chartMingguanList.addAll([
       ChartModel(
         label: "Out\n${weeklyExpPercent.toStringAsFixed(1)}%",
-        value: summaryModel!.weeklyexpense[currentWeek],
+        value: weeklyExpense,
         color: MahasColors.darkgray,
       ),
       ChartModel(
-        label: "Budget\n${weeklybudgetPercent.toStringAsFixed(1)}%",
-        value: budget > weeklyExpense ? budget - weeklyExpense : 0.0,
+        label:
+            "Budget\n${remaining == 0 ? '0' : ((remaining / budget) * 100).toStringAsFixed(1)}%",
+        value: remaining,
         color: MahasColors.primary,
       ),
     ]);
 
     listSummaryMingguan.addAll([
-      ItemValueModel(item: "pemasukan_minggu".tr, value: budget),
+      ItemValueModel(item: "budget_minggu".tr, value: budget),
       ItemValueModel(item: "pengeluaran_minggu".tr, value: weeklyExpense),
     ]);
   }
