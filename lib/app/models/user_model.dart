@@ -11,6 +11,7 @@ class UserModel {
   String selectedLanguage;
   String? profilepic;
   String? subscriptionplan;
+  bool? moneytrackershortcut;
   Timestamp? createdat;
   Timestamp? updatedat;
 
@@ -21,6 +22,7 @@ class UserModel {
     required this.selectedLanguage,
     this.profilepic,
     this.subscriptionplan,
+    this.moneytrackershortcut,
     this.createdat,
     this.updatedat,
   });
@@ -38,6 +40,7 @@ class UserModel {
       selectedLanguage: dynamicData['selectedLanguage'],
       profilepic: dynamicData['profilePic'],
       subscriptionplan: dynamicData['subscriptionPlan'],
+      moneytrackershortcut: dynamicData['MoneyTrackerShortcut'],
       createdat: InputFormatter.dynamicToTimestamp(dynamicData['createdAt']),
       updatedat: InputFormatter.dynamicToTimestamp(dynamicData['updatedAt']),
     );

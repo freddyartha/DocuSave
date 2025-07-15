@@ -162,6 +162,11 @@ const Map<String, String> idID = {
   "from_date": "Dari Tanggal",
   "to_date": "Sampai Tanggal",
   "search": "Cari...",
+  "shortcut_money_tracker_short": "Pintasan untuk Menambah Catatan Keuangan",
+  "shortcut_money_tracker_title":
+      "Aktifkan Pintasan untuk Menambah Catatan Keuangan?",
+  "shortcut_money_tracker_subtitle":
+      "Pintasan ini bikin kamu langsung masuk ke halaman tambah catatan uang pas buka aplikasi.\nKalau berubah pikiran nanti, bisa dinonaktifkan di menu Profile → Pintasan untuk Menambah Catatan Keuangan.",
 
   //money tracker type
   "pemasukan": "Pemasukan",

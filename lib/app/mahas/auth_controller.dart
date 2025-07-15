@@ -77,7 +77,14 @@ class AuthController extends GetxController {
         await FirebaseRepository.addUserDeviceInfo(user.uid);
       }
       await EasyLoading.dismiss();
-      Get.offAllNamed(Routes.HOME);
+      if (MahasConfig.userProfile != null &&
+          MahasConfig.userProfile!.moneytrackershortcut == true) {
+        Get.toNamed(Routes.HOME);
+        Get.toNamed(Routes.MONEY_TRACKER_HOME);
+        Get.toNamed(Routes.MONEY_TRACKER_SETUP);
+      } else {
+        Get.offAllNamed(Routes.HOME);
+      }
     }
   }
 

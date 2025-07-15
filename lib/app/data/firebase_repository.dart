@@ -104,7 +104,7 @@ class FirebaseRepository {
         await firestore
             .collection(userCollection)
             .doc(userModel.userid)
-            .set(userModelToJson(userModel));
+            .set(userModelToJson(userModel), SetOptions(merge: true));
         await checkUserExist(userModel.userid);
       }
     } catch (e) {
@@ -118,6 +118,22 @@ class FirebaseRepository {
           .collection(userCollection)
           .doc(userModel.userid)
           .update(userModelToJson(userModel));
+      return true;
+    } catch (e) {
+      ReusableWidgets.notifBottomSheet(subtitle: e.toString());
+      return false;
+    }
+  }
+
+  static Future<bool> addProfileMoneyTrackerShortcut(
+    String userId,
+    bool shortcutAllowed,
+  ) async {
+    try {
+      await firestore.collection(userCollection).doc(userId).set({
+        "MoneyTrackerShortcut": shortcutAllowed,
+      }, SetOptions(merge: true));
+      await checkUserExist(userId);
       return true;
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: e.toString());

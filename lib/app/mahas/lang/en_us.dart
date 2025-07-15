@@ -161,6 +161,10 @@ const Map<String, String> enUS = {
   "from_date": "From Date",
   "to_date": "To Date",
   "search": "Search...",
+  "shortcut_money_tracker_short": "Shortcut to Add Money Tracker",
+  "shortcut_money_tracker_title": "Enable Money Tracker Shortcut?",
+  "shortcut_money_tracker_subtitle":
+      "This shortcut takes you straight to the add money tracker page when you open the app.\nYou can always turn it off later from Profile → Money Tracker Shortcut.",
 
   //money tracker type
   "pemasukan": "Income",
