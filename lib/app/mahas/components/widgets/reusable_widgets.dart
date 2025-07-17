@@ -1098,10 +1098,18 @@ class ReusableWidgets {
             children: [TextComponent(value: "go_back_confirmation".tr)],
           );
           if (result == true) {
-            customBackAction ?? Get.back();
+            if (customBackAction != null) {
+              customBackAction();
+            } else {
+              Get.back();
+            }
           }
         } else {
-          Get.back();
+          if (customBackAction != null) {
+            customBackAction();
+          } else {
+            Get.back();
+          }
         }
       },
       child: child,

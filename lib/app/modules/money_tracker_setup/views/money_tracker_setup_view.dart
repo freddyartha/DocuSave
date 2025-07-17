@@ -6,6 +6,8 @@ import 'package:docusave/app/mahas/components/inputs/input_radio_component.dart'
 import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
+import 'package:docusave/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -18,6 +20,14 @@ class MoneyTrackerSetupView extends GetView<MoneyTrackerSetupController> {
   Widget build(BuildContext context) {
     return ReusableWidgets.generalPopScopeWidget(
       showConfirmationCondition: controller.showConfirmationCondition,
+      customBackAction: () {
+        if (MahasConfig.isInitialShortcut == true) {
+          MahasConfig.isInitialShortcut = false;
+          Get.offAllNamed(Routes.HOME);
+        } else {
+          Get.back();
+        }
+      },
       child: Scaffold(
         backgroundColor: MahasColors.white,
         extendBodyBehindAppBar: true,

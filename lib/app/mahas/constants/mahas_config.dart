@@ -7,4 +7,5 @@ class MahasConfig {
   static UpdateappvaluesModel updateAppValues = UpdateappvaluesModel();
   static UserModel? userProfile;
   static bool demo = false;
+  static bool isInitialShortcut = false;
 }

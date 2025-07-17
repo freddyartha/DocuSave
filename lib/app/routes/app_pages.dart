@@ -6,13 +6,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
-import '../modules/money_tracker_budget/bindings/money_tracker_budget_binding.dart';
 import '../modules/money_tracker_budget/views/money_tracker_budget_view.dart';
-import '../modules/money_tracker_chart/bindings/money_tracker_chart_binding.dart';
 import '../modules/money_tracker_chart/views/money_tracker_chart_view.dart';
 import '../modules/money_tracker_home/bindings/money_tracker_home_binding.dart';
 import '../modules/money_tracker_home/views/money_tracker_home_view.dart';
-import '../modules/money_tracker_list/bindings/money_tracker_list_binding.dart';
 import '../modules/money_tracker_list/views/money_tracker_list_view.dart';
 import '../modules/money_tracker_setup/bindings/money_tracker_setup_binding.dart';
 import '../modules/money_tracker_setup/views/money_tracker_setup_view.dart';
@@ -155,66 +152,180 @@ class AppPages {
       name: _Paths.RECEIPT_LIST,
       page: () => const ReceiptListView(),
       binding: ReceiptListBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ReceiptListPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.RECEIPT_SETUP,
       page: () => const ReceiptSetupView(),
       binding: ReceiptSetupBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ReceiptSetupPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.WARRANTY_LIST,
       page: () => const WarrantyListView(),
       binding: WarrantyListBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'WarrantyListPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.WARRANTY_SETUP,
       page: () => const WarrantySetupView(),
       binding: WarrantySetupBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'WarrantySetupPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.ONBOARDING,
       page: () => const OnboardingView(),
       binding: OnboardingBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'OnboardingPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.PROFILE_SUGGESTION_SETUP,
       page: () => const ProfileSuggestionSetupView(),
       binding: ProfileSuggestionSetupBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ProfileSuggestionSetupPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.SERVICE_LIST,
       page: () => const ServiceListView(),
       binding: ServiceListBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ServiceListPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.SERVICE_SETUP,
       page: () => const ServiceSetupView(),
       binding: ServiceSetupBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'ServiceSetupPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.MONEY_TRACKER_HOME,
       page: () => const MoneyTrackerHomeView(),
       binding: MoneyTrackerHomeBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'MoneyTrackerHomePage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.MONEY_TRACKER_SETUP,
       page: () => const MoneyTrackerSetupView(),
       binding: MoneyTrackerSetupBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'MoneyTrackerSetupPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.MONEY_TRACKER_LIST,
       page: () => const MoneyTrackerListView(),
-      binding: MoneyTrackerListBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'MoneyTrackerListPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.MONEY_TRACKER_CHART,
       page: () => const MoneyTrackerChartView(),
-      binding: MoneyTrackerChartBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'MoneyTrackerChartPage',
+        ),
+      ],
     ),
     GetPage(
       name: _Paths.MONEY_TRACKER_BUDGET,
       page: () => const MoneyTrackerBudgetView(),
-      binding: MoneyTrackerBudgetBinding(),
+      middlewares: [
+        FirebaseAnalyticsMiddleware(
+          analytics: FirebaseAnalytics.instance,
+          observer: FirebaseAnalyticsObserver(
+            analytics: FirebaseAnalytics.instance,
+          ),
+          name: 'MoneyTrackerBudgetPage',
+        ),
+      ],
     ),
   ];
 }
