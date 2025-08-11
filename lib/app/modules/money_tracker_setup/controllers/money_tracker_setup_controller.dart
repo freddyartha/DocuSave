@@ -9,9 +9,11 @@ import 'package:docusave/app/mahas/components/inputs/input_text_component.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/input_formatter.dart';
+import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/models/money_tracker_model.dart';
 import 'package:docusave/app/models/money_tracker_summary_model.dart';
+import 'package:docusave/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -207,7 +209,14 @@ class MoneyTrackerSetupController extends GetxController {
             notifType: NotifType.success,
             subtitle: "success_save_transaction".tr,
           );
-          if (result != null) Get.back(result: true);
+          if (result != null) {
+            if (MahasConfig.isInitialShortcut == true) {
+              MahasConfig.isInitialShortcut = false;
+              Get.offAllNamed(Routes.HOME);
+            } else {
+              Get.back(result: true);
+            }
+          }
         } else {
           buttonActive(true);
         }
