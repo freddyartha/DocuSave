@@ -218,4 +218,5 @@ const Map<String, String> idID = {
   "request_camera_subtitle":
       "Kami memerlukan izin kamera untuk membantu kamu memotret struk atau dokumen langsung dari aplikasi",
   "click_here": "Klik disini",
+  "failed_install_update": "Gagal Menginstal Pembaruan Otomatis",
 };

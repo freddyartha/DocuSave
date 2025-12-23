@@ -1,6 +1,7 @@
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
+import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/mahas_service.dart';
 import 'package:docusave/app/mahas/models/menu_item_model.dart';
@@ -8,12 +9,15 @@ import 'package:docusave/app/models/article_model.dart';
 import 'package:docusave/app/models/warranty_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 class HomeController extends GetxController {
   final RxList<ArticleModel> listBanner = <ArticleModel>[].obs;
   final RxList<WarrantyModel> listExpiringWarranties = <WarrantyModel>[].obs;
   var authCon = AuthController.instance;
   RxBool demo = false.obs;
+  final updater = ShorebirdUpdater();
+
   void googleLoginOnPress() async {
     await authCon.signInWithGoogle();
   }
@@ -43,7 +47,24 @@ class HomeController extends GetxController {
   @override
   void onReady() async {
     await ReusableStatics.checkingVersion();
+    await _checkShoreBirdUpdate();
     super.onReady();
+  }
+
+  Future<void> _checkShoreBirdUpdate() async {
+    final status = await updater.checkForUpdate();
+
+    if (status == UpdateStatus.outdated) {
+      try {
+        // Perform the update
+        await updater.update();
+      } on UpdateException catch (error) {
+        ReusableWidgets.notifBottomSheet(
+          title: "failed_install_update".tr,
+          subtitle: error.toString(),
+        );
+      }
+    }
   }
 
   void addLayananList() {

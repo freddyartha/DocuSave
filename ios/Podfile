@@ -37,7 +37,7 @@ target 'Runner' do
 end
 
 # add this line:
-$iOSVersion = '15.5'
+$iOSVersion = '15.6'
 
 post_install do |installer|
    # add these lines:

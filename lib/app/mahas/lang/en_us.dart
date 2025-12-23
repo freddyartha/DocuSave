@@ -216,4 +216,5 @@ const Map<String, String> enUS = {
   "request_camera_subtitle":
       "We need camera access to help you capture receipts or documents directly from the app",
   "click_here": "Click here",
+  "failed_install_update": "Failed to Install Automatic Update",
 };
