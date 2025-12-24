@@ -131,4 +131,8 @@ class HomeController extends GetxController {
       loadExpiringWarranties();
     });
   }
+
+  // void showWebView() {
+  //   Get.toNamed(Routes.WEBVIEW_EXAMPLE);
+  // }
 }

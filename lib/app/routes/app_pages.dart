@@ -39,6 +39,8 @@ import '../modules/warranty_list/bindings/warranty_list_binding.dart';
 import '../modules/warranty_list/views/warranty_list_view.dart';
 import '../modules/warranty_setup/bindings/warranty_setup_binding.dart';
 import '../modules/warranty_setup/views/warranty_setup_view.dart';
+import '../modules/webview_example/bindings/webview_example_binding.dart';
+import '../modules/webview_example/views/webview_example_view.dart';
 
 // ignore_for_file: constant_identifier_names
 
@@ -326,6 +328,11 @@ class AppPages {
           name: 'MoneyTrackerBudgetPage',
         ),
       ],
+    ),
+    GetPage(
+      name: _Paths.WEBVIEW_EXAMPLE,
+      page: () => const WebviewExampleView(),
+      binding: WebviewExampleBinding(),
     ),
   ];
 }

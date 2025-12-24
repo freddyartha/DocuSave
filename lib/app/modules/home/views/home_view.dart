@@ -388,6 +388,28 @@ class HomeView extends GetView<HomeController> {
                                       },
                                     ),
                           ),
+                          InkWell(
+                            // onTap: controller.showWebView,
+                            child: Container(
+                              width: Get.width,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 15,
+                                horizontal: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                  MahasRadius.extraLarge,
+                                ),
+                                border: Border.all(color: MahasColors.primary),
+                              ),
+                              child: TextComponent(
+                                value: "Web View Example",
+                                fontSize: MahasFontSize.h5,
+                                fontWeight: FontWeight.w600,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
