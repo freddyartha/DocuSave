@@ -6,6 +6,7 @@ import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
 import 'package:docusave/app/mahas/local_notification_service.dart';
 import 'package:docusave/app/mahas/models/update_app_values_model.dart';
+import 'package:docusave/app/mahas/models/web_view_values_model.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -97,6 +98,14 @@ class MahasService {
         if (updateRemote.isNotEmpty) {
           MahasConfig.updateAppValues = UpdateappvaluesModel.fromJson(
             updateRemote,
+          );
+        }
+
+        // get web_view_update from remote config
+        String webViewUpdate = remoteConfig.getString("web_view_update");
+        if (webViewUpdate.isNotEmpty) {
+          MahasConfig.webViewValues = WebViewValuesModel.fromJson(
+            webViewUpdate,
           );
         }
 

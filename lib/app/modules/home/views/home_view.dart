@@ -389,7 +389,7 @@ class HomeView extends GetView<HomeController> {
                                     ),
                           ),
                           InkWell(
-                            // onTap: controller.showWebView,
+                            onTap: controller.showWebView,
                             child: Container(
                               width: Get.width,
                               padding: EdgeInsets.symmetric(

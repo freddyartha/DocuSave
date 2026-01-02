@@ -243,6 +243,9 @@ class FirebaseRepository {
     }
   }
 
+  static Reference getWebDataFirebaseStorage(String fileName) =>
+      firebaseStorage.child('web_view/$fileName');
+
   static Future<bool> checkUserNotificationExist(
     String userId,
     String? notificationToken,

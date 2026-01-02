@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:archive/archive_io.dart';
+import 'package:dio/dio.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
@@ -9,6 +13,7 @@ import 'package:docusave/app/models/article_model.dart';
 import 'package:docusave/app/models/warranty_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 class HomeController extends GetxController {
@@ -48,7 +53,67 @@ class HomeController extends GetxController {
   void onReady() async {
     await ReusableStatics.checkingVersion();
     await _checkShoreBirdUpdate();
+    await checkAndDownloadWebView().then((value) async {
+      if (value != null) {
+        await extractZip(value);
+      }
+    });
     super.onReady();
+  }
+
+  Future<File?> checkAndDownloadWebView() async {
+    bool checkUpdate =
+        MahasConfig.webViewValues.prevVersion <
+                MahasConfig.webViewValues.version
+            ? true
+            : false;
+    if (checkUpdate) {
+      // Ambil download URL
+      final ref = FirebaseRepository.getWebDataFirebaseStorage(
+        MahasConfig.webViewValues.fileName,
+      );
+      final url = await ref.getDownloadURL();
+
+      // Ambil directory lokal
+      final dir = await getApplicationDocumentsDirectory();
+      final filePath = '${dir.path}/${ref.name}';
+
+      final dio = Dio();
+
+      await dio.download(url, filePath);
+
+      return File(filePath);
+    } else {
+      return null;
+    }
+  }
+
+  Future<void> extractZip(File zipFile) async {
+    final dir = await getApplicationSupportDirectory();
+    final webDir = Directory('${dir.path}/web_view');
+
+    if (await webDir.exists()) {
+      await webDir.delete(recursive: true);
+    }
+
+    await webDir.create();
+
+    final bytes = zipFile.readAsBytesSync();
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    for (final file in archive) {
+      final filename = '${webDir.path}/${file.name}';
+
+      if (file.isFile) {
+        final outFile = File(filename);
+        await outFile.create(recursive: true);
+        await outFile.writeAsBytes(file.content);
+      } else {
+        await Directory(filename).create(recursive: true);
+      }
+    }
+
+    MahasConfig.webViewDirectory = webDir.path;
   }
 
   Future<void> _checkShoreBirdUpdate() async {
@@ -132,7 +197,14 @@ class HomeController extends GetxController {
     });
   }
 
-  // void showWebView() {
-  //   Get.toNamed(Routes.WEBVIEW_EXAMPLE);
-  // }
+  void showWebView() {
+    if (MahasConfig.webViewDirectory.isNotEmpty) {
+      Get.toNamed(Routes.WEBVIEW_EXAMPLE);
+    } else {
+      ReusableWidgets.notifBottomSheet(
+        title: "WebView Belum Terunduh",
+        subtitle: "Konten Web View belum terunduh di perangkat Anda",
+      );
+    }
+  }
 }
