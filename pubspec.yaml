@@ -76,7 +76,8 @@ flutter:
   assets:
     - assets/images/
     - shorebird.yaml
-
+    - assets/web/
+    
   fonts:
     - family: Poppins
       fonts:

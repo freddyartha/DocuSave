@@ -11,4 +11,5 @@ class MahasConfig {
   static bool demo = false;
   static bool isInitialShortcut = false;
   static String webViewDirectory = '';
+  static String localWebViewVersion = '1.0.1';
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:archive/archive_io.dart';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:docusave/app/mahas/components/buttons/button_component.dart';
 import 'package:docusave/app/mahas/components/images/image_component.dart';
@@ -25,6 +26,50 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 class ReusableStatics {
+  static Future<Directory> webViewDirectory() async {
+    final dir = await getApplicationSupportDirectory();
+    return Directory('${dir.path}/web_view');
+  }
+
+  static Future<bool> checkLocalWebIsExist() async {
+    final webDir = await webViewDirectory();
+
+    return await webDir.exists();
+  }
+
+  static Future<void> extractZip(File zipFile) async {
+    final webDir = await webViewDirectory();
+
+    if (await webDir.exists()) {
+      await webDir.delete(recursive: true);
+    }
+
+    await webDir.create();
+
+    final bytes = zipFile.readAsBytesSync();
+    final archive = ZipDecoder().decodeBytes(bytes);
+
+    for (final file in archive) {
+      final filename = '${webDir.path}/${file.name}';
+
+      if (file.isFile) {
+        final outFile = File(filename);
+        await outFile.create(recursive: true);
+        await outFile.writeAsBytes(file.content);
+      } else {
+        await Directory(filename).create(recursive: true);
+      }
+    }
+
+    MahasConfig.webViewDirectory = webDir.path;
+  }
+
+  static Future<void> getLocalWebViewVersion() async {
+    final webDir = await webViewDirectory();
+    MahasConfig.localWebViewVersion =
+        await File('${webDir.path}/version.txt').readAsString();
+  }
+
   static double appBarHeight(BuildContext context) =>
       MediaQuery.of(context).padding.top + kToolbarHeight;
 

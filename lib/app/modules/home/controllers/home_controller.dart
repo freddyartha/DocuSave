@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:archive/archive_io.dart';
 import 'package:dio/dio.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
@@ -55,7 +54,7 @@ class HomeController extends GetxController {
     await _checkShoreBirdUpdate();
     await checkAndDownloadWebView().then((value) async {
       if (value != null) {
-        await extractZip(value);
+        await ReusableStatics.extractZip(value);
       }
     });
     super.onReady();
@@ -63,11 +62,10 @@ class HomeController extends GetxController {
 
   Future<File?> checkAndDownloadWebView() async {
     bool checkUpdate =
-        MahasConfig.webViewValues.prevVersion <
-                MahasConfig.webViewValues.version
+        MahasConfig.webViewValues.version != MahasConfig.localWebViewVersion
             ? true
             : false;
-    if (checkUpdate) {
+    if (auth.currentUser != null && checkUpdate) {
       // Ambil download URL
       final ref = FirebaseRepository.getWebDataFirebaseStorage(
         MahasConfig.webViewValues.fileName,
@@ -86,34 +84,6 @@ class HomeController extends GetxController {
     } else {
       return null;
     }
-  }
-
-  Future<void> extractZip(File zipFile) async {
-    final dir = await getApplicationSupportDirectory();
-    final webDir = Directory('${dir.path}/web_view');
-
-    if (await webDir.exists()) {
-      await webDir.delete(recursive: true);
-    }
-
-    await webDir.create();
-
-    final bytes = zipFile.readAsBytesSync();
-    final archive = ZipDecoder().decodeBytes(bytes);
-
-    for (final file in archive) {
-      final filename = '${webDir.path}/${file.name}';
-
-      if (file.isFile) {
-        final outFile = File(filename);
-        await outFile.create(recursive: true);
-        await outFile.writeAsBytes(file.content);
-      } else {
-        await Directory(filename).create(recursive: true);
-      }
-    }
-
-    MahasConfig.webViewDirectory = webDir.path;
   }
 
   Future<void> _checkShoreBirdUpdate() async {

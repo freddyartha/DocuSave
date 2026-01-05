@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
+import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
 import 'package:docusave/app/mahas/components/widgets/reusable_widgets.dart';
 import 'package:docusave/app/mahas/constants/mahas_colors.dart';
 import 'package:docusave/app/mahas/constants/mahas_config.dart';
@@ -20,6 +23,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:path_provider/path_provider.dart';
 
 final remoteConfig = FirebaseRemoteConfig.instance;
 final auth = FirebaseAuth.instance;
@@ -51,6 +55,19 @@ class MahasService {
 
     // packageInfo
     MahasConfig.packageInfo = await PackageInfo.fromPlatform();
+
+    //load local web view
+    await ReusableStatics.checkLocalWebIsExist().then((isExist) async {
+      if (!isExist) {
+        final zipFile = await _copyAssetZipToLocal();
+        await ReusableStatics.extractZip(zipFile);
+      } else {
+        MahasConfig.webViewDirectory = await ReusableStatics.webViewDirectory()
+            .then((value) => value.path);
+      }
+    });
+
+    await ReusableStatics.getLocalWebViewVersion();
 
     //easyloading
     EasyLoading.instance
@@ -117,5 +134,16 @@ class MahasService {
     } catch (e) {
       ReusableWidgets.notifBottomSheet(subtitle: "no_connection_subtitle".tr);
     }
+  }
+
+  static Future<File> _copyAssetZipToLocal() async {
+    final data = await rootBundle.load('assets/web/web-portofolio.zip');
+
+    final dir = await getApplicationDocumentsDirectory();
+    final zipFile = File('${dir.path}/web-portofolio.zip');
+
+    await zipFile.writeAsBytes(data.buffer.asUint8List(), flush: true);
+
+    return zipFile;
   }
 }

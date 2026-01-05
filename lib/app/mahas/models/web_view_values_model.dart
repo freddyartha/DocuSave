@@ -1,17 +1,10 @@
 import 'dart:convert';
 
-import 'package:docusave/app/mahas/constants/input_formatter.dart';
-
 class WebViewValuesModel {
-  int version;
-  int prevVersion;
+  String version;
   String fileName;
 
-  WebViewValuesModel({
-    this.version = 0,
-    this.prevVersion = 0,
-    this.fileName = '',
-  });
+  WebViewValuesModel({this.version = '', this.fileName = ''});
 
   static WebViewValuesModel fromJson(String jsonString) {
     final data = json.decode(jsonString);
@@ -21,9 +14,7 @@ class WebViewValuesModel {
   static WebViewValuesModel fromDynamic(dynamic dynamicData) {
     final model = WebViewValuesModel();
 
-    model.version = InputFormatter.dynamicToInt(dynamicData['version']) ?? 0;
-    model.prevVersion =
-        InputFormatter.dynamicToInt(dynamicData['prev_version']) ?? 0;
+    model.version = dynamicData['version'];
     model.fileName = dynamicData['file_name'];
     return model;
   }
@@ -33,10 +24,6 @@ class WebViewValuesModel {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      "version": version,
-      "prev_version": prevVersion,
-      "file_name": fileName,
-    };
+    return {"version": version, "file_name": fileName};
   }
 }
