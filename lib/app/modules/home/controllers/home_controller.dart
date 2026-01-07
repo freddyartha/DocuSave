@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:docusave/app/data/firebase_repository.dart';
 import 'package:docusave/app/mahas/auth_controller.dart';
 import 'package:docusave/app/mahas/components/others/reusable_statics.dart';
@@ -12,7 +9,6 @@ import 'package:docusave/app/models/article_model.dart';
 import 'package:docusave/app/models/warranty_model.dart';
 import 'package:docusave/app/routes/app_pages.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shorebird_code_push/shorebird_code_push.dart';
 
 class HomeController extends GetxController {
@@ -52,38 +48,7 @@ class HomeController extends GetxController {
   void onReady() async {
     await ReusableStatics.checkingVersion();
     await _checkShoreBirdUpdate();
-    await checkAndDownloadWebView().then((value) async {
-      if (value != null) {
-        await ReusableStatics.extractZip(value);
-      }
-    });
     super.onReady();
-  }
-
-  Future<File?> checkAndDownloadWebView() async {
-    bool checkUpdate =
-        MahasConfig.webViewValues.version != MahasConfig.localWebViewVersion
-            ? true
-            : false;
-    if (auth.currentUser != null && checkUpdate) {
-      // Ambil download URL
-      final ref = FirebaseRepository.getWebDataFirebaseStorage(
-        MahasConfig.webViewValues.fileName,
-      );
-      final url = await ref.getDownloadURL();
-
-      // Ambil directory lokal
-      final dir = await getApplicationDocumentsDirectory();
-      final filePath = '${dir.path}/${ref.name}';
-
-      final dio = Dio();
-
-      await dio.download(url, filePath);
-
-      return File(filePath);
-    } else {
-      return null;
-    }
   }
 
   Future<void> _checkShoreBirdUpdate() async {

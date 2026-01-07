@@ -11,13 +11,18 @@ class WebviewExampleView extends GetView<WebviewExampleController> {
   const WebviewExampleView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MahasColors.white,
-      appBar: ReusableWidgets.generalAppBarWidget(
-        title: "Webview Example",
+    return Obx(
+      () => Scaffold(
         backgroundColor: MahasColors.white,
+        appBar: ReusableWidgets.generalAppBarWidget(
+          title: "Webview Example",
+          backgroundColor: MahasColors.white,
+        ),
+        body:
+            controller.downloadWebAssetsLoading.value
+                ? ReusableWidgets.listLoadingWidget(count: 5)
+                : WebViewWidget(controller: controller.webController),
       ),
-      body: WebViewWidget(controller: controller.webController),
     );
   }
 }
