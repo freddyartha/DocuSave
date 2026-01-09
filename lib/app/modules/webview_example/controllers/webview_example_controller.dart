@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -16,6 +17,9 @@ class WebviewExampleController extends GetxController {
   final webController =
       WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setOnConsoleMessage((consoleMessage) {
+          print('WEBVIEW LOG: ${consoleMessage.message}');
+        })
         ..loadFile("${MahasConfig.webViewDirectory}/index.html");
 
   @override
@@ -32,6 +36,19 @@ class WebviewExampleController extends GetxController {
             "${MahasConfig.webViewDirectory}/index.html",
           );
           downloadWebAssetsLoading(false);
+        }
+      });
+
+      // Kirim token ke webview ketika sudah siap
+      final token = await auth.currentUser?.getIdToken();
+      Timer.periodic(Duration(milliseconds: 300), (timer) async {
+        final ready = await webController.runJavaScriptReturningResult(
+          "window.__WEB_READY__ === true",
+        );
+
+        if (ready.toString() == 'true') {
+          webController.runJavaScript("window.setAuthToken('$token')");
+          timer.cancel();
         }
       });
     }
